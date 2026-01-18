@@ -30,7 +30,19 @@ async def add_request_logging(request: Request, call_next) -> Response:
     request_id = f"req_{uuid4().hex}"
     request.state.request_id = request_id
     start = time.perf_counter()
-    response = await call_next(request)
+    try:
+        response = await call_next(request)
+    except Exception as exc:
+        duration_ms = (time.perf_counter() - start) * 1000
+        LOGGER.exception(
+            "request_id=%s method=%s path=%s status=500 duration_ms=%.2f error=%s",
+            request_id,
+            request.method,
+            request.url.path,
+            duration_ms,
+            exc,
+        )
+        raise
     duration_ms = (time.perf_counter() - start) * 1000
     response.headers["X-Request-Id"] = request_id
     LOGGER.info(
