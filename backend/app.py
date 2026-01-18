@@ -423,15 +423,23 @@ async def add_template_reply(moment_id: str, body: Dict[str, str], request: Requ
 
 
 @app.get("/api/me/moments")
-async def list_my_moments(user_id: Optional[str] = None) -> List[Dict[str, Any]]:
+async def list_my_moments(request: Request, user_id: Optional[str] = None) -> List[Dict[str, Any]]:
     """Return current user's moments."""
     if not user_id:
+        LOGGER.info("request_id=%s list_my_moments empty_user", request_id_from(request))
         return []
     rows = DB.execute(
         "SELECT * FROM moments WHERE user_id = ? ORDER BY created_at DESC",
         (user_id,),
     ).fetchall()
-    return [moment_row_to_payload(row_to_dict(row)) for row in rows]
+    moments = [moment_row_to_payload(row_to_dict(row)) for row in rows]
+    LOGGER.info(
+        "request_id=%s list_my_moments user_id=%s total=%s",
+        request_id_from(request),
+        user_id,
+        len(moments),
+    )
+    return moments
 
 
 class BottleCreateInput(BaseModel):
@@ -470,9 +478,10 @@ async def create_bottle(payload: BottleCreateInput, request: Request) -> Dict[st
 
 
 @app.get("/api/me/bottles")
-async def list_bottles(user_id: Optional[str] = None) -> Dict[str, Any]:
+async def list_bottles(request: Request, user_id: Optional[str] = None) -> Dict[str, Any]:
     """List bottles grouped by status."""
     if not user_id:
+        LOGGER.info("request_id=%s list_bottles empty_user", request_id_from(request))
         return {"floating": [], "opened": []}
     rows = DB.execute(
         "SELECT * FROM bottles WHERE user_id = ? ORDER BY created_at DESC",
@@ -487,6 +496,13 @@ async def list_bottles(user_id: Optional[str] = None) -> Dict[str, Any]:
         bottle["moment_ids"] = [row["moment_id"] for row in moment_rows]
     floating = [bottle for bottle in bottles if bottle["status"] == "floating"]
     opened = [bottle for bottle in bottles if bottle["status"] == "opened"]
+    LOGGER.info(
+        "request_id=%s list_bottles user_id=%s floating=%s opened=%s",
+        request_id_from(request),
+        user_id,
+        len(floating),
+        len(opened),
+    )
     return {"floating": floating, "opened": opened}
 
 
@@ -519,9 +535,10 @@ async def open_bottle(bottle_id: str, request: Request) -> Dict[str, bool]:
 
 
 @app.get("/api/me/notifications")
-async def list_notifications(user_id: Optional[str] = None) -> List[Dict[str, Any]]:
+async def list_notifications(request: Request, user_id: Optional[str] = None) -> List[Dict[str, Any]]:
     """List notifications."""
     if not user_id:
+        LOGGER.info("request_id=%s list_notifications empty_user", request_id_from(request))
         return []
     rows = DB.execute(
         "SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC",
@@ -533,17 +550,28 @@ async def list_notifications(user_id: Optional[str] = None) -> List[Dict[str, An
         item["payload"] = json.loads(item["payload"])
         item["read"] = bool(item["read"])
         notices.append(item)
+    LOGGER.info(
+        "request_id=%s list_notifications user_id=%s total=%s",
+        request_id_from(request),
+        user_id,
+        len(notices),
+    )
     return notices
 
 
 @app.post("/api/me/notifications/{notification_id}/read")
-async def mark_notification_read(notification_id: str) -> Dict[str, bool]:
+async def mark_notification_read(notification_id: str, request: Request) -> Dict[str, bool]:
     """Mark notification read (stub)."""
     DB.execute(
         "UPDATE notifications SET read = 1 WHERE id = ?",
         (notification_id,),
     )
     DB.commit()
+    LOGGER.info(
+        "request_id=%s mark_notification_read id=%s",
+        request_id_from(request),
+        notification_id,
+    )
     return {"ok": True}
 
 
