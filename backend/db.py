@@ -18,7 +18,28 @@ def get_connection() -> sqlite3.Connection:
 def init_db(conn: sqlite3.Connection) -> None:
     schema = SCHEMA_PATH.read_text(encoding="utf-8")
     conn.executescript(schema)
+    ensure_moments_columns(conn)
     conn.commit()
+
+
+def ensure_moments_columns(conn: sqlite3.Connection) -> None:
+    rows = conn.execute("PRAGMA table_info(moments)").fetchall()
+    existing = {row[1] for row in rows}
+    columns = {
+        "mood_bucket": "TEXT",
+        "geo_hidden": "INTEGER NOT NULL DEFAULT 0",
+        "mp4_url": "TEXT",
+        "allow_replies": "INTEGER NOT NULL DEFAULT 1",
+        "model_type": "TEXT",
+        "model_id": "TEXT",
+        "style_key": "TEXT",
+        "ref_image_urls": "TEXT",
+        "ip_character_id": "TEXT",
+        "ip_pose": "TEXT",
+    }
+    for name, definition in columns.items():
+        if name not in existing:
+            conn.execute(f"ALTER TABLE moments ADD COLUMN {name} {definition}")
 
 
 def row_to_dict(row: sqlite3.Row) -> Dict[str, Any]:

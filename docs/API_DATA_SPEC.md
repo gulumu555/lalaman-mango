@@ -27,6 +27,14 @@
 - motion_template_id: string    // e.g. "T02_Cloud"
 - pony: boolean                 // 是否马年小马主题
 - allow_replies: boolean        // 是否允许模板回复
+- model:
+  - type: string | null         // "image_to_image" | "image_to_video"
+  - id: string | null           // 后台可选模型ID
+- style_key: string | null      // 风格：ghibli / shinkai / pixar / disney / jimmy / china_a / china_b
+- ref_image_urls: string[] | null // 参考图（前端1张，后端可选2-4张）
+- ip_character:
+  - id: string | null
+  - pose: string | null
 - created_at: number (ms)
 - updated_at: number (ms)
 
@@ -99,6 +107,12 @@ Body:
 - motion_template_id
 - pony
 - allow_replies?
+- model_type?                 // image_to_image | image_to_video
+- model_id?
+- style_key?
+- ref_image_urls?             // string[]
+- ip_character_id?
+- ip_pose?
 - assets {photo_url,audio_url,mp4_url,thumb_url?,duration_s}
 Response: { id }
 

@@ -53,6 +53,12 @@ class MomentCreateInput(BaseModel):
     motion_template_id: str
     pony: bool = False
     allow_replies: Optional[bool] = None
+    model_type: Optional[str] = None
+    model_id: Optional[str] = None
+    style_key: Optional[str] = None
+    ref_image_urls: Optional[List[str]] = None
+    ip_character_id: Optional[str] = None
+    ip_pose: Optional[str] = None
     assets: AssetsInput
 
 
@@ -93,6 +99,12 @@ def bounding_box(lat: float, lng: float, radius_m: int) -> Tuple[float, float, f
 
 
 def moment_row_to_payload(row: Dict[str, Any]) -> Dict[str, Any]:
+    ref_images = []
+    if row.get("ref_image_urls"):
+        try:
+            ref_images = json.loads(row["ref_image_urls"])
+        except json.JSONDecodeError:
+            ref_images = []
     return {
         "id": row["id"],
         "user_id": row["user_id"],
@@ -119,6 +131,16 @@ def moment_row_to_payload(row: Dict[str, Any]) -> Dict[str, Any]:
         "motion_template_id": row["motion_template_id"],
         "pony": bool(row["pony"]),
         "allow_replies": bool(row["allow_replies"]),
+        "model": {
+            "type": row.get("model_type"),
+            "id": row.get("model_id"),
+        },
+        "style_key": row.get("style_key"),
+        "ref_image_urls": ref_images,
+        "ip_character": {
+            "id": row.get("ip_character_id"),
+            "pose": row.get("ip_pose"),
+        },
         "created_at": row["created_at"],
         "updated_at": row["updated_at"],
     }
@@ -230,6 +252,7 @@ async def create_moment(payload: MomentCreateInput) -> Dict[str, str]:
     mood_bucket = payload.mood_bucket or bucket_from_code(mood_code)
     created_at = now_ms()
     allow_replies = payload.allow_replies if payload.allow_replies is not None else True
+    ref_image_urls = json.dumps(payload.ref_image_urls) if payload.ref_image_urls else None
     geo_hidden = 1 if payload.geo.hidden else 0
     DB.execute(
         """
@@ -237,8 +260,10 @@ async def create_moment(payload: MomentCreateInput) -> Dict[str, str]:
             id, user_id, title, mood_code, mood_emoji, mood_bucket, visibility,
             lat, lng, geohash, zone_name, radius_m, geo_hidden,
             photo_url, audio_url, mp4_url, thumb_url, duration_s,
-            motion_template_id, pony, allow_replies, created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            motion_template_id, pony, allow_replies,
+            model_type, model_id, style_key, ref_image_urls, ip_character_id, ip_pose,
+            created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         (
             moment_id,
@@ -262,6 +287,12 @@ async def create_moment(payload: MomentCreateInput) -> Dict[str, str]:
             payload.motion_template_id,
             1 if payload.pony else 0,
             1 if allow_replies else 0,
+            payload.model_type,
+            payload.model_id,
+            payload.style_key,
+            ref_image_urls,
+            payload.ip_character_id,
+            payload.ip_pose,
             created_at,
             created_at,
         ),

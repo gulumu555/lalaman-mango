@@ -9,6 +9,7 @@
 ## 0.1) Seed 交付方式（MVP）
 - 使用本文件作为种子内容源
 - 后端提供 dev-only seed endpoint 或脚本导入
+- 参考导入文件：docs/seed/chengdu_demo_seed.json
 
 ## 1) 成都中心点（建议）
 - Center: 太古里附近

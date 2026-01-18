@@ -22,6 +22,12 @@ CREATE TABLE IF NOT EXISTS moments (
   motion_template_id TEXT NOT NULL,
   pony INTEGER NOT NULL DEFAULT 0,
   allow_replies INTEGER NOT NULL DEFAULT 1,
+  model_type TEXT,
+  model_id TEXT,
+  style_key TEXT,
+  ref_image_urls TEXT,
+  ip_character_id TEXT,
+  ip_pose TEXT,
   created_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL
 );
