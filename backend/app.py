@@ -6,12 +6,13 @@ Run locally (once deps installed):
 from __future__ import annotations
 
 import json
+import logging
 import math
 import time
 from typing import Any, Dict, List, Optional, Tuple
 from uuid import uuid4
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request, Response
 from pydantic import BaseModel, Field
 
 from .db import get_connection, init_db, row_to_dict, rows_to_dicts
@@ -20,6 +21,26 @@ from .seed_data import build_seed_payloads
 app = FastAPI(title="MomentPin MVP API", version="0.1.0")
 
 DB = get_connection()
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+LOGGER = logging.getLogger("momentpin")
+
+
+@app.middleware("http")
+async def add_request_logging(request: Request, call_next) -> Response:
+    request_id = f"req_{uuid4().hex}"
+    start = time.perf_counter()
+    response = await call_next(request)
+    duration_ms = (time.perf_counter() - start) * 1000
+    response.headers["X-Request-Id"] = request_id
+    LOGGER.info(
+        "request_id=%s method=%s path=%s status=%s duration_ms=%.2f",
+        request_id,
+        request.method,
+        request.url.path,
+        response.status_code,
+        duration_ms,
+    )
+    return response
 
 
 @app.on_event("startup")
@@ -208,7 +229,7 @@ async def list_moments_nearby(
             {"mood_code": "emo", "mood_emoji": "🥲", "percent": 10},
         ]
 
-    return {
+    response = {
         "clusters": list(clusters.values()),
         "items": items,
         "mood_weather": {
@@ -219,6 +240,15 @@ async def list_moments_nearby(
             "updated_at": now_ms(),
         },
     }
+    LOGGER.info(
+        "nearby_moments lat=%.4f lng=%.4f radius_m=%s visibility=%s total=%s",
+        lat,
+        lng,
+        radius_m,
+        visibility,
+        len(items),
+    )
+    return response
 
 
 @app.get("/api/moments/{moment_id}")
@@ -240,6 +270,7 @@ async def get_moment(moment_id: str) -> Dict[str, Any]:
             (moment_id,),
         ).fetchall()
     )
+    LOGGER.info("get_moment id=%s", moment_id)
     return {"moment": moment, "reactions": reactions, "template_replies_preview": replies_preview}
 
 
@@ -298,6 +329,12 @@ async def create_moment(payload: MomentCreateInput) -> Dict[str, str]:
         ),
     )
     DB.commit()
+    LOGGER.info(
+        "create_moment id=%s visibility=%s mood_code=%s",
+        moment_id,
+        payload.visibility,
+        mood_code,
+    )
     return {"id": moment_id}
 
 
@@ -403,6 +440,7 @@ async def create_bottle(payload: BottleCreateInput) -> Dict[str, str]:
             (bottle_id, moment_id),
         )
     DB.commit()
+    LOGGER.info("create_bottle id=%s moments=%s", bottle_id, len(payload.moment_ids))
     return {"id": bottle_id}
 
 
@@ -446,6 +484,7 @@ async def open_bottle(bottle_id: str) -> Dict[str, bool]:
         (f"notice_{uuid4().hex}", row["user_id"], payload, now_ms()),
     )
     DB.commit()
+    LOGGER.info("open_bottle id=%s user_id=%s", bottle_id, row["user_id"])
     return {"ok": True}
 
 
@@ -529,4 +568,5 @@ async def seed_chengdu() -> Dict[str, Any]:
         )
         created += 1
     DB.commit()
+    LOGGER.info("seed_chengdu count=%s", created)
     return {"ok": True, "count": created}
