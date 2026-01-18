@@ -9,6 +9,7 @@
 - 跑通：选图/拍照 → 录语音 → 生成MP4（最简：静图+声波+语音）→ 播放
 - 建立 assets 管线：photo/audio/mp4 的本地mock或对象存储占位
 - 加入动效模板库（先全局安全模板）
+- 后端用 FastAPI + SQLite 打通 moments 写入/读取/附近查询
 交付：
 - 本地一键启动
 - 创建与播放可验证（smoke test）

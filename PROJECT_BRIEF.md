@@ -53,3 +53,61 @@
 - 配置驱动：动效模板库用JSON/配置文件描述，便于扩展
 - 可观测：生成、发布、播放、通知等关键步骤都有日志
 - 小步提交：每次改动少量文件，便于review和回滚
+
+## 7.1 协作角色（固定）
+- CEO：你（产品强人，洞察用户需求）
+- CTO：Lucy（技术全能，负责技术方案与落地）
+- 协作原则：由 CEO 定方向与需求，CTO 负责拆解与实现
+
+## 7.2 Git 同步计划（本地 + 云端）
+- 工作分支：默认 main（如需分支由 CEO 指定）
+- 同步频率：每天至少一次 push（默认 20:00）；关键里程碑当天必同步
+- 同步触发：完成单个增量（<=5 文件）后可提交并推送
+- 验证前置：本地通过 smoke test 后再推送
+- 同步记录：每次推送在更新说明中标注对应增量编号
+
+## 8. 技术栈与现状
+- 客户端：先做微信小程序 MVP；App（iOS/Android）第二阶段再做，复用同一套后端 API
+- 现有资产：lalaman1.0 小程序已完成，UI 与后端约定可延续以提高开发效率
+- 后端：FastAPI（已 scaffold）；存储先用 SQLite（本地/测试），后续可切 Postgres
+- 当前目标：Moments 的写入/读取/附近查询跑通，可用 Swagger + curl 验证
+
+## 9. 运行方式（本地）
+- 安装依赖：pip install -r backend/requirements.txt
+- 启动服务：uvicorn backend.app:app --reload --port 8000
+- 配置：尽量不引入复杂环境变量；必要配置写到 backend/.env.example
+
+## 10. 媒体处理（MP4）
+- MVP 暂不做真实渲染管线
+- 后端先存 photo_url/audio_url/mp4_url，mp4_url 允许为空或占位
+- 下一阶段再接 ffmpeg/模板渲染（服务端）
+
+## 11. 动效模板（JSON/配置）
+- MVP 模板列表先写死在 docs/MOTION_TEMPLATES.md
+- 后端只做模板 id 校验 + 原样返回
+
+## 12. 地图与定位
+- MVP 不接第三方地图 SDK
+- 附近查询用 bounding box（lat/lng + radius_m）做简单过滤
+- 坐标系使用 WGS84
+
+## 13. 权限与账号
+- MVP 匿名/游客模式（不强制登录）
+- 若需要 user_id，用 uuid 生成
+- 下一阶段接微信登录（openid）
+
+## 14. 通知机制
+- MVP 只做数据结构/接口，不做推送
+- 客户端轮询获取 notifications
+
+## 15. 内容审核
+- MVP 不做复杂审核
+- 仅做大小/时长限制（photo/audio/mp4）+ 预留黑名单字段
+
+## 16. 种子数据
+- 使用 docs/DEMO_SEEDS_CHENGDU.md 作为 seed
+- 后端提供 dev-only seed endpoint 或脚本
+
+## 17. 指标与日志
+- 结构化日志：request_id、耗时、endpoint、结果
+- 不接外部监控

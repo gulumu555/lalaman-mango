@@ -9,6 +9,7 @@
 - title: string | null
 - mood_code: string        // e.g. "healing", "tired", "light", "luck", "emo"
 - mood_emoji: string       // e.g. "🫧"
+- mood_bucket: "A" | "B" | "C" | null   // A开心/轻松 B治愈/平静 C疲惫/Emo
 - visibility: "public_anonymous" | "private"
 - geo:
   - lat: number
@@ -16,14 +17,16 @@
   - geohash: string | null
   - zone_name: string | null   // e.g. "太古里附近"
   - radius_m: number | null    // 模糊半径
+  - hidden: boolean | null     // 是否隐藏位置
 - assets:
   - photo_url: string
   - audio_url: string
-  - mp4_url: string
+  - mp4_url: string | null   // MVP 可为空或占位
   - thumb_url: string | null
   - duration_s: number
 - motion_template_id: string    // e.g. "T02_Cloud"
 - pony: boolean                 // 是否马年小马主题
+- allow_replies: boolean        // 是否允许模板回复
 - created_at: number (ms)
 - updated_at: number (ms)
 
@@ -66,12 +69,20 @@
 ## 2) 接口列表（MVP）
 > REST风格示例；也可用小程序云函数映射同名 action。
 
+### 2.0 约定（MVP）
+- 后端：FastAPI + SQLite（本地/测试），后续可切 Postgres
+- 鉴权：MVP 可匿名，user_id 允许为空；如需传递可用 uuid
+- 返回结构：先用简单 JSON，后续再统一 code/message 包装
+- 默认值：visibility=private，mood_bucket=A，allow_replies=true
+
 ### 2.1 Nearby Moments（地图/列表）
 GET /api/moments/nearby?lat=&lng=&radius_m=3000&visibility=public_anonymous
 Response:
 - clusters: [{ id, lat, lng, count }]
 - items: Moment[] (可分页)
 - mood_weather: MoodWeather
+Note:
+- MVP 使用 bounding box 做附近过滤（lat/lng + radius_m），先不做复杂地理索引
 
 ### 2.2 Moment详情
 GET /api/moments/:id
@@ -81,11 +92,13 @@ Response: Moment + reactions + template_replies_preview(optional)
 POST /api/moments
 Body:
 - title?
-- mood_code
-- visibility
-- geo {lat,lng,zone_name?,radius_m?}
+- mood_code?
+- mood_bucket?
+- visibility? (default private)
+- geo {lat,lng,zone_name?,radius_m?,hidden?}
 - motion_template_id
 - pony
+- allow_replies?
 - assets {photo_url,audio_url,mp4_url,thumb_url?,duration_s}
 Response: { id }
 
@@ -98,6 +111,8 @@ Response: { ok: true, counts: Reaction[] }
 POST /api/moments/:id/template-replies
 Body: { reply_id }
 Response: { ok: true }
+Note:
+- 限频：同一用户对同一条片刻每天最多 1 条模板回应
 
 ### 2.6 My Moments
 GET /api/me/moments
@@ -122,6 +137,10 @@ Response: Notification[]
 
 POST /api/me/notifications/:id/read
 Response: { ok: true }
+
+### 2.9 Seed（dev only）
+POST /api/dev/seed/chengdu
+Response: { ok: true, count: number }
 
 ## 3) 页面 × 接口映射
 ### 首页地图（附近3km）
