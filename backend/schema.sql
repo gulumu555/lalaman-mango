@@ -28,6 +28,9 @@ CREATE TABLE IF NOT EXISTS moments (
   ref_image_urls TEXT,
   ip_character_id TEXT,
   ip_pose TEXT,
+  render_status TEXT,
+  render_error TEXT,
+  preview_url TEXT,
   created_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL
 );

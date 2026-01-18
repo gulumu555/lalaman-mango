@@ -59,6 +59,9 @@ class MomentCreateInput(BaseModel):
     ref_image_urls: Optional[List[str]] = None
     ip_character_id: Optional[str] = None
     ip_pose: Optional[str] = None
+    render_status: Optional[str] = None
+    render_error: Optional[str] = None
+    preview_url: Optional[str] = None
     assets: AssetsInput
 
 
@@ -140,6 +143,11 @@ def moment_row_to_payload(row: Dict[str, Any]) -> Dict[str, Any]:
         "ip_character": {
             "id": row.get("ip_character_id"),
             "pose": row.get("ip_pose"),
+        },
+        "render": {
+            "status": row.get("render_status"),
+            "error": row.get("render_error"),
+            "preview_url": row.get("preview_url"),
         },
         "created_at": row["created_at"],
         "updated_at": row["updated_at"],
@@ -252,6 +260,7 @@ async def create_moment(payload: MomentCreateInput) -> Dict[str, str]:
     mood_bucket = payload.mood_bucket or bucket_from_code(mood_code)
     created_at = now_ms()
     allow_replies = payload.allow_replies if payload.allow_replies is not None else True
+    render_status = payload.render_status or "pending"
     ref_image_urls = json.dumps(payload.ref_image_urls) if payload.ref_image_urls else None
     geo_hidden = 1 if payload.geo.hidden else 0
     DB.execute(
@@ -262,8 +271,9 @@ async def create_moment(payload: MomentCreateInput) -> Dict[str, str]:
             photo_url, audio_url, mp4_url, thumb_url, duration_s,
             motion_template_id, pony, allow_replies,
             model_type, model_id, style_key, ref_image_urls, ip_character_id, ip_pose,
+            render_status, render_error, preview_url,
             created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         (
             moment_id,
@@ -293,6 +303,9 @@ async def create_moment(payload: MomentCreateInput) -> Dict[str, str]:
             ref_image_urls,
             payload.ip_character_id,
             payload.ip_pose,
+            render_status,
+            payload.render_error,
+            payload.preview_url,
             created_at,
             created_at,
         ),

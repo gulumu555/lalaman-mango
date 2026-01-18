@@ -35,6 +35,10 @@
 - ip_character:
   - id: string | null
   - pose: string | null
+- render:
+  - status: string | null    // pending | rendering | ready | failed
+  - error: string | null
+  - preview_url: string | null
 - created_at: number (ms)
 - updated_at: number (ms)
 
@@ -113,6 +117,9 @@ Body:
 - ref_image_urls?             // string[]
 - ip_character_id?
 - ip_pose?
+- render_status?
+- render_error?
+- preview_url?
 - assets {photo_url,audio_url,mp4_url,thumb_url?,duration_s}
 Response: { id }
 
