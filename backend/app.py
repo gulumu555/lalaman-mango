@@ -6,12 +6,13 @@ Run locally (once deps installed):
 from __future__ import annotations
 
 import json
+import logging
 import math
 import time
 from typing import Any, Dict, List, Optional, Tuple
 from uuid import uuid4
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request, Response
 from pydantic import BaseModel, Field
 
 from .db import get_connection, init_db, row_to_dict, rows_to_dicts
@@ -20,6 +21,27 @@ from .seed_data import build_seed_payloads
 app = FastAPI(title="MomentPin MVP API", version="0.1.0")
 
 DB = get_connection()
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+LOGGER = logging.getLogger("momentpin")
+
+
+@app.middleware("http")
+async def add_request_logging(request: Request, call_next) -> Response:
+    request_id = f"req_{uuid4().hex}"
+    request.state.request_id = request_id
+    start = time.perf_counter()
+    response = await call_next(request)
+    duration_ms = (time.perf_counter() - start) * 1000
+    response.headers["X-Request-Id"] = request_id
+    LOGGER.info(
+        "request_id=%s method=%s path=%s status=%s duration_ms=%.2f",
+        request_id,
+        request.method,
+        request.url.path,
+        response.status_code,
+        duration_ms,
+    )
+    return response
 
 
 @app.on_event("startup")
@@ -80,6 +102,10 @@ MOOD_EMOJI_BY_CODE = {
 
 def now_ms() -> int:
     return int(time.time() * 1000)
+
+
+def request_id_from(request: Request) -> str:
+    return getattr(request.state, "request_id", "unknown")
 
 
 def bucket_from_code(code: str) -> str:
@@ -147,6 +173,7 @@ def moment_row_to_payload(row: Dict[str, Any]) -> Dict[str, Any]:
 
 @app.get("/api/moments/nearby")
 async def list_moments_nearby(
+    request: Request,
     lat: float,
     lng: float,
     radius_m: int = 3000,
@@ -208,7 +235,7 @@ async def list_moments_nearby(
             {"mood_code": "emo", "mood_emoji": "🥲", "percent": 10},
         ]
 
-    return {
+    response = {
         "clusters": list(clusters.values()),
         "items": items,
         "mood_weather": {
@@ -219,10 +246,21 @@ async def list_moments_nearby(
             "updated_at": now_ms(),
         },
     }
+    LOGGER.info(
+        "request_id=%s nearby_moments lat=%.4f lng=%.4f radius_m=%s visibility=%s mood_code=%s total=%s",
+        request_id_from(request),
+        lat,
+        lng,
+        radius_m,
+        visibility,
+        mood_code,
+        len(items),
+    )
+    return response
 
 
 @app.get("/api/moments/{moment_id}")
-async def get_moment(moment_id: str) -> Dict[str, Any]:
+async def get_moment(moment_id: str, request: Request) -> Dict[str, Any]:
     """Fetch moment detail."""
     row = DB.execute("SELECT * FROM moments WHERE id = ?", (moment_id,)).fetchone()
     if not row:
@@ -240,11 +278,12 @@ async def get_moment(moment_id: str) -> Dict[str, Any]:
             (moment_id,),
         ).fetchall()
     )
+    LOGGER.info("request_id=%s get_moment id=%s", request_id_from(request), moment_id)
     return {"moment": moment, "reactions": reactions, "template_replies_preview": replies_preview}
 
 
 @app.post("/api/moments")
-async def create_moment(payload: MomentCreateInput) -> Dict[str, str]:
+async def create_moment(payload: MomentCreateInput, request: Request) -> Dict[str, str]:
     """Create a moment."""
     moment_id = f"moment_{uuid4().hex}"
     mood_code = payload.mood_code or "light"
@@ -298,11 +337,18 @@ async def create_moment(payload: MomentCreateInput) -> Dict[str, str]:
         ),
     )
     DB.commit()
+    LOGGER.info(
+        "request_id=%s create_moment id=%s visibility=%s mood_code=%s",
+        request_id_from(request),
+        moment_id,
+        payload.visibility,
+        mood_code,
+    )
     return {"id": moment_id}
 
 
 @app.post("/api/moments/{moment_id}/reactions")
-async def add_reaction(moment_id: str, body: Dict[str, str]) -> Dict[str, Any]:
+async def add_reaction(moment_id: str, body: Dict[str, str], request: Request) -> Dict[str, Any]:
     """Increment reaction counter."""
     if "type" not in body:
         raise HTTPException(status_code=400, detail="Missing reaction type")
@@ -325,11 +371,17 @@ async def add_reaction(moment_id: str, body: Dict[str, str]) -> Dict[str, Any]:
             (moment_id,),
         ).fetchall()
     )
+    LOGGER.info(
+        "request_id=%s add_reaction moment_id=%s type=%s",
+        request_id_from(request),
+        moment_id,
+        reaction_type,
+    )
     return {"ok": True, "counts": counts}
 
 
 @app.post("/api/moments/{moment_id}/template-replies")
-async def add_template_reply(moment_id: str, body: Dict[str, str]) -> Dict[str, Any]:
+async def add_template_reply(moment_id: str, body: Dict[str, str], request: Request) -> Dict[str, Any]:
     """Store template reply."""
     if "reply_id" not in body:
         raise HTTPException(status_code=400, detail="Missing reply_id")
@@ -362,19 +414,33 @@ async def add_template_reply(moment_id: str, body: Dict[str, str]) -> Dict[str, 
         (f"reply_{uuid4().hex}", moment_id, user_id, reply_id, text, None, now),
     )
     DB.commit()
+    LOGGER.info(
+        "request_id=%s add_template_reply moment_id=%s reply_id=%s",
+        request_id_from(request),
+        moment_id,
+        reply_id,
+    )
     return {"ok": True}
 
 
 @app.get("/api/me/moments")
-async def list_my_moments(user_id: Optional[str] = None) -> List[Dict[str, Any]]:
+async def list_my_moments(request: Request, user_id: Optional[str] = None) -> List[Dict[str, Any]]:
     """Return current user's moments."""
     if not user_id:
+        LOGGER.info("request_id=%s list_my_moments empty_user", request_id_from(request))
         return []
     rows = DB.execute(
         "SELECT * FROM moments WHERE user_id = ? ORDER BY created_at DESC",
         (user_id,),
     ).fetchall()
-    return [moment_row_to_payload(row_to_dict(row)) for row in rows]
+    moments = [moment_row_to_payload(row_to_dict(row)) for row in rows]
+    LOGGER.info(
+        "request_id=%s list_my_moments user_id=%s total=%s",
+        request_id_from(request),
+        user_id,
+        len(moments),
+    )
+    return moments
 
 
 class BottleCreateInput(BaseModel):
@@ -384,7 +450,7 @@ class BottleCreateInput(BaseModel):
 
 
 @app.post("/api/bottles")
-async def create_bottle(payload: BottleCreateInput) -> Dict[str, str]:
+async def create_bottle(payload: BottleCreateInput, request: Request) -> Dict[str, str]:
     """Create bottle."""
     if not payload.user_id:
         raise HTTPException(status_code=400, detail="Missing user_id")
@@ -403,13 +469,20 @@ async def create_bottle(payload: BottleCreateInput) -> Dict[str, str]:
             (bottle_id, moment_id),
         )
     DB.commit()
+    LOGGER.info(
+        "request_id=%s create_bottle id=%s moments=%s",
+        request_id_from(request),
+        bottle_id,
+        len(payload.moment_ids),
+    )
     return {"id": bottle_id}
 
 
 @app.get("/api/me/bottles")
-async def list_bottles(user_id: Optional[str] = None) -> Dict[str, Any]:
+async def list_bottles(request: Request, user_id: Optional[str] = None) -> Dict[str, Any]:
     """List bottles grouped by status."""
     if not user_id:
+        LOGGER.info("request_id=%s list_bottles empty_user", request_id_from(request))
         return {"floating": [], "opened": []}
     rows = DB.execute(
         "SELECT * FROM bottles WHERE user_id = ? ORDER BY created_at DESC",
@@ -424,11 +497,18 @@ async def list_bottles(user_id: Optional[str] = None) -> Dict[str, Any]:
         bottle["moment_ids"] = [row["moment_id"] for row in moment_rows]
     floating = [bottle for bottle in bottles if bottle["status"] == "floating"]
     opened = [bottle for bottle in bottles if bottle["status"] == "opened"]
+    LOGGER.info(
+        "request_id=%s list_bottles user_id=%s floating=%s opened=%s",
+        request_id_from(request),
+        user_id,
+        len(floating),
+        len(opened),
+    )
     return {"floating": floating, "opened": opened}
 
 
 @app.post("/api/bottles/{bottle_id}/open")
-async def open_bottle(bottle_id: str) -> Dict[str, bool]:
+async def open_bottle(bottle_id: str, request: Request) -> Dict[str, bool]:
     """Dev-only open bottle."""
     row = DB.execute("SELECT * FROM bottles WHERE id = ?", (bottle_id,)).fetchone()
     if not row:
@@ -446,13 +526,20 @@ async def open_bottle(bottle_id: str) -> Dict[str, bool]:
         (f"notice_{uuid4().hex}", row["user_id"], payload, now_ms()),
     )
     DB.commit()
+    LOGGER.info(
+        "request_id=%s open_bottle id=%s user_id=%s",
+        request_id_from(request),
+        bottle_id,
+        row["user_id"],
+    )
     return {"ok": True}
 
 
 @app.get("/api/me/notifications")
-async def list_notifications(user_id: Optional[str] = None) -> List[Dict[str, Any]]:
+async def list_notifications(request: Request, user_id: Optional[str] = None) -> List[Dict[str, Any]]:
     """List notifications."""
     if not user_id:
+        LOGGER.info("request_id=%s list_notifications empty_user", request_id_from(request))
         return []
     rows = DB.execute(
         "SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC",
@@ -464,25 +551,41 @@ async def list_notifications(user_id: Optional[str] = None) -> List[Dict[str, An
         item["payload"] = json.loads(item["payload"])
         item["read"] = bool(item["read"])
         notices.append(item)
+    LOGGER.info(
+        "request_id=%s list_notifications user_id=%s total=%s",
+        request_id_from(request),
+        user_id,
+        len(notices),
+    )
     return notices
 
 
 @app.post("/api/me/notifications/{notification_id}/read")
-async def mark_notification_read(notification_id: str) -> Dict[str, bool]:
+async def mark_notification_read(notification_id: str, request: Request) -> Dict[str, bool]:
     """Mark notification read (stub)."""
     DB.execute(
         "UPDATE notifications SET read = 1 WHERE id = ?",
         (notification_id,),
     )
     DB.commit()
+    LOGGER.info(
+        "request_id=%s mark_notification_read id=%s",
+        request_id_from(request),
+        notification_id,
+    )
     return {"ok": True}
 
 
 @app.post("/api/dev/seed/chengdu")
-async def seed_chengdu() -> Dict[str, Any]:
+async def seed_chengdu(request: Request) -> Dict[str, Any]:
     """Dev-only: seed Chengdu demo moments."""
     existing = DB.execute("SELECT COUNT(1) AS count FROM moments").fetchone()
     if existing and existing["count"] >= 30:
+        LOGGER.info(
+            "request_id=%s seed_chengdu skip count=%s",
+            request_id_from(request),
+            existing["count"],
+        )
         return {"ok": True, "count": existing["count"]}
     payloads = build_seed_payloads()
     created = 0
@@ -529,4 +632,5 @@ async def seed_chengdu() -> Dict[str, Any]:
         )
         created += 1
     DB.commit()
+    LOGGER.info("request_id=%s seed_chengdu count=%s", request_id_from(request), created)
     return {"ok": True, "count": created}
