@@ -247,12 +247,13 @@ async def list_moments_nearby(
         },
     }
     LOGGER.info(
-        "request_id=%s nearby_moments lat=%.4f lng=%.4f radius_m=%s visibility=%s total=%s",
+        "request_id=%s nearby_moments lat=%.4f lng=%.4f radius_m=%s visibility=%s mood_code=%s total=%s",
         request_id_from(request),
         lat,
         lng,
         radius_m,
         visibility,
+        mood_code,
         len(items),
     )
     return response
@@ -580,6 +581,11 @@ async def seed_chengdu(request: Request) -> Dict[str, Any]:
     """Dev-only: seed Chengdu demo moments."""
     existing = DB.execute("SELECT COUNT(1) AS count FROM moments").fetchone()
     if existing and existing["count"] >= 30:
+        LOGGER.info(
+            "request_id=%s seed_chengdu skip count=%s",
+            request_id_from(request),
+            existing["count"],
+        )
         return {"ok": True, "count": existing["count"]}
     payloads = build_seed_payloads()
     created = 0
