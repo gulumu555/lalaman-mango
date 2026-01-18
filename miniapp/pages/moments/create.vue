@@ -20,6 +20,16 @@
 			</view>
 		</view>
 		<view class="section">
+			<view class="label">语音（必填）</view>
+			<view class="audio-actions">
+				<button class="btn" :disabled="recording" @click="startRecord">开始录音</button>
+				<button class="btn-secondary" :disabled="!recording" @click="stopRecord">停止录音</button>
+			</view>
+			<view class="audio-info" v-if="audioPath">
+				已录音 {{ audioDuration }} 秒
+			</view>
+		</view>
+		<view class="section">
 			<view class="label">发布范围</view>
 			<switch :checked="visibility === 'public_anonymous'" @change="toggleVisibility" />
 			<text class="hint">匿名公开</text>
@@ -44,6 +54,10 @@ export default {
 			moodCode: 'light',
 			visibility: 'private',
 			submitting: false,
+			audioPath: '',
+			audioDuration: 0,
+			recording: false,
+			recorderManager: null,
 			moods: [
 				{ code: 'light', label: '🙂轻松' },
 				{ code: 'healing', label: '🫧治愈' },
@@ -57,6 +71,17 @@ export default {
 		if (options?.photo) {
 			this.photoPath = decodeURIComponent(options.photo);
 		}
+		const recorderManager = uni.getRecorderManager();
+		recorderManager.onStop((res: any) => {
+			this.recording = false;
+			this.audioPath = res.tempFilePath || '';
+			this.audioDuration = Math.max(1, Math.round((res.duration || 0) / 1000));
+		});
+		recorderManager.onError(() => {
+			this.recording = false;
+			uni.showToast({ title: '录音失败', icon: 'none' });
+		});
+		this.recorderManager = recorderManager;
 	},
 	methods: {
 		async pickPhoto() {
@@ -65,12 +90,30 @@ export default {
 				this.photoPath = tmpUrl;
 			}
 		},
+		startRecord() {
+			if (!this.recorderManager) return;
+			this.recording = true;
+			this.audioPath = '';
+			this.audioDuration = 0;
+			this.recorderManager.start({
+				duration: 15000,
+				format: 'mp3',
+			});
+		},
+		stopRecord() {
+			if (!this.recorderManager) return;
+			this.recorderManager.stop();
+		},
 		toggleVisibility(e: any) {
 			this.visibility = e.detail.value ? 'public_anonymous' : 'private';
 		},
 		async submit() {
 			if (!this.photoPath) {
 				uni.showToast({ title: '请先选择照片', icon: 'none' });
+				return;
+			}
+			if (!this.audioPath) {
+				uni.showToast({ title: '请先录一段语音', icon: 'none' });
 				return;
 			}
 			this.submitting = true;
@@ -84,10 +127,10 @@ export default {
 					pony: false,
 					assets: {
 						photo_url: this.photoPath,
-						audio_url: 'https://example.com/assets/audio_placeholder.mp3',
+						audio_url: this.audioPath,
 						mp4_url: null,
 						thumb_url: null,
-						duration_s: 4.0,
+						duration_s: this.audioDuration || 4.0,
 					},
 				};
 				const res = await apiMoments.create(payload);
@@ -160,6 +203,25 @@ export default {
 	color: #fff;
 	border-radius: 16rpx;
 	margin-top: 12rpx;
+}
+
+.btn-secondary {
+	background: #f2f2f2;
+	color: #111;
+	border-radius: 16rpx;
+	margin-top: 12rpx;
+	margin-left: 12rpx;
+}
+
+.audio-actions {
+	display: flex;
+	align-items: center;
+}
+
+.audio-info {
+	margin-top: 12rpx;
+	font-size: 24rpx;
+	color: #666;
 }
 
 .primary {
