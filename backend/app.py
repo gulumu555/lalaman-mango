@@ -28,6 +28,7 @@ LOGGER = logging.getLogger("momentpin")
 @app.middleware("http")
 async def add_request_logging(request: Request, call_next) -> Response:
     request_id = f"req_{uuid4().hex}"
+    request.state.request_id = request_id
     start = time.perf_counter()
     response = await call_next(request)
     duration_ms = (time.perf_counter() - start) * 1000
@@ -103,6 +104,10 @@ def now_ms() -> int:
     return int(time.time() * 1000)
 
 
+def request_id_from(request: Request) -> str:
+    return getattr(request.state, "request_id", "unknown")
+
+
 def bucket_from_code(code: str) -> str:
     if code in {"light", "happy", "luck", "funny"}:
         return "A"
@@ -168,6 +173,7 @@ def moment_row_to_payload(row: Dict[str, Any]) -> Dict[str, Any]:
 
 @app.get("/api/moments/nearby")
 async def list_moments_nearby(
+    request: Request,
     lat: float,
     lng: float,
     radius_m: int = 3000,
@@ -241,7 +247,8 @@ async def list_moments_nearby(
         },
     }
     LOGGER.info(
-        "nearby_moments lat=%.4f lng=%.4f radius_m=%s visibility=%s total=%s",
+        "request_id=%s nearby_moments lat=%.4f lng=%.4f radius_m=%s visibility=%s total=%s",
+        request_id_from(request),
         lat,
         lng,
         radius_m,
@@ -252,7 +259,7 @@ async def list_moments_nearby(
 
 
 @app.get("/api/moments/{moment_id}")
-async def get_moment(moment_id: str) -> Dict[str, Any]:
+async def get_moment(moment_id: str, request: Request) -> Dict[str, Any]:
     """Fetch moment detail."""
     row = DB.execute("SELECT * FROM moments WHERE id = ?", (moment_id,)).fetchone()
     if not row:
@@ -270,12 +277,12 @@ async def get_moment(moment_id: str) -> Dict[str, Any]:
             (moment_id,),
         ).fetchall()
     )
-    LOGGER.info("get_moment id=%s", moment_id)
+    LOGGER.info("request_id=%s get_moment id=%s", request_id_from(request), moment_id)
     return {"moment": moment, "reactions": reactions, "template_replies_preview": replies_preview}
 
 
 @app.post("/api/moments")
-async def create_moment(payload: MomentCreateInput) -> Dict[str, str]:
+async def create_moment(payload: MomentCreateInput, request: Request) -> Dict[str, str]:
     """Create a moment."""
     moment_id = f"moment_{uuid4().hex}"
     mood_code = payload.mood_code or "light"
@@ -330,7 +337,8 @@ async def create_moment(payload: MomentCreateInput) -> Dict[str, str]:
     )
     DB.commit()
     LOGGER.info(
-        "create_moment id=%s visibility=%s mood_code=%s",
+        "request_id=%s create_moment id=%s visibility=%s mood_code=%s",
+        request_id_from(request),
         moment_id,
         payload.visibility,
         mood_code,
@@ -421,7 +429,7 @@ class BottleCreateInput(BaseModel):
 
 
 @app.post("/api/bottles")
-async def create_bottle(payload: BottleCreateInput) -> Dict[str, str]:
+async def create_bottle(payload: BottleCreateInput, request: Request) -> Dict[str, str]:
     """Create bottle."""
     if not payload.user_id:
         raise HTTPException(status_code=400, detail="Missing user_id")
@@ -440,7 +448,12 @@ async def create_bottle(payload: BottleCreateInput) -> Dict[str, str]:
             (bottle_id, moment_id),
         )
     DB.commit()
-    LOGGER.info("create_bottle id=%s moments=%s", bottle_id, len(payload.moment_ids))
+    LOGGER.info(
+        "request_id=%s create_bottle id=%s moments=%s",
+        request_id_from(request),
+        bottle_id,
+        len(payload.moment_ids),
+    )
     return {"id": bottle_id}
 
 
@@ -466,7 +479,7 @@ async def list_bottles(user_id: Optional[str] = None) -> Dict[str, Any]:
 
 
 @app.post("/api/bottles/{bottle_id}/open")
-async def open_bottle(bottle_id: str) -> Dict[str, bool]:
+async def open_bottle(bottle_id: str, request: Request) -> Dict[str, bool]:
     """Dev-only open bottle."""
     row = DB.execute("SELECT * FROM bottles WHERE id = ?", (bottle_id,)).fetchone()
     if not row:
@@ -484,7 +497,12 @@ async def open_bottle(bottle_id: str) -> Dict[str, bool]:
         (f"notice_{uuid4().hex}", row["user_id"], payload, now_ms()),
     )
     DB.commit()
-    LOGGER.info("open_bottle id=%s user_id=%s", bottle_id, row["user_id"])
+    LOGGER.info(
+        "request_id=%s open_bottle id=%s user_id=%s",
+        request_id_from(request),
+        bottle_id,
+        row["user_id"],
+    )
     return {"ok": True}
 
 
@@ -518,7 +536,7 @@ async def mark_notification_read(notification_id: str) -> Dict[str, bool]:
 
 
 @app.post("/api/dev/seed/chengdu")
-async def seed_chengdu() -> Dict[str, Any]:
+async def seed_chengdu(request: Request) -> Dict[str, Any]:
     """Dev-only: seed Chengdu demo moments."""
     existing = DB.execute("SELECT COUNT(1) AS count FROM moments").fetchone()
     if existing and existing["count"] >= 30:
@@ -568,5 +586,5 @@ async def seed_chengdu() -> Dict[str, Any]:
         )
         created += 1
     DB.commit()
-    LOGGER.info("seed_chengdu count=%s", created)
+    LOGGER.info("request_id=%s seed_chengdu count=%s", request_id_from(request), created)
     return {"ok": True, "count": created}
