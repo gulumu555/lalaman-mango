@@ -1,0 +1,177 @@
+<template>
+	<view class="moment-create">
+		<Header :title="'创建片刻'" />
+		<view class="section">
+			<view class="label">照片</view>
+			<image v-if="photoPath" class="photo" :src="photoPath" mode="widthFix" />
+			<button class="btn" @click="pickPhoto">选择照片</button>
+		</view>
+		<view class="section">
+			<view class="label">标题</view>
+			<input class="input" v-model="title" placeholder="给这一刻起个名字" />
+		</view>
+		<view class="section">
+			<view class="label">情绪</view>
+			<view class="moods">
+				<button v-for="item in moods" :key="item.code" class="pill"
+					:class="{ active: moodCode === item.code }" @click="moodCode = item.code">
+					{{ item.label }}
+				</button>
+			</view>
+		</view>
+		<view class="section">
+			<view class="label">发布范围</view>
+			<switch :checked="visibility === 'public_anonymous'" @change="toggleVisibility" />
+			<text class="hint">匿名公开</text>
+		</view>
+		<button class="primary" :disabled="submitting" @click="submit">发布片刻</button>
+	</view>
+</template>
+
+<script lang="ts">
+import Header from '@/components/Header.vue';
+import { chooseImage } from '@/utils/upload';
+import apiMoments from '@/api/moments';
+
+export default {
+	components: {
+		Header,
+	},
+	data() {
+		return {
+			photoPath: '',
+			title: '',
+			moodCode: 'light',
+			visibility: 'private',
+			submitting: false,
+			moods: [
+				{ code: 'light', label: '🙂轻松' },
+				{ code: 'healing', label: '🫧治愈' },
+				{ code: 'luck', label: '✨小确幸' },
+				{ code: 'tired', label: '😮‍💨疲惫' },
+				{ code: 'emo', label: '🥲emo' },
+			],
+		};
+	},
+	onLoad(options: Record<string, string>) {
+		if (options?.photo) {
+			this.photoPath = decodeURIComponent(options.photo);
+		}
+	},
+	methods: {
+		async pickPhoto() {
+			const tmpUrl = await chooseImage();
+			if (tmpUrl) {
+				this.photoPath = tmpUrl;
+			}
+		},
+		toggleVisibility(e: any) {
+			this.visibility = e.detail.value ? 'public_anonymous' : 'private';
+		},
+		async submit() {
+			if (!this.photoPath) {
+				uni.showToast({ title: '请先选择照片', icon: 'none' });
+				return;
+			}
+			this.submitting = true;
+			try {
+				const payload = {
+					title: this.title,
+					mood_code: this.moodCode,
+					visibility: this.visibility,
+					geo: { lat: 30.6570, lng: 104.0800, zone_name: '成都', radius_m: 3000 },
+					motion_template_id: 'T02_Cloud',
+					pony: false,
+					assets: {
+						photo_url: this.photoPath,
+						audio_url: 'https://example.com/assets/audio_placeholder.mp3',
+						mp4_url: null,
+						thumb_url: null,
+						duration_s: 4.0,
+					},
+				};
+				const res = await apiMoments.create(payload);
+				const momentId = res?.id || res?.data?.id;
+				uni.showToast({ title: '已发布', icon: 'success' });
+				if (momentId) {
+					uni.navigateTo({ url: `/pages/moments/detail?id=${momentId}` });
+				}
+			} catch (err) {
+				console.error(err);
+				uni.showToast({ title: '发布失败', icon: 'none' });
+			} finally {
+				this.submitting = false;
+			}
+		},
+	},
+};
+</script>
+
+<style scoped>
+.moment-create {
+	background-color: #fff;
+	min-height: 100vh;
+	padding: 24rpx 32rpx 80rpx;
+}
+
+.section {
+	margin-bottom: 32rpx;
+}
+
+.label {
+	font-size: 26rpx;
+	color: #444;
+	margin-bottom: 12rpx;
+}
+
+.photo {
+	width: 100%;
+	border-radius: 24rpx;
+	margin-bottom: 16rpx;
+}
+
+.input {
+	width: 100%;
+	background: #f6f6f6;
+	border-radius: 16rpx;
+	padding: 20rpx;
+}
+
+.moods {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12rpx;
+}
+
+.pill {
+	padding: 12rpx 20rpx;
+	border-radius: 999rpx;
+	background: #f2f2f2;
+	font-size: 24rpx;
+}
+
+.pill.active {
+	background: #111;
+	color: #fff;
+}
+
+.btn {
+	background: #111;
+	color: #fff;
+	border-radius: 16rpx;
+	margin-top: 12rpx;
+}
+
+.primary {
+	background: #111;
+	color: #fff;
+	border-radius: 24rpx;
+	margin-top: 24rpx;
+}
+
+.hint {
+	margin-left: 12rpx;
+	font-size: 24rpx;
+	color: #666;
+}
+</style>
