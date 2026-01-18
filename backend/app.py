@@ -347,7 +347,7 @@ async def create_moment(payload: MomentCreateInput, request: Request) -> Dict[st
 
 
 @app.post("/api/moments/{moment_id}/reactions")
-async def add_reaction(moment_id: str, body: Dict[str, str]) -> Dict[str, Any]:
+async def add_reaction(moment_id: str, body: Dict[str, str], request: Request) -> Dict[str, Any]:
     """Increment reaction counter."""
     if "type" not in body:
         raise HTTPException(status_code=400, detail="Missing reaction type")
@@ -370,11 +370,17 @@ async def add_reaction(moment_id: str, body: Dict[str, str]) -> Dict[str, Any]:
             (moment_id,),
         ).fetchall()
     )
+    LOGGER.info(
+        "request_id=%s add_reaction moment_id=%s type=%s",
+        request_id_from(request),
+        moment_id,
+        reaction_type,
+    )
     return {"ok": True, "counts": counts}
 
 
 @app.post("/api/moments/{moment_id}/template-replies")
-async def add_template_reply(moment_id: str, body: Dict[str, str]) -> Dict[str, Any]:
+async def add_template_reply(moment_id: str, body: Dict[str, str], request: Request) -> Dict[str, Any]:
     """Store template reply."""
     if "reply_id" not in body:
         raise HTTPException(status_code=400, detail="Missing reply_id")
@@ -407,6 +413,12 @@ async def add_template_reply(moment_id: str, body: Dict[str, str]) -> Dict[str, 
         (f"reply_{uuid4().hex}", moment_id, user_id, reply_id, text, None, now),
     )
     DB.commit()
+    LOGGER.info(
+        "request_id=%s add_template_reply moment_id=%s reply_id=%s",
+        request_id_from(request),
+        moment_id,
+        reply_id,
+    )
     return {"ok": True}
 
 
