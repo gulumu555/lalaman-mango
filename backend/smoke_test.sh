@@ -32,7 +32,7 @@ create_response=$(curl -s -X POST "$BASE_URL/api/moments" \
   -d "$create_payload")
 echo "Create: $create_response"
 
-moment_id=$(python - <<PY
+moment_id=$(python3 - <<PY
 import json
 print(json.loads('''$create_response''')["id"])
 PY
@@ -59,7 +59,7 @@ bottle_response=$(curl -s -X POST "$BASE_URL/api/bottles" \
   -d '{"user_id":"user_demo","moment_ids":["'$moment_id'"],"open_at":1700000000000}')
 echo "Bottle: $bottle_response"
 
-bottle_id=$(python - <<PY
+bottle_id=$(python3 - <<PY
 import json
 print(json.loads('''$bottle_response''')["id"])
 PY

@@ -175,7 +175,7 @@ async def list_moments_nearby(
 
     clusters: Dict[str, Dict[str, Any]] = {}
     for item in items:
-        key = f\"{round(item['geo']['lat'], 3)}:{round(item['geo']['lng'], 3)}\"
+        key = f"{round(item['geo']['lat'], 3)}:{round(item['geo']['lng'], 3)}"
         if key not in clusters:
             clusters[key] = {
                 "id": key,
