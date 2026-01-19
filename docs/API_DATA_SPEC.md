@@ -168,6 +168,17 @@ POST /api/dev/moments/:id/render
 Body: { status: "pending" | "rendering" | "ready" | "failed", preview_url?, error? }
 Response: { ok: true }
 
+### 2.11 Render 状态流转（说明）
+- pending → rendering → ready
+- pending → failed
+- rendering → failed
+Notes:
+- preview_url 仅在 ready 时返回/保存
+- failed 需附带 error 用于前端降级提示
+
+### 2.12 External Render (reserved)
+- 预留给外部渲染/生成服务（不在仓库内记录接口细节）
+
 ## 3) 页面 × 接口映射
 ### 首页地图（附近3km）
 - GET /moments/nearby (clusters + list + mood_weather)
