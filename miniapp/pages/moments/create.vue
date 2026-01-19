@@ -39,9 +39,7 @@
 			<view class="status" :class="renderStatus">
 				{{ renderStatusLabel }}
 			</view>
-			<view class="status-hint" v-if="renderError">
-				{{ renderError }}
-			</view>
+			<view class="status-hint" v-if="renderHint">{{ renderHint }}</view>
 		</view>
 		<button class="primary" :disabled="submitting" @click="submit">发布片刻</button>
 	</view>
@@ -178,6 +176,13 @@ export default {
 				default:
 					return '';
 			}
+		},
+		renderHint() {
+			if (this.renderError) return this.renderError;
+			if (this.renderStatus === 'rendering' || this.renderStatus === 'pending') {
+				return '可在详情页查看最新状态';
+			}
+			return '';
 		},
 	},
 };
