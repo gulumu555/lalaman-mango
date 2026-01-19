@@ -107,6 +107,11 @@ reply_response=$(curl -s -X POST "$BASE_URL/api/moments/$moment_id/template-repl
   -d '{"reply_id":"A01","user_id":"user_demo"}')
 echo "Reply: $reply_response"
 
+visibility_response=$(curl -s -X POST "$BASE_URL/api/moments/$moment_id/visibility" \
+  -H "Content-Type: application/json" \
+  -d '{"visibility":"private"}')
+echo "Visibility: $visibility_response"
+
 report_response=$(curl -s -X POST "$BASE_URL/api/moderation/report" \
   -H "Content-Type: application/json" \
   -d '{"user_id":"user_demo","target_type":"moment","target_id":"'$moment_id'","reason":"spam"}')
@@ -138,3 +143,6 @@ echo "Open bottle: $open_response"
 
 notifications_response=$(curl -s "$BASE_URL/api/me/notifications?user_id=user_demo")
 echo "Notifications: $notifications_response"
+
+delete_response=$(curl -s -X DELETE "$BASE_URL/api/moments/$moment_id")
+echo "Delete moment: $delete_response"

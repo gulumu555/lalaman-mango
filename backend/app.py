@@ -103,6 +103,10 @@ class ModerationEventInput(BaseModel):
     note: Optional[str] = None
 
 
+class VisibilityUpdateInput(BaseModel):
+    visibility: str = Field(pattern="^(public_anonymous|private)$")
+
+
 MOOD_EMOJI_BY_CODE = {
     "light": "🙂",
     "happy": "😄",
@@ -436,6 +440,41 @@ async def add_template_reply(moment_id: str, body: Dict[str, str]) -> Dict[str, 
         """,
         (f"reply_{uuid4().hex}", moment_id, user_id, reply_id, text, None, now),
     )
+    DB.commit()
+    return {"ok": True}
+
+
+@app.post("/api/moments/{moment_id}/visibility")
+async def update_moment_visibility(
+    moment_id: str,
+    payload: VisibilityUpdateInput,
+) -> Dict[str, Any]:
+    """Update moment visibility."""
+    row = DB.execute("SELECT id FROM moments WHERE id = ?", (moment_id,)).fetchone()
+    if not row:
+        raise HTTPException(status_code=404, detail="Moment not found")
+    DB.execute(
+        """
+        UPDATE moments
+        SET visibility = ?, updated_at = ?
+        WHERE id = ?
+        """,
+        (payload.visibility, now_ms(), moment_id),
+    )
+    DB.commit()
+    return {"ok": True}
+
+
+@app.delete("/api/moments/{moment_id}")
+async def delete_moment(moment_id: str) -> Dict[str, Any]:
+    """Delete a moment and related records."""
+    row = DB.execute("SELECT id FROM moments WHERE id = ?", (moment_id,)).fetchone()
+    if not row:
+        raise HTTPException(status_code=404, detail="Moment not found")
+    DB.execute("DELETE FROM reactions WHERE moment_id = ?", (moment_id,))
+    DB.execute("DELETE FROM template_replies WHERE moment_id = ?", (moment_id,))
+    DB.execute("DELETE FROM bottle_moments WHERE moment_id = ?", (moment_id,))
+    DB.execute("DELETE FROM moments WHERE id = ?", (moment_id,))
     DB.commit()
     return {"ok": True}
 

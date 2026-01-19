@@ -95,10 +95,19 @@ Response:
 - mood_weather: MoodWeather
 Note:
 - MVP 使用 bounding box 做附近过滤（lat/lng + radius_m），先不做复杂地理索引
+- 若 geo.hidden=true，仅返回 zone_name 或置空（前端不展示精确坐标）
 
 ### 2.2 Moment详情
 GET /api/moments/:id
 Response: Moment + reactions + template_replies_preview(optional)
+
+### 2.2.1 Moment 可见性/删除
+POST /api/moments/:id/visibility
+Body: { visibility: "public_anonymous" | "private" }
+Response: { ok: true }
+
+DELETE /api/moments/:id
+Response: { ok: true }
 
 ### 2.3 Create Moment（发布）
 POST /api/moments
@@ -122,6 +131,8 @@ Body:
 - preview_url?
 - assets {photo_url,audio_url,mp4_url,thumb_url?,duration_s}
 Response: { id }
+Notes:
+- geo.hidden=true 时，前端展示需隐藏位置
 
 ### 2.4 Reaction
 POST /api/moments/:id/reactions
@@ -200,6 +211,8 @@ Notes:
 - POST /moments/:id/reactions
 - POST /moments/:id/template-replies
 - POST /bottles（从播放页加入漂流瓶）
+- 导出/分享：客户端本地能力（不新增后端接口）
+- 失败重试：客户端重新触发渲染（dev 用 /api/dev/moments/:id/render）
 
 ### 创建流程
 - 资产上传（如果有）：photo/audio/mp4 上传到对象存储（或本地mock）
