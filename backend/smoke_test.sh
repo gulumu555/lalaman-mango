@@ -54,6 +54,11 @@ reply_response=$(curl -s -X POST "$BASE_URL/api/moments/$moment_id/template-repl
   -d '{"reply_id":"A01","user_id":"user_demo"}')
 echo "Reply: $reply_response"
 
+render_response=$(curl -s -X POST "$BASE_URL/api/dev/moments/$moment_id/render" \
+  -H "Content-Type: application/json" \
+  -d '{"status":"ready","preview_url":"https://example.com/assets/preview_ready.jpg"}')
+echo "Render: $render_response"
+
 bottle_response=$(curl -s -X POST "$BASE_URL/api/bottles" \
   -H "Content-Type: application/json" \
   -d '{"user_id":"user_demo","moment_ids":["'$moment_id'"],"open_at":1700000000000}')
