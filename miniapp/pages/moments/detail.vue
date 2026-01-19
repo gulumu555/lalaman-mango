@@ -11,7 +11,7 @@
 			<text class="hint" v-if="moment?.render?.error">{{ moment.render.error }}</text>
 			<button class="refresh" :disabled="isRefreshing" @click="manualRefresh">刷新状态</button>
 		</view>
-		<view class="status-actions" v-if="momentId">
+		<view class="status-actions" v-if="momentId && showDevTools">
 			<text class="label">开发：快速切换状态</text>
 			<view class="buttons">
 				<button class="pill" @click="updateRender('rendering')">生成中</button>
@@ -44,6 +44,9 @@ export default {
 		};
 	},
 	computed: {
+		showDevTools() {
+			return process.env.NODE_ENV !== 'production';
+		},
 		statusLabel() {
 			switch (this.moment?.render?.status) {
 				case 'rendering':
