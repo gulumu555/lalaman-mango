@@ -38,8 +38,9 @@ print(json.loads('''$create_response''')["id"])
 PY
 )
 
-nearby_response=$(curl -s "$BASE_URL/api/moments/nearby?lat=30.6570&lng=104.0800&radius_m=3000&visibility=public_anonymous")
+nearby_response=$(curl -s -D /tmp/momentpin_headers.txt "$BASE_URL/api/moments/nearby?lat=30.6570&lng=104.0800&radius_m=3000&visibility=public_anonymous")
 echo "Nearby: $nearby_response"
+echo "Headers: $(grep -i '^X-Request-Id:' /tmp/momentpin_headers.txt | tr -d '\r')"
 
 moment_response=$(curl -s "$BASE_URL/api/moments/$moment_id")
 echo "Moment: $moment_response"
