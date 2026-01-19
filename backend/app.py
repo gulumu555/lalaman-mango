@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import logging
 import math
+import os
 import time
 from typing import Any, Dict, List, Optional, Tuple
 from uuid import uuid4
@@ -88,6 +89,12 @@ class MomentCreateInput(BaseModel):
     assets: AssetsInput
 
 
+class SeedreamRenderInput(BaseModel):
+    moment_id: str
+    prompt: Optional[str] = None
+    image_urls: Optional[List[str]] = None
+
+
 MOOD_EMOJI_BY_CODE = {
     "light": "🙂",
     "happy": "😄",
@@ -101,6 +108,16 @@ MOOD_EMOJI_BY_CODE = {
     "emo": "🥲",
     "annoyed": "😵‍💫",
     "down": "😔",
+}
+MOTION_TEMPLATE_IDS = {
+    "T01_Wave",
+    "T02_Cloud",
+    "T03_Neon",
+    "T04_LightLeak",
+    "T05_Flag",
+    "T06_Wind",
+    "T07_Sparkle",
+    "T08_Bokeh",
 }
 
 
@@ -175,6 +192,10 @@ def moment_row_to_payload(row: Dict[str, Any]) -> Dict[str, Any]:
         "created_at": row["created_at"],
         "updated_at": row["updated_at"],
     }
+
+
+def seedream_configured() -> bool:
+    return bool(os.getenv("ARK_API_KEY"))
 
 @app.get("/api/moments/nearby")
 async def list_moments_nearby(
@@ -278,12 +299,22 @@ async def get_moment(moment_id: str) -> Dict[str, Any]:
 async def create_moment(payload: MomentCreateInput) -> Dict[str, str]:
     """Create a moment."""
     moment_id = f"moment_{uuid4().hex}"
+    if payload.motion_template_id not in MOTION_TEMPLATE_IDS:
+        raise HTTPException(status_code=400, detail="Invalid motion template")
     mood_code = payload.mood_code or "light"
     mood_emoji = MOOD_EMOJI_BY_CODE.get(mood_code, "🙂")
     mood_bucket = payload.mood_bucket or bucket_from_code(mood_code)
     created_at = now_ms()
     allow_replies = payload.allow_replies if payload.allow_replies is not None else True
-    render_status = payload.render_status or "pending"
+    if payload.render_status and payload.render_status not in {
+        "pending",
+        "rendering",
+        "ready",
+        "failed",
+    }:
+        raise HTTPException(status_code=400, detail="Invalid render status")
+    render_status = payload.render_status or ("ready" if payload.preview_url else "pending")
+    render_error = payload.render_error or ("render_failed" if render_status == "failed" else None)
     ref_image_urls = json.dumps(payload.ref_image_urls) if payload.ref_image_urls else None
     geo_hidden = 1 if payload.geo.hidden else 0
     DB.execute(
@@ -327,7 +358,7 @@ async def create_moment(payload: MomentCreateInput) -> Dict[str, str]:
             payload.ip_character_id,
             payload.ip_pose,
             render_status,
-            payload.render_error,
+            render_error,
             payload.preview_url,
             created_at,
             created_at,
@@ -593,3 +624,51 @@ async def dev_update_render(moment_id: str, body: Dict[str, Any]) -> Dict[str, A
     )
     DB.commit()
     return {"ok": True}
+
+
+@app.post("/api/dev/render/seedream")
+async def dev_seedream_render(body: SeedreamRenderInput) -> Dict[str, Any]:
+    """Dev-only: placeholder for external rendering."""
+    row = DB.execute("SELECT id FROM moments WHERE id = ?", (body.moment_id,)).fetchone()
+    if not row:
+        raise HTTPException(status_code=404, detail="Moment not found")
+    if not seedream_configured():
+        DB.execute(
+            """
+            UPDATE moments
+            SET render_status = ?, render_error = ?, updated_at = ?
+            WHERE id = ?
+            """,
+            ("failed", "seedream_not_configured", now_ms(), body.moment_id),
+        )
+        DB.commit()
+        return {"ok": False, "error": "seedream_not_configured"}
+    DB.execute(
+        """
+        UPDATE moments
+        SET render_status = ?, render_error = ?, updated_at = ?
+        WHERE id = ?
+        """,
+        ("rendering", None, now_ms(), body.moment_id),
+    )
+    DB.commit()
+    return {"ok": True, "status": "rendering"}
+
+
+@app.post("/api/dev/render/seedream/ready")
+async def dev_seedream_ready(body: SeedreamRenderInput) -> Dict[str, Any]:
+    """Dev-only: mark a render as ready with optional preview URL."""
+    row = DB.execute("SELECT id FROM moments WHERE id = ?", (body.moment_id,)).fetchone()
+    if not row:
+        raise HTTPException(status_code=404, detail="Moment not found")
+    preview_url = body.image_urls[0] if body.image_urls else None
+    DB.execute(
+        """
+        UPDATE moments
+        SET render_status = ?, render_error = ?, preview_url = ?, updated_at = ?
+        WHERE id = ?
+        """,
+        ("ready", None, preview_url, now_ms(), body.moment_id),
+    )
+    DB.commit()
+    return {"ok": True, "status": "ready", "preview_url": preview_url}

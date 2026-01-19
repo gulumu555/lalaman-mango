@@ -159,3 +159,10 @@
 30) 标题：给未来的你（马年）
     语音：如果你听到这句，记得夸夸自己。
     情绪：✨小确幸 模板：T07_Sparkle pony:true
+
+## 7) 导入与校验（开发用）
+- 导入方式：调用 `POST /api/dev/seed/chengdu`（后端已内置种子）
+- 校验方式（示例）：
+  - 运行 `backend/smoke_test.sh` 或 `backend/run_verify.sh`
+  - 检查返回 `seed_count >= 30`
+  - 地图接口 `GET /api/moments/nearby` 能返回 items 与 mood_weather

@@ -45,6 +45,58 @@ echo "Headers: $(grep -i '^X-Request-Id:' /tmp/momentpin_headers.txt | tr -d '\r
 moment_response=$(curl -s "$BASE_URL/api/moments/$moment_id")
 echo "Moment: $moment_response"
 
+seedream_response=$(curl -s -X POST "$BASE_URL/api/dev/render/seedream" \
+  -H "Content-Type: application/json" \
+  -d '{"moment_id":"'$moment_id'","prompt":"demo prompt"}')
+echo "Seedream render: $seedream_response"
+
+moment_after_seedream=$(curl -s "$BASE_URL/api/moments/$moment_id")
+echo "Moment after seedream: $moment_after_seedream"
+
+seedream_ready_response=$(curl -s -X POST "$BASE_URL/api/dev/render/seedream/ready" \
+  -H "Content-Type: application/json" \
+  -d '{"moment_id":"'$moment_id'","image_urls":["https://example.com/assets/preview_ready.jpg"]}')
+echo "Seedream ready: $seedream_ready_response"
+
+moment_after_ready=$(curl -s "$BASE_URL/api/moments/$moment_id")
+echo "Moment after ready: $moment_after_ready"
+
+python3 - <<PY
+import json
+data = json.loads('''$moment_after_ready''')
+status = data["moment"]["render"]["status"]
+if status != "ready":
+    raise SystemExit(f"Expected render status ready, got {status}")
+PY
+
+invalid_template_response=$(curl -s -X POST "$BASE_URL/api/moments" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "'"$USER_ID"'",
+    "title": "非法模板测试",
+    "mood_code": "light",
+    "visibility": "public_anonymous",
+    "geo": {"lat": 30.6570, "lng": 104.0800, "zone_name": "成都", "radius_m": 3000},
+    "motion_template_id": "T99_Invalid",
+    "pony": false,
+    "assets": {
+      "photo_url": "https://example.com/assets/test_photo.jpg",
+      "audio_url": "https://example.com/assets/test_audio.mp3",
+      "mp4_url": null,
+      "thumb_url": null,
+      "duration_s": 4.0
+    }
+  }')
+echo "Invalid template create: $invalid_template_response"
+
+python3 - <<PY
+import json
+data = json.loads('''$invalid_template_response''')
+detail = data.get("detail", "")
+if detail != "Invalid motion template":
+    raise SystemExit(f"Expected invalid template error, got {detail}")
+PY
+
 reaction_response=$(curl -s -X POST "$BASE_URL/api/moments/$moment_id/reactions" \
   -H "Content-Type: application/json" \
   -d '{"type":"heart"}')

@@ -40,6 +40,13 @@ T08_Bokeh
 - 类型：虚化光斑漂浮（全局）
 - 风险：低
 
+## 2.1 统一参数约束（MVP）
+- intensity: 0.2-0.6（默认 0.35）
+- speed: 0.6-1.2（默认 0.9）
+- loop: true
+- safe_mask: "full" | "edge" | "fixed"
+- max_duration_s: 15
+
 ## 3. 模板选择策略
 - 默认：T02_Cloud（最安全）
 - “再来一个”：随机换一个低风险模板（避开 T05_Flag）
@@ -54,6 +61,25 @@ T08_Bokeh
 - mid：局部/依赖mask
 - high：智能识别（MVP不启用）
 
+## 4.1 示例配置（单条）
+```json
+{
+  "id": "T02_Cloud",
+  "name": "云雾漂移",
+  "risk_level": "low",
+  "overlay_type": "alpha_layer",
+  "intensity": 0.35,
+  "speed": 0.9,
+  "loop": true,
+  "safe_mask": "full",
+  "max_duration_s": 15,
+  "params": {
+    "opacity": 0.4,
+    "drift": "slow"
+  }
+}
+```
+
 ## 5. 失败降级策略（必须实现）
 - 模板渲染失败：输出静图+声波+语音 MP4
 - 声波渲染失败：输出静图+语音 MP4
@@ -62,3 +88,8 @@ T08_Bokeh
 ## 6. MVP 后端行为
 - 模板列表以本文档为准，MVP 先不落库
 - 后端仅做模板 id 校验 + 原样返回，渲染留到下一阶段
+
+## 7. 渲染兜底验收
+- 任一模板渲染失败不影响播放链路
+- 播放页始终有可播放 MP4（可为降级版本）
+- 失败提示不打断用户流程（允许重试或“再来一个”）
