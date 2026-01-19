@@ -34,6 +34,15 @@
 			<switch :checked="visibility === 'public_anonymous'" @change="toggleVisibility" />
 			<text class="hint">匿名公开</text>
 		</view>
+		<view class="section" v-if="renderStatus">
+			<view class="label">生成状态</view>
+			<view class="status" :class="renderStatus">
+				{{ renderStatusLabel }}
+			</view>
+			<view class="status-hint" v-if="renderError">
+				{{ renderError }}
+			</view>
+		</view>
 		<button class="primary" :disabled="submitting" @click="submit">发布片刻</button>
 	</view>
 </template>
@@ -58,6 +67,8 @@ export default {
 			audioDuration: 0,
 			recording: false,
 			recorderManager: null,
+			renderStatus: '',
+			renderError: '',
 			moods: [
 				{ code: 'light', label: '🙂轻松' },
 				{ code: 'healing', label: '🫧治愈' },
@@ -117,6 +128,8 @@ export default {
 				return;
 			}
 			this.submitting = true;
+			this.renderStatus = 'rendering';
+			this.renderError = '';
 			try {
 				const payload = {
 					title: this.title,
@@ -125,6 +138,7 @@ export default {
 					geo: { lat: 30.6570, lng: 104.0800, zone_name: '成都', radius_m: 3000 },
 					motion_template_id: 'T02_Cloud',
 					pony: false,
+					render_status: 'rendering',
 					assets: {
 						photo_url: this.photoPath,
 						audio_url: this.audioPath,
@@ -135,15 +149,34 @@ export default {
 				};
 				const res = await apiMoments.create(payload);
 				const momentId = res?.id || res?.data?.id;
+				this.renderStatus = 'pending';
 				uni.showToast({ title: '已发布', icon: 'success' });
 				if (momentId) {
 					uni.navigateTo({ url: `/pages/moments/detail?id=${momentId}` });
 				}
 			} catch (err) {
 				console.error(err);
+				this.renderStatus = 'failed';
+				this.renderError = '生成失败，请稍后再试';
 				uni.showToast({ title: '发布失败', icon: 'none' });
 			} finally {
 				this.submitting = false;
+			}
+		},
+	},
+	computed: {
+		renderStatusLabel() {
+			switch (this.renderStatus) {
+				case 'rendering':
+					return '生成中...';
+				case 'pending':
+					return '已提交，等待生成';
+				case 'ready':
+					return '生成完成';
+				case 'failed':
+					return '生成失败';
+				default:
+					return '';
 			}
 		},
 	},
@@ -235,5 +268,37 @@ export default {
 	margin-left: 12rpx;
 	font-size: 24rpx;
 	color: #666;
+}
+
+.status {
+	display: inline-flex;
+	align-items: center;
+	padding: 8rpx 16rpx;
+	border-radius: 999rpx;
+	font-size: 24rpx;
+	background: #f2f2f2;
+	color: #333;
+}
+
+.status.rendering,
+.status.pending {
+	background: #111;
+	color: #fff;
+}
+
+.status.failed {
+	background: #ffeaea;
+	color: #b42318;
+}
+
+.status.ready {
+	background: #e7f6ec;
+	color: #0f5132;
+}
+
+.status-hint {
+	margin-top: 8rpx;
+	font-size: 22rpx;
+	color: #b42318;
 }
 </style>
