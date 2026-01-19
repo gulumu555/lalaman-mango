@@ -6,12 +6,13 @@ Run locally (once deps installed):
 from __future__ import annotations
 
 import json
+import logging
 import math
 import time
 from typing import Any, Dict, List, Optional, Tuple
 from uuid import uuid4
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel, Field
 
 from .db import get_connection, init_db, row_to_dict, rows_to_dicts
@@ -19,12 +20,34 @@ from .seed_data import build_seed_payloads
 
 app = FastAPI(title="MomentPin MVP API", version="0.1.0")
 
+logger = logging.getLogger("momentpin")
+if not logger.handlers:
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
+
 DB = get_connection()
 
 
 @app.on_event("startup")
 def on_startup() -> None:
     init_db(DB)
+
+
+@app.middleware("http")
+async def add_request_id(request: Request, call_next):
+    request_id = request.headers.get("X-Request-Id") or f"req_{uuid4().hex}"
+    start = time.time()
+    response = await call_next(request)
+    duration_ms = int((time.time() - start) * 1000)
+    response.headers["X-Request-Id"] = request_id
+    logger.info(
+        "request_id=%s method=%s path=%s status=%s duration_ms=%s",
+        request_id,
+        request.method,
+        request.url.path,
+        response.status_code,
+        duration_ms,
+    )
+    return response
 
 
 class GeoInput(BaseModel):
