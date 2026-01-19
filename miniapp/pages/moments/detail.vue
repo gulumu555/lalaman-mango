@@ -9,6 +9,7 @@
 		<view class="status" v-if="moment?.render?.status">
 			<text class="badge" :class="moment.render.status">{{ statusLabel }}</text>
 			<text class="hint" v-if="moment?.render?.error">{{ moment.render.error }}</text>
+			<button class="refresh" :disabled="isRefreshing" @click="manualRefresh">刷新状态</button>
 		</view>
 		<view class="meta">
 			<view class="title">{{ (moment?.mood_emoji || '') + ' ' + (moment?.title || '片刻') }}</view>
@@ -28,6 +29,9 @@ export default {
 	data() {
 		return {
 			moment: null,
+			momentId: '',
+			isRefreshing: false,
+			pollTimer: null,
 		};
 	},
 	computed: {
@@ -49,13 +53,41 @@ export default {
 	onLoad(options: Record<string, string>) {
 		const { id } = options || {};
 		if (id) {
+			this.momentId = id;
 			this.fetchMoment(id);
+			this.startPolling();
 		}
+	},
+	onUnload() {
+		this.stopPolling();
 	},
 	methods: {
 		async fetchMoment(id: string) {
 			const res = await apiMoments.detail(id);
 			this.moment = res?.moment || res;
+		},
+		startPolling() {
+			if (this.pollTimer || !this.momentId) return;
+			this.pollTimer = setInterval(() => {
+				if (this.momentId) {
+					this.fetchMoment(this.momentId);
+				}
+			}, 10000);
+		},
+		stopPolling() {
+			if (this.pollTimer) {
+				clearInterval(this.pollTimer);
+				this.pollTimer = null;
+			}
+		},
+		async manualRefresh() {
+			if (!this.momentId) return;
+			this.isRefreshing = true;
+			try {
+				await this.fetchMoment(this.momentId);
+			} finally {
+				this.isRefreshing = false;
+			}
 		},
 	},
 };
@@ -121,6 +153,15 @@ audio {
 .hint {
 	font-size: 22rpx;
 	color: #b42318;
+}
+
+.refresh {
+	margin-left: auto;
+	padding: 8rpx 16rpx;
+	border-radius: 999rpx;
+	background: #f2f2f2;
+	font-size: 22rpx;
+	color: #111;
 }
 
 .title {
