@@ -87,7 +87,7 @@ export default {
 		startPolling() {
 			if (this.pollTimer || !this.momentId) return;
 			this.pollTimer = setInterval(() => {
-				if (this.momentId) {
+				if (this.momentId && !this.isRefreshing) {
 					this.fetchMoment(this.momentId);
 				}
 			}, 10000);
