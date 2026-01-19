@@ -20,6 +20,15 @@
 			</view>
 		</view>
 		<view class="section">
+			<view class="label">风格</view>
+			<view class="moods">
+				<button v-for="item in styles" :key="item.key" class="pill"
+					:class="{ active: styleKey === item.key }" @click="styleKey = item.key">
+					{{ item.label }}
+				</button>
+			</view>
+		</view>
+		<view class="section">
 			<view class="label">语音（必填）</view>
 			<view class="audio-actions">
 				<button class="btn" :disabled="recording" @click="startRecord">开始录音</button>
@@ -67,12 +76,22 @@ export default {
 			recorderManager: null,
 			renderStatus: '',
 			renderError: '',
+			styleKey: 'ghibli',
 			moods: [
 				{ code: 'light', label: '🙂轻松' },
 				{ code: 'healing', label: '🫧治愈' },
 				{ code: 'luck', label: '✨小确幸' },
 				{ code: 'tired', label: '😮‍💨疲惫' },
 				{ code: 'emo', label: '🥲emo' },
+			],
+			styles: [
+				{ key: 'ghibli', label: '吉卜力' },
+				{ key: 'shinkai', label: '新海诚' },
+				{ key: 'pixar', label: '皮克斯' },
+				{ key: 'disney', label: '迪士尼' },
+				{ key: 'jimmy', label: '吉米漫画' },
+				{ key: 'china_a', label: '华风格A' },
+				{ key: 'china_b', label: '华风格B' },
 			],
 		};
 	},
@@ -136,6 +155,7 @@ export default {
 					geo: { lat: 30.6570, lng: 104.0800, zone_name: '成都', radius_m: 3000 },
 					motion_template_id: 'T02_Cloud',
 					pony: false,
+					style_key: this.styleKey,
 					render_status: 'rendering',
 					assets: {
 						photo_url: this.photoPath,
