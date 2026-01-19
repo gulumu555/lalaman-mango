@@ -11,6 +11,9 @@
 			<text class="hint" v-if="moment?.render?.error">{{ moment.render.error }}</text>
 			<button class="refresh" :disabled="isRefreshing" @click="manualRefresh">刷新状态</button>
 		</view>
+		<view class="status" v-else>
+			<text class="badge pending">等待生成</text>
+		</view>
 		<view class="status-actions" v-if="momentId && showDevTools">
 			<text class="label">开发：快速切换状态</text>
 			<view class="buttons">
