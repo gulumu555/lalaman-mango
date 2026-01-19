@@ -145,7 +145,7 @@ def moment_row_to_payload(row: Dict[str, Any]) -> Dict[str, Any]:
             "pose": row.get("ip_pose"),
         },
         "render": {
-            "status": row.get("render_status"),
+            "status": row.get("render_status") or "pending",
             "error": row.get("render_error"),
             "preview_url": row.get("preview_url"),
         },
