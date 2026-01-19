@@ -11,6 +11,14 @@
 			<text class="hint" v-if="moment?.render?.error">{{ moment.render.error }}</text>
 			<button class="refresh" :disabled="isRefreshing" @click="manualRefresh">刷新状态</button>
 		</view>
+		<view class="status-actions" v-if="momentId">
+			<text class="label">开发：快速切换状态</text>
+			<view class="buttons">
+				<button class="pill" @click="updateRender('rendering')">生成中</button>
+				<button class="pill" @click="updateRender('ready')">完成</button>
+				<button class="pill" @click="updateRender('failed')">失败</button>
+			</view>
+		</view>
 		<view class="meta">
 			<view class="title">{{ (moment?.mood_emoji || '') + ' ' + (moment?.title || '片刻') }}</view>
 			<view class="sub">{{ moment?.geo?.zone_name || '附近' }}</view>
@@ -21,6 +29,7 @@
 <script lang="ts">
 import Header from '@/components/Header.vue';
 import apiMoments from '@/api/moments';
+import apiDev from '@/api/dev';
 
 export default {
 	components: {
@@ -87,6 +96,16 @@ export default {
 				await this.fetchMoment(this.momentId);
 			} finally {
 				this.isRefreshing = false;
+			}
+		},
+		async updateRender(status: string) {
+			if (!this.momentId) return;
+			try {
+				await apiDev.updateRenderStatus(this.momentId, { status });
+				await this.fetchMoment(this.momentId);
+			} catch (err) {
+				console.error(err);
+				uni.showToast({ title: '更新失败', icon: 'none' });
 			}
 		},
 	},
@@ -157,6 +176,29 @@ audio {
 
 .refresh {
 	margin-left: auto;
+	padding: 8rpx 16rpx;
+	border-radius: 999rpx;
+	background: #f2f2f2;
+	font-size: 22rpx;
+	color: #111;
+}
+
+.status-actions {
+	padding: 0 32rpx 20rpx;
+}
+
+.status-actions .label {
+	font-size: 22rpx;
+	color: #777;
+}
+
+.status-actions .buttons {
+	display: flex;
+	gap: 12rpx;
+	margin-top: 12rpx;
+}
+
+.status-actions .pill {
 	padding: 8rpx 16rpx;
 	border-radius: 999rpx;
 	background: #f2f2f2;
