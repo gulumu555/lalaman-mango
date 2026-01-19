@@ -29,6 +29,13 @@
 			</view>
 		</view>
 		<view class="section">
+			<view class="label">参考图（可选）</view>
+			<view class="ref-actions">
+				<button class="btn-secondary" @click="pickRefImages">选择参考图（1-4）</button>
+				<text class="hint" v-if="refImages.length">已选 {{ refImages.length }} 张</text>
+			</view>
+		</view>
+		<view class="section">
 			<view class="label">语音（必填）</view>
 			<view class="audio-actions">
 				<button class="btn" :disabled="recording" @click="startRecord">开始录音</button>
@@ -77,6 +84,7 @@ export default {
 			renderStatus: '',
 			renderError: '',
 			styleKey: 'ghibli',
+			refImages: [],
 			moods: [
 				{ code: 'light', label: '🙂轻松' },
 				{ code: 'healing', label: '🫧治愈' },
@@ -118,6 +126,18 @@ export default {
 				this.photoPath = tmpUrl;
 			}
 		},
+		async pickRefImages() {
+			const res = await new Promise((resolve) => {
+				uni.chooseImage({
+					count: 4,
+					success: resolve,
+					fail: () => resolve(null),
+				});
+			});
+			if (res && res.tempFilePaths) {
+				this.refImages = res.tempFilePaths.slice(0, 4);
+			}
+		},
 		startRecord() {
 			if (!this.recorderManager) return;
 			this.recording = true;
@@ -156,6 +176,7 @@ export default {
 					motion_template_id: 'T02_Cloud',
 					pony: false,
 					style_key: this.styleKey,
+					ref_image_urls: this.refImages,
 					render_status: 'rendering',
 					assets: {
 						photo_url: this.photoPath,
