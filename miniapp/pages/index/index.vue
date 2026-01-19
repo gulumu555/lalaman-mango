@@ -1,6 +1,17 @@
 <template>
 	<Header icon="/static/options.svg" :iconTitle="configInfo?.title" :back="() => navigatorTo('/pages/user/index')">
 	</Header>
+	<view class="map-bg">
+		<map
+			class="map-full"
+			:latitude="centerLat"
+			:longitude="centerLng"
+			:scale="13"
+			:show-location="true"
+			:circles="mapCircles"
+		></map>
+		<view class="map-mask"></view>
+	</view>
 	<view class="content">
 		<image class="logo" src="/static/logo.svg" mode="aspectFit"
 			:style="{ 'transform': `translate(-50%,${statusBarHeight * scale}px) scale(${scale})` }"></image>
@@ -22,9 +33,9 @@
 			<button class="mood-clear" v-if="selectedMood" @click="clearMoodFilter">清除筛选</button>
 		</view>
 		<InfiniteList :fetchFn="requestData" :scroll="handleScroll" :params="{ mood_code: selectedMood }"
-			:styles="{ width: '100%', height: 'calc(100vh - 47px - 78rpx)' }">
+			:styles="{ width: '100%', height: 'calc(100vh - 47px - 220rpx)' }">
 			<template #default="{ item, index }">
-				<view style="padding-top: 246rpx;background-color: #fff;" v-if="index === 0"></view>
+				<view style="padding-top: 246rpx;background-color: transparent;" v-if="index === 0"></view>
 				<view class="image-list" @click="openMoment(item.id)">
 					<image class="image" :src="getThumbnailUrl(item?.assets?.photo_url || item?.photo_url, 500)" mode="widthFix"></image>
 					<view class="desc">
@@ -107,7 +118,17 @@
 				centerLng: 104.0800,
 				radiusM: 3000,
 				moodWeather: null,
-				selectedMood: ''
+				selectedMood: '',
+				mapCircles: [
+					{
+						latitude: 30.6570,
+						longitude: 104.0800,
+						radius: 3000,
+						strokeWidth: 2,
+						color: 'rgba(17, 17, 17, 0.6)',
+						fillColor: 'rgba(17, 17, 17, 0.08)',
+					}
+				],
 			}
 		},
 		onLoad(options) {
@@ -244,6 +265,8 @@ handleCancelChooseImage() {
 		align-items: center;
 		justify-content: center;
 		position: relative;
+		z-index: 2;
+		padding-bottom: 220rpx;
 	}
 
 	.mood-card {
@@ -251,8 +274,9 @@ handleCancelChooseImage() {
 		margin: 24rpx 32rpx 0;
 		padding: 20rpx 24rpx;
 		border-radius: 24rpx;
-		background: #f7f5f0;
-		box-shadow: 0 12rpx 28rpx rgba(0, 0, 0, 0.08);
+		background: rgba(255, 255, 255, 0.92);
+		box-shadow: 0 12rpx 28rpx rgba(0, 0, 0, 0.12);
+		border: 2rpx solid rgba(0, 0, 0, 0.06);
 	}
 
 	.mood-title {
@@ -319,20 +343,27 @@ handleCancelChooseImage() {
 
 	.image-list {
 		position: relative;
+		margin: 18rpx 24rpx 26rpx;
+		border-radius: 16rpx;
+		overflow: hidden;
+		background: rgba(255, 255, 255, 0.95);
+		box-shadow: 0 12rpx 28rpx rgba(0, 0, 0, 0.16);
 
 		.image {
-			width: 100vw;
+			width: 100%;
 			display: block;
 		}
 
 		.desc {
 			position: absolute;
 			left: 0;
-			bottom: 50rpx;
-			width: 100vw;
+			bottom: 0;
+			width: 100%;
+			padding: 18rpx 16rpx 20rpx;
 			text-align: center;
 			font-size: 24rpx;
 			color: #fff;
+			background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(37, 20, 35, 0.55) 100%);
 			text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
 		}
 	}
@@ -348,18 +379,50 @@ handleCancelChooseImage() {
 	}
 
 	.footer-float-wrapper {
-		bottom: 88rpx;
-		left: 28rpx;
-		right: 28rpx;
+		bottom: 96rpx;
+		left: 36rpx;
+		right: 36rpx;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 24rpx;
+		z-index: 4;
 
 		.user {
-			width: 138rpx;
-			height: 138rpx;
+			width: 116rpx;
+			height: 116rpx;
+			background: rgba(255, 255, 255, 0.96);
+			border-radius: 999rpx;
+			padding: 18rpx;
+			border: 2rpx solid rgba(0, 0, 0, 0.08);
+			box-shadow: 0 14rpx 28rpx rgba(0, 0, 0, 0.18);
 		}
 
 		.addition {
 			width: 216rpx;
 			height: 216rpx;
+			background: #111;
+			border-radius: 999rpx;
+			padding: 30rpx;
+			box-shadow: 0 24rpx 48rpx rgba(0, 0, 0, 0.35);
 		}
+	}
+
+	.map-bg {
+		position: fixed;
+		inset: 0;
+		z-index: 0;
+	}
+
+	.map-full {
+		width: 100%;
+		height: 100%;
+	}
+
+	.map-mask {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(245, 245, 245, 0.6) 65%, rgba(255, 255, 255, 0.95) 100%);
+		pointer-events: none;
 	}
 </style>
