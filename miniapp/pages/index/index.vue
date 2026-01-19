@@ -4,7 +4,24 @@
 	<view class="content">
 		<image class="logo" src="/static/logo.svg" mode="aspectFit"
 			:style="{ 'transform': `translate(-50%,${statusBarHeight * scale}px) scale(${scale})` }"></image>
-		<InfiniteList :fetchFn="requestData" :scroll="handleScroll"
+		<view class="mood-card" v-if="moodWeather?.summary?.length">
+			<view class="mood-title">情绪天气</view>
+			<view class="mood-list">
+				<view
+					v-for="item in moodWeather.summary"
+					:key="item.mood_code"
+					class="mood-item"
+					:class="{ selected: selectedMood === item.mood_code }"
+					@click="setMoodFilter(item.mood_code)"
+				>
+					<text class="emoji">{{ item.mood_emoji }}</text>
+					<text class="label">{{ item.mood_code }}</text>
+					<text class="percent">{{ item.percent }}%</text>
+				</view>
+			</view>
+			<button class="mood-clear" v-if="selectedMood" @click="clearMoodFilter">清除筛选</button>
+		</view>
+		<InfiniteList :fetchFn="requestData" :scroll="handleScroll" :params="{ mood_code: selectedMood }"
 			:styles="{ width: '100%', height: 'calc(100vh - 47px - 78rpx)' }">
 			<template #default="{ item, index }">
 				<view style="padding-top: 246rpx;background-color: #fff;" v-if="index === 0"></view>
@@ -86,9 +103,11 @@
 				scale: 1,
 				isLoadedUser: false,
 				configInfo: {},
-						centerLat: 30.6570,
-						centerLng: 104.0800,
-						radiusM: 3000
+				centerLat: 30.6570,
+				centerLng: 104.0800,
+				radiusM: 3000,
+				moodWeather: null,
+				selectedMood: ''
 			}
 		},
 		onLoad(options) {
@@ -151,15 +170,26 @@
 					callback && callback()
 				}
 			},
-			async requestData() {
+			async requestData(params = {}) {
+				const moodCode = params?.mood_code || this.selectedMood;
 				const res = await apiMoments.nearby({
 					lat: this.centerLat,
 					lng: this.centerLng,
 					radius_m: this.radiusM,
 					visibility: 'public_anonymous',
+					mood_code: moodCode || undefined,
 				});
 				const items = res?.items || res?.data?.items || [];
+				this.moodWeather = res?.mood_weather || res?.data?.mood_weather || this.moodWeather;
 				return { data: { current_page: 1, last_page: 1, data: items } };
+			},
+			setMoodFilter(code: string) {
+				if (this.selectedMood === code) return;
+				this.selectedMood = code;
+			},
+			clearMoodFilter() {
+				if (!this.selectedMood) return;
+				this.selectedMood = '';
 			},
 			navigatorTo(url : string) {
 				checkLoginThen(() => {
@@ -214,6 +244,67 @@ handleCancelChooseImage() {
 		align-items: center;
 		justify-content: center;
 		position: relative;
+	}
+
+	.mood-card {
+		width: calc(100% - 64rpx);
+		margin: 24rpx 32rpx 0;
+		padding: 20rpx 24rpx;
+		border-radius: 24rpx;
+		background: #f7f5f0;
+		box-shadow: 0 12rpx 28rpx rgba(0, 0, 0, 0.08);
+	}
+
+	.mood-title {
+		font-size: 26rpx;
+		color: #4a4a4a;
+		margin-bottom: 16rpx;
+	}
+
+	.mood-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 16rpx;
+	}
+
+	.mood-item {
+		flex: 1 1 calc(50% - 16rpx);
+		min-width: 200rpx;
+		padding: 14rpx 16rpx;
+		border-radius: 18rpx;
+		background: #fff;
+		display: flex;
+		flex-direction: column;
+		gap: 6rpx;
+		border: 2rpx solid transparent;
+	}
+
+	.mood-item.selected {
+		border-color: #111;
+		background: #fff7e6;
+	}
+
+	.mood-item .emoji {
+		font-size: 30rpx;
+	}
+
+	.mood-item .label {
+		font-size: 22rpx;
+		color: #333;
+	}
+
+	.mood-item .percent {
+		font-size: 20rpx;
+		color: #777;
+	}
+
+	.mood-clear {
+		margin-top: 16rpx;
+		padding: 10rpx 16rpx;
+		border-radius: 999rpx;
+		background: #111;
+		color: #fff;
+		font-size: 22rpx;
 	}
 
 	.logo {
