@@ -95,6 +95,14 @@ class SeedreamRenderInput(BaseModel):
     image_urls: Optional[List[str]] = None
 
 
+class ModerationEventInput(BaseModel):
+    user_id: Optional[str] = None
+    target_type: str = Field(pattern="^(moment|user)$")
+    target_id: str
+    reason: Optional[str] = None
+    note: Optional[str] = None
+
+
 MOOD_EMOJI_BY_CODE = {
     "light": "🙂",
     "happy": "😄",
@@ -430,6 +438,64 @@ async def add_template_reply(moment_id: str, body: Dict[str, str]) -> Dict[str, 
     )
     DB.commit()
     return {"ok": True}
+
+
+@app.post("/api/moderation/report")
+async def create_report(payload: ModerationEventInput) -> Dict[str, Any]:
+    """Stub: record a report event."""
+    if payload.target_type == "moment":
+        row = DB.execute("SELECT id FROM moments WHERE id = ?", (payload.target_id,)).fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="Moment not found")
+    event_id = f"mod_{uuid4().hex}"
+    DB.execute(
+        """
+        INSERT INTO moderation_events
+        (id, type, user_id, target_type, target_id, reason, note, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            event_id,
+            "report",
+            payload.user_id,
+            payload.target_type,
+            payload.target_id,
+            payload.reason,
+            payload.note,
+            now_ms(),
+        ),
+    )
+    DB.commit()
+    return {"ok": True, "id": event_id}
+
+
+@app.post("/api/moderation/block")
+async def create_block(body: Dict[str, str]) -> Dict[str, Any]:
+    """Stub: record a block event."""
+    user_id = body.get("user_id")
+    target_user_id = body.get("target_user_id")
+    if not user_id or not target_user_id:
+        raise HTTPException(status_code=400, detail="Missing user_id or target_user_id")
+    event_id = f"mod_{uuid4().hex}"
+    DB.execute(
+        """
+        INSERT INTO moderation_events
+        (id, type, user_id, target_type, target_id, reason, note, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            event_id,
+            "block",
+            user_id,
+            "user",
+            target_user_id,
+            None,
+            body.get("note"),
+            now_ms(),
+        ),
+    )
+    DB.commit()
+    return {"ok": True, "id": event_id}
 
 
 @app.get("/api/me/moments")

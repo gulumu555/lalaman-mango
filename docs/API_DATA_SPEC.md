@@ -159,16 +159,25 @@ Response: Notification[]
 POST /api/me/notifications/:id/read
 Response: { ok: true }
 
-### 2.9 Seed（dev only）
+### 2.9 Moderation（stub）
+POST /api/moderation/report
+Body: { user_id?, target_type: "moment" | "user", target_id, reason?, note? }
+Response: { ok: true, id }
+
+POST /api/moderation/block
+Body: { user_id, target_user_id, note? }
+Response: { ok: true, id }
+
+### 2.10 Seed（dev only）
 POST /api/dev/seed/chengdu
 Response: { ok: true, count: number }
 
-### 2.10 Render Status（dev only）
+### 2.11 Render Status（dev only）
 POST /api/dev/moments/:id/render
 Body: { status: "pending" | "rendering" | "ready" | "failed", preview_url?, error? }
 Response: { ok: true }
 
-### 2.11 Render 状态流转（说明）
+### 2.12 Render 状态流转（说明）
 - pending → rendering → ready
 - pending → failed
 - rendering → failed
@@ -176,7 +185,7 @@ Notes:
 - preview_url 仅在 ready 时返回/保存
 - failed 需附带 error 用于前端降级提示
 
-### 2.12 External Render (reserved)
+### 2.13 External Render (reserved)
 - 预留给外部渲染/生成服务（不在仓库内记录接口细节）
 
 ## 3) 页面 × 接口映射

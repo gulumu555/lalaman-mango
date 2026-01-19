@@ -107,6 +107,16 @@ reply_response=$(curl -s -X POST "$BASE_URL/api/moments/$moment_id/template-repl
   -d '{"reply_id":"A01","user_id":"user_demo"}')
 echo "Reply: $reply_response"
 
+report_response=$(curl -s -X POST "$BASE_URL/api/moderation/report" \
+  -H "Content-Type: application/json" \
+  -d '{"user_id":"user_demo","target_type":"moment","target_id":"'$moment_id'","reason":"spam"}')
+echo "Report: $report_response"
+
+block_response=$(curl -s -X POST "$BASE_URL/api/moderation/block" \
+  -H "Content-Type: application/json" \
+  -d '{"user_id":"user_demo","target_user_id":"user_spam"}')
+echo "Block: $block_response"
+
 render_response=$(curl -s -X POST "$BASE_URL/api/dev/moments/$moment_id/render" \
   -H "Content-Type: application/json" \
   -d '{"status":"ready","preview_url":"https://example.com/assets/preview_ready.jpg"}')
