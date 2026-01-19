@@ -77,6 +77,9 @@ export default {
 		async fetchMoment(id: string) {
 			const res = await apiMoments.detail(id);
 			this.moment = res?.moment || res;
+			if (this.moment?.render?.status === 'ready' || this.moment?.render?.status === 'failed') {
+				this.stopPolling();
+			}
 		},
 		startPolling() {
 			if (this.pollTimer || !this.momentId) return;
