@@ -163,6 +163,11 @@ Response: { ok: true }
 POST /api/dev/seed/chengdu
 Response: { ok: true, count: number }
 
+### 2.10 Render Status（dev only）
+POST /api/dev/moments/:id/render
+Body: { status: "pending" | "rendering" | "ready" | "failed", preview_url?, error? }
+Response: { ok: true }
+
 ## 3) 页面 × 接口映射
 ### 首页地图（附近3km）
 - GET /moments/nearby (clusters + list + mood_weather)

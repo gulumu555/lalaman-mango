@@ -543,3 +543,30 @@ async def seed_chengdu() -> Dict[str, Any]:
         created += 1
     DB.commit()
     return {"ok": True, "count": created}
+
+
+@app.post("/api/dev/moments/{moment_id}/render")
+async def dev_update_render(moment_id: str, body: Dict[str, Any]) -> Dict[str, Any]:
+    """Dev-only: update render status for demo."""
+    status = body.get("status")
+    if status not in {"pending", "rendering", "ready", "failed"}:
+        raise HTTPException(status_code=400, detail="Invalid render status")
+    row = DB.execute("SELECT id FROM moments WHERE id = ?", (moment_id,)).fetchone()
+    if not row:
+        raise HTTPException(status_code=404, detail="Moment not found")
+    DB.execute(
+        """
+        UPDATE moments
+        SET render_status = ?, render_error = ?, preview_url = ?, updated_at = ?
+        WHERE id = ?
+        """,
+        (
+            status,
+            body.get("error"),
+            body.get("preview_url"),
+            now_ms(),
+            moment_id,
+        ),
+    )
+    DB.commit()
+    return {"ok": True}
