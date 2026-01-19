@@ -3,8 +3,12 @@
 		<Header :title="'片刻'" />
 		<view class="media">
 			<video v-if="moment?.assets?.mp4_url" :src="moment.assets.mp4_url" controls object-fit="cover" />
-			<image v-else class="photo" :src="moment?.assets?.photo_url" mode="widthFix" />
+			<image v-else class="photo" :src="moment?.render?.preview_url || moment?.assets?.photo_url" mode="widthFix" />
 			<audio v-if="!moment?.assets?.mp4_url" :src="moment?.assets?.audio_url" controls />
+		</view>
+		<view class="status" v-if="moment?.render?.status">
+			<text class="badge" :class="moment.render.status">{{ statusLabel }}</text>
+			<text class="hint" v-if="moment?.render?.error">{{ moment.render.error }}</text>
 		</view>
 		<view class="meta">
 			<view class="title">{{ (moment?.mood_emoji || '') + ' ' + (moment?.title || '片刻') }}</view>
@@ -25,6 +29,22 @@ export default {
 		return {
 			moment: null,
 		};
+	},
+	computed: {
+		statusLabel() {
+			switch (this.moment?.render?.status) {
+				case 'rendering':
+					return '生成中...';
+				case 'pending':
+					return '等待生成';
+				case 'ready':
+					return '生成完成';
+				case 'failed':
+					return '生成失败';
+				default:
+					return '';
+			}
+		},
 	},
 	onLoad(options: Record<string, string>) {
 		const { id } = options || {};
@@ -65,6 +85,42 @@ audio {
 
 .meta {
 	padding: 0 32rpx 40rpx;
+}
+
+.status {
+	padding: 0 32rpx 20rpx;
+	display: flex;
+	align-items: center;
+	gap: 12rpx;
+}
+
+.badge {
+	padding: 8rpx 16rpx;
+	border-radius: 999rpx;
+	font-size: 24rpx;
+	background: #f2f2f2;
+	color: #333;
+}
+
+.badge.rendering,
+.badge.pending {
+	background: #111;
+	color: #fff;
+}
+
+.badge.failed {
+	background: #ffeaea;
+	color: #b42318;
+}
+
+.badge.ready {
+	background: #e7f6ec;
+	color: #0f5132;
+}
+
+.hint {
+	font-size: 22rpx;
+	color: #b42318;
 }
 
 .title {
