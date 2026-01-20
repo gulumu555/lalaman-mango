@@ -48,6 +48,9 @@ struct DetailView: View {
 
                 ModerationSection()
 
+                Text("仅匿名公开可互动（占位）")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
                 if showFeedback {
                     Text("已发送")
                         .font(.caption)

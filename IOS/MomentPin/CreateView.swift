@@ -13,6 +13,7 @@ struct CreateView: View {
     @State private var isPublic = false
     @State private var includeBottle = false
     @State private var showDetail = false
+    @State private var showGenerating = false
     private let previewMoment = Moment.sample.first!
 
     var body: some View {
@@ -36,12 +37,28 @@ struct CreateView: View {
                 .padding(.bottom, 12)
 
             StepControls(step: $step, onPublish: {
-                showDetail = true
+                showGenerating = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                    showGenerating = false
+                    showDetail = true
+                }
             })
                 .padding(.horizontal, 20)
                 .padding(.bottom, 28)
         }
         .background(Color.white)
+        .overlay {
+            if showGenerating {
+                VStack(spacing: 12) {
+                    ProgressView()
+                    Text("生成中...")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.black.opacity(0.2))
+            }
+        }
         .fullScreenCover(isPresented: $showDetail) {
             NavigationStack {
                 DetailView(moment: previewMoment)

@@ -241,7 +241,9 @@ private struct PlaceSheet: View {
                 Text("共 \(items.count) 条")
                     .font(.caption)
                     .foregroundColor(.secondary)
-                Button("刷新") {}
+                Button("刷新") {
+                    actionHint = "已刷新"
+                }
                     .font(.caption)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
@@ -289,6 +291,13 @@ private struct PlaceSheet: View {
             Text(subHint)
                 .font(.caption)
                 .foregroundColor(.secondary)
+        }
+        .onChange(of: actionHint) { _ in
+            if actionHint == "已刷新" {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                    actionHint = "在这里留一句"
+                }
+            }
         }
         .padding(20)
     }
