@@ -7,18 +7,26 @@ struct NearbyView: View {
         span: MKCoordinateSpan(latitudeDelta: 0.03, longitudeDelta: 0.03)
     )
 
+    @State private var showPlaceSheet = false
+    @State private var selectedMoment: Moment? = nil
+
     private let moments: [Moment] = Moment.sample
 
     var body: some View {
         ZStack {
             Map(coordinateRegion: $region, annotationItems: moments) { moment in
                 MapAnnotation(coordinate: moment.coordinate) {
-                    Text("\(moment.count)")
-                        .font(.caption2)
-                        .foregroundColor(.black)
-                        .padding(6)
-                        .background(Color.white)
-                        .cornerRadius(6)
+                    Button {
+                        selectedMoment = moment
+                        showPlaceSheet = true
+                    } label: {
+                        Text("\(moment.count)")
+                            .font(.caption2)
+                            .foregroundColor(.black)
+                            .padding(6)
+                            .background(Color.white)
+                            .cornerRadius(6)
+                    }
                 }
             }
             .ignoresSafeArea()
@@ -43,6 +51,12 @@ struct NearbyView: View {
             }
             .padding(.horizontal, 20)
             .padding(.top, 90)
+            .sheet(isPresented: $showPlaceSheet) {
+                PlaceSheet(
+                    title: selectedMoment?.zoneName ?? "附近片刻",
+                    items: moments
+                )
+            }
         }
     }
 }
@@ -123,17 +137,49 @@ private struct MomentCard: View {
     }
 }
 
-private struct Moment: Identifiable {
-    let id = UUID()
+private struct PlaceSheet: View {
     let title: String
-    let moodEmoji: String
-    let zoneName: String
-    let coordinate: CLLocationCoordinate2D
-    let count: Int
+    let items: [Moment]
 
-    static let sample: [Moment] = [
-        Moment(title: "在这儿停一下", moodEmoji: "🫧", zoneName: "太古里附近", coordinate: .init(latitude: 30.6570, longitude: 104.0800), count: 8),
-        Moment(title: "桥上有风", moodEmoji: "🫧", zoneName: "九眼桥附近", coordinate: .init(latitude: 30.6395, longitude: 104.0920), count: 4),
-        Moment(title: "巷子里的灯", moodEmoji: "✨", zoneName: "宽窄巷子", coordinate: .init(latitude: 30.6708, longitude: 104.0517), count: 6),
-    ]
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text(title)
+                    .font(.headline)
+                Spacer()
+                Text("共 \(items.count) 条")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            ScrollView {
+                VStack(spacing: 12) {
+                    ForEach(items) { moment in
+                        HStack(spacing: 12) {
+                            Text(moment.moodEmoji)
+                                .font(.title3)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(moment.title)
+                                    .font(.subheadline)
+                                Text(moment.zoneName)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                        }
+                        .padding(12)
+                        .background(Color.gray.opacity(0.08))
+                        .cornerRadius(12)
+                    }
+                }
+            }
+            Button("在这里留一句") {}
+                .font(.headline)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(Color.black)
+                .foregroundColor(.white)
+                .cornerRadius(999)
+        }
+        .padding(20)
+    }
 }
