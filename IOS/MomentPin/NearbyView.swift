@@ -164,8 +164,17 @@ private struct MoodCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("情绪天气")
-                .font(.headline)
+            HStack {
+                Text("情绪天气")
+                    .font(.headline)
+                Spacer()
+                Text("Top3")
+                    .font(.caption2)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color.black.opacity(0.1))
+                    .cornerRadius(8)
+            }
             HStack(spacing: 12) {
                 MoodChip(
                     emoji: "😮‍💨",

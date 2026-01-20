@@ -12,15 +12,26 @@ struct DetailView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                Rectangle()
-                    .fill(Color.gray.opacity(0.2))
-                    .frame(height: 280)
-                    .cornerRadius(16)
-                    .overlay(
-                        Text("视频播放区 (MP4 + 声波)")
+                VStack(spacing: 12) {
+                    Rectangle()
+                        .fill(Color.gray.opacity(0.2))
+                        .frame(height: 280)
+                        .cornerRadius(16)
+                        .overlay(
+                            Text("视频播放区 (MP4 + 声波)")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        )
+                    HStack {
+                        Text("声波占位")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                    )
+                        Spacer()
+                        Text("时长 0:08")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("\(moment.moodEmoji) \(moment.title)")

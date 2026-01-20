@@ -22,6 +22,8 @@ struct CreateView: View {
             StepHeader(step: step)
                 .padding(.horizontal, 20)
                 .padding(.top, 16)
+            StepDots(step: step)
+                .padding(.top, 8)
 
             TabView(selection: $step) {
                 PhotoStep()
@@ -105,6 +107,20 @@ private struct StepHeader: View {
                 .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+private struct StepDots: View {
+    let step: CreateView.Step
+
+    var body: some View {
+        HStack(spacing: 8) {
+            ForEach(CreateView.Step.allCases, id: \.rawValue) { item in
+                Circle()
+                    .fill(item == step ? Color.black : Color.gray.opacity(0.3))
+                    .frame(width: item == step ? 10 : 8, height: item == step ? 10 : 8)
+            }
+        }
     }
 }
 
