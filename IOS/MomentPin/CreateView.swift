@@ -204,6 +204,7 @@ private struct PublishSettings: View {
     let presetZoneName: String?
     @State private var showDatePicker = false
     @State private var openDate = Date().addingTimeInterval(60 * 60 * 24 * 30)
+    @State private var hideLocation = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -218,6 +219,8 @@ private struct PublishSettings: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
+            Toggle("隐藏位置", isOn: $hideLocation)
+                .toggleStyle(SwitchToggleStyle(tint: .black))
             HStack {
                 Text("靠岸时间")
                 Spacer()

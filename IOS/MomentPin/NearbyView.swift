@@ -12,6 +12,7 @@ struct NearbyView: View {
     @State private var selectedZoneName: String? = nil
     @State private var showCreate = false
     @State private var moodFilter: MoodFilter? = nil
+    @State private var showMoodSheet = false
     @State private var showRefreshHint = false
 
     private let moments: [Moment] = Moment.sample
@@ -70,7 +71,7 @@ struct NearbyView: View {
                     }
                     MoodCard(selectedFilter: $moodFilter)
                     Button("按情绪浏览") {
-                        moodFilter = .light
+                        showMoodSheet = true
                     }
                     .font(.footnote)
                     .frame(maxWidth: .infinity)
@@ -127,6 +128,9 @@ struct NearbyView: View {
             }
             .navigationDestination(item: $selectedMoment) { moment in
                 DetailView(moment: moment)
+            }
+            .sheet(isPresented: $showMoodSheet) {
+                MoodBrowseSheet(selectedFilter: $moodFilter)
             }
         }
     }
@@ -196,6 +200,37 @@ private struct MoodCard: View {
     }
 }
 
+private struct MoodBrowseSheet: View {
+    @Binding var selectedFilter: MoodFilter?
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("按情绪浏览")
+                .font(.headline)
+            Picker("情绪", selection: Binding(get: {
+                selectedFilter ?? .light
+            }, set: { value in
+                selectedFilter = value
+            })) {
+                Text("轻松").tag(MoodFilter.light)
+                Text("疲惫").tag(MoodFilter.tired)
+                Text("emo").tag(MoodFilter.emo)
+            }
+            .pickerStyle(.segmented)
+            Button("清除筛选") {
+                selectedFilter = nil
+            }
+            .font(.footnote)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 10)
+            .background(Color.black)
+            .foregroundColor(.white)
+            .cornerRadius(999)
+            Spacer()
+        }
+        .padding(20)
+    }
+}
 private struct MoodChip: View {
     let emoji: String
     let label: String

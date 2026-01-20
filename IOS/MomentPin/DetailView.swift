@@ -48,6 +48,9 @@ struct DetailView: View {
                 TemplateReplies(selectedTemplate: $selectedTemplate) {
                     showFeedback = true
                 }
+                Text("模板回应：每日最多 1 条（占位）")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
 
                 ShareRetrySection()
 
