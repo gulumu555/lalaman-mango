@@ -9,13 +9,18 @@ struct NearbyView: View {
 
     @State private var showPlaceSheet = false
     @State private var selectedMoment: Moment? = nil
+    @State private var moodFilter: MoodFilter? = nil
 
     private let moments: [Moment] = Moment.sample
+    private var filteredMoments: [Moment] {
+        guard let moodFilter else { return moments }
+        return moments.filter { moodFilter.match(emoji: $0.moodEmoji) }
+    }
 
     var body: some View {
         NavigationStack {
             ZStack {
-                Map(coordinateRegion: $region, annotationItems: moments) { moment in
+                Map(coordinateRegion: $region, annotationItems: filteredMoments) { moment in
                     MapAnnotation(coordinate: moment.coordinate) {
                         Button {
                             selectedMoment = moment
@@ -40,10 +45,10 @@ struct NearbyView: View {
                 .ignoresSafeArea()
 
                 VStack(spacing: 16) {
-                    MoodCard()
+                    MoodCard(selectedFilter: $moodFilter)
                     ScrollView {
                         VStack(spacing: 16) {
-                            ForEach(moments) { moment in
+                            ForEach(filteredMoments) { moment in
                                 MomentCard(moment: moment) {
                                     selectedMoment = moment
                                 }
@@ -57,7 +62,7 @@ struct NearbyView: View {
                 .sheet(isPresented: $showPlaceSheet) {
                     PlaceSheet(
                         title: selectedMoment?.zoneName ?? "附近片刻",
-                        items: moments
+                        items: filteredMoments
                     ) { moment in
                         showPlaceSheet = false
                         selectedMoment = moment
@@ -71,23 +76,62 @@ struct NearbyView: View {
     }
 }
 
+private enum MoodFilter {
+    case tired
+    case light
+    case emo
+
+    func match(emoji: String) -> Bool {
+        switch self {
+        case .tired:
+            return emoji == "😮‍💨"
+        case .light:
+            return emoji == "🙂"
+        case .emo:
+            return emoji == "🥲"
+        }
+    }
+}
+
 private struct MoodCard: View {
+    @Binding var selectedFilter: MoodFilter?
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("情绪天气")
                 .font(.headline)
             HStack(spacing: 12) {
-                MoodChip(emoji: "😮‍💨", label: "疲惫 45%")
-                MoodChip(emoji: "🙂", label: "轻松 30%")
-                MoodChip(emoji: "🥲", label: "emo 25%")
+                MoodChip(
+                    emoji: "😮‍💨",
+                    label: "疲惫 45%",
+                    isSelected: selectedFilter == .tired
+                ) {
+                    selectedFilter = .tired
+                }
+                MoodChip(
+                    emoji: "🙂",
+                    label: "轻松 30%",
+                    isSelected: selectedFilter == .light
+                ) {
+                    selectedFilter = .light
+                }
+                MoodChip(
+                    emoji: "🥲",
+                    label: "emo 25%",
+                    isSelected: selectedFilter == .emo
+                ) {
+                    selectedFilter = .emo
+                }
             }
-            Button("去听听") {}
-                .font(.footnote)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 8)
-                .background(Color.black)
-                .foregroundColor(.white)
-                .cornerRadius(999)
+            Button(selectedFilter == nil ? "去听听" : "清除筛选") {
+                selectedFilter = nil
+            }
+            .font(.footnote)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
+            .background(Color.black)
+            .foregroundColor(.white)
+            .cornerRadius(999)
         }
         .padding(16)
         .background(Color.white.opacity(0.95))
@@ -99,21 +143,26 @@ private struct MoodCard: View {
 private struct MoodChip: View {
     let emoji: String
     let label: String
+    let isSelected: Bool
+    let onTap: () -> Void
 
     var body: some View {
-        HStack(spacing: 6) {
-            Text(emoji)
-            Text(label)
-                .font(.caption)
+        Button(action: onTap) {
+            HStack(spacing: 6) {
+                Text(emoji)
+                Text(label)
+                    .font(.caption)
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(isSelected ? Color.black.opacity(0.1) : Color.white)
+            .cornerRadius(999)
+            .overlay(
+                RoundedRectangle(cornerRadius: 999)
+                    .stroke(Color.black.opacity(0.08), lineWidth: 1)
+            )
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 6)
-        .background(Color.white)
-        .cornerRadius(999)
-        .overlay(
-            RoundedRectangle(cornerRadius: 999)
-                .stroke(Color.black.opacity(0.08), lineWidth: 1)
-        )
+        .buttonStyle(.plain)
     }
 }
 
