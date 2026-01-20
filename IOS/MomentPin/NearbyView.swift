@@ -25,20 +25,26 @@ struct NearbyView: View {
         NavigationStack {
             ZStack {
                 Map(coordinateRegion: $region, annotationItems: filteredMoments) { moment in
-                    MapAnnotation(coordinate: moment.coordinate) {
-                        Button {
-                            selectedMoment = moment
-                            showPlaceSheet = true
-                        } label: {
-                            Text("\(moment.count)")
-                                .font(.caption2)
-                                .foregroundColor(.black)
-                                .padding(6)
-                                .background(Color.white)
-                                .cornerRadius(6)
-                        }
+                MapAnnotation(coordinate: moment.coordinate) {
+                    Button {
+                        selectedMoment = moment
+                        showPlaceSheet = true
+                    } label: {
+                        Text("\(moment.count)")
+                            .font(.caption2)
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 6)
+                            .background(Color.black)
+                            .cornerRadius(12)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color.white.opacity(0.4), lineWidth: 1)
+                            )
+                            .shadow(color: Color.black.opacity(0.2), radius: 6, x: 0, y: 4)
                     }
                 }
+            }
                 .ignoresSafeArea()
 
                 LinearGradient(

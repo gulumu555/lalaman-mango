@@ -54,6 +54,8 @@ struct DetailView: View {
 
                 ShareRetrySection()
 
+                BottleSection()
+
                 AuthorActions(isPublic: $isPublic)
 
                 ModerationSection {
@@ -246,6 +248,37 @@ private struct ModerationSection: View {
                 .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+private struct BottleSection: View {
+    @State private var showDatePicker = false
+    @State private var openDate = Date().addingTimeInterval(60 * 60 * 24 * 365)
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("漂流瓶")
+                .font(.headline)
+            Toggle("放进漂流瓶", isOn: .constant(true))
+                .toggleStyle(SwitchToggleStyle(tint: .black))
+            HStack {
+                Text("靠岸时间")
+                Spacer()
+                Button(openDate, style: .date) {
+                    showDatePicker.toggle()
+                }
+                .font(.caption)
+                .foregroundColor(.secondary)
+            }
+            if showDatePicker {
+                DatePicker("选择日期", selection: $openDate, displayedComponents: [.date])
+                    .datePickerStyle(.graphical)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .background(Color.gray.opacity(0.08))
+        .cornerRadius(16)
     }
 }
 

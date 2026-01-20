@@ -214,6 +214,11 @@ private struct PublishSettings: View {
                 .toggleStyle(SwitchToggleStyle(tint: .black))
             Toggle("放进漂流瓶", isOn: $includeBottle)
                 .toggleStyle(SwitchToggleStyle(tint: .black))
+            if includeBottle {
+                Text("靠岸时间到期后会通知你回听")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
             if let presetZoneName {
                 Text("地点：\(presetZoneName)")
                     .font(.caption)
