@@ -13,49 +13,59 @@ struct NearbyView: View {
     private let moments: [Moment] = Moment.sample
 
     var body: some View {
-        ZStack {
-            Map(coordinateRegion: $region, annotationItems: moments) { moment in
-                MapAnnotation(coordinate: moment.coordinate) {
-                    Button {
-                        selectedMoment = moment
-                        showPlaceSheet = true
-                    } label: {
-                        Text("\(moment.count)")
-                            .font(.caption2)
-                            .foregroundColor(.black)
-                            .padding(6)
-                            .background(Color.white)
-                            .cornerRadius(6)
-                    }
-                }
-            }
-            .ignoresSafeArea()
-
-            LinearGradient(
-                colors: [Color.white.opacity(0.15), Color.white.opacity(0.55), Color.white.opacity(0.95)],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
-
-            VStack(spacing: 16) {
-                MoodCard()
-                ScrollView {
-                    VStack(spacing: 16) {
-                        ForEach(moments) { moment in
-                            MomentCard(moment: moment)
+        NavigationStack {
+            ZStack {
+                Map(coordinateRegion: $region, annotationItems: moments) { moment in
+                    MapAnnotation(coordinate: moment.coordinate) {
+                        Button {
+                            selectedMoment = moment
+                            showPlaceSheet = true
+                        } label: {
+                            Text("\(moment.count)")
+                                .font(.caption2)
+                                .foregroundColor(.black)
+                                .padding(6)
+                                .background(Color.white)
+                                .cornerRadius(6)
                         }
                     }
-                    .padding(.bottom, 120)
+                }
+                .ignoresSafeArea()
+
+                LinearGradient(
+                    colors: [Color.white.opacity(0.15), Color.white.opacity(0.55), Color.white.opacity(0.95)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea()
+
+                VStack(spacing: 16) {
+                    MoodCard()
+                    ScrollView {
+                        VStack(spacing: 16) {
+                            ForEach(moments) { moment in
+                                MomentCard(moment: moment) {
+                                    selectedMoment = moment
+                                }
+                            }
+                        }
+                        .padding(.bottom, 120)
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 90)
+                .sheet(isPresented: $showPlaceSheet) {
+                    PlaceSheet(
+                        title: selectedMoment?.zoneName ?? "附近片刻",
+                        items: moments
+                    ) { moment in
+                        showPlaceSheet = false
+                        selectedMoment = moment
+                    }
                 }
             }
-            .padding(.horizontal, 20)
-            .padding(.top, 90)
-            .sheet(isPresented: $showPlaceSheet) {
-                PlaceSheet(
-                    title: selectedMoment?.zoneName ?? "附近片刻",
-                    items: moments
-                )
+            .navigationDestination(item: $selectedMoment) { moment in
+                DetailView(moment: moment)
             }
         }
     }
@@ -109,9 +119,42 @@ private struct MoodChip: View {
 
 private struct MomentCard: View {
     let moment: Moment
+    let onTap: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        Button(action: onTap) {
+            VStack(alignment: .leading, spacing: 12) {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(height: 180)
+                    .cornerRadius(14)
+                    .overlay(
+                        Text("MP4 预览")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    )
+                HStack {
+                    Text("\(moment.moodEmoji) \(moment.title)")
+                        .font(.headline)
+                    Spacer()
+                    Text(moment.zoneName)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+        .buttonStyle(.plain)
+        .padding(14)
+        .background(Color.white.opacity(0.95))
+        .cornerRadius(16)
+        .shadow(color: Color.black.opacity(0.12), radius: 12, x: 0, y: 8)
+    }
+}
+
+private struct PlaceSheet: View {
+    let title: String
+    let items: [Moment]
+    let onSelect: (Moment) -> Void
             Rectangle()
                 .fill(Color.gray.opacity(0.2))
                 .frame(height: 180)
@@ -154,21 +197,26 @@ private struct PlaceSheet: View {
             ScrollView {
                 VStack(spacing: 12) {
                     ForEach(items) { moment in
-                        HStack(spacing: 12) {
-                            Text(moment.moodEmoji)
-                                .font(.title3)
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(moment.title)
-                                    .font(.subheadline)
-                                Text(moment.zoneName)
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
+                        Button {
+                            onSelect(moment)
+                        } label: {
+                            HStack(spacing: 12) {
+                                Text(moment.moodEmoji)
+                                    .font(.title3)
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(moment.title)
+                                        .font(.subheadline)
+                                    Text(moment.zoneName)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                Spacer()
                             }
-                            Spacer()
+                            .padding(12)
+                            .background(Color.gray.opacity(0.08))
+                            .cornerRadius(12)
                         }
-                        .padding(12)
-                        .background(Color.gray.opacity(0.08))
-                        .cornerRadius(12)
+                        .buttonStyle(.plain)
                     }
                 }
             }
