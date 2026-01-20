@@ -75,7 +75,9 @@ struct NearbyView: View {
                         .background(Color.white.opacity(0.95))
                         .cornerRadius(999)
                     }
-                    MoodCard(selectedFilter: $moodFilter)
+                    MoodCard(selectedFilter: $moodFilter) {
+                        showMoodSheet = true
+                    }
                     Button("按情绪浏览") {
                         showMoodSheet = true
                     }
@@ -161,6 +163,7 @@ private enum MoodFilter {
 
 private struct MoodCard: View {
     @Binding var selectedFilter: MoodFilter?
+    var onBrowse: () -> Void = {}
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -199,7 +202,11 @@ private struct MoodCard: View {
                 }
             }
             Button(selectedFilter == nil ? "去听听" : "清除筛选") {
-                selectedFilter = nil
+                if selectedFilter == nil {
+                    onBrowse()
+                } else {
+                    selectedFilter = nil
+                }
             }
             .font(.footnote)
             .frame(maxWidth: .infinity)

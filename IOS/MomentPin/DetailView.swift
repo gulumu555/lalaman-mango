@@ -8,6 +8,7 @@ struct DetailView: View {
     @State private var selectedTemplate: String? = nil
     @State private var showFeedback = false
     @State private var showModerationSheet = false
+    @State private var showDeleteConfirm = false
 
     var body: some View {
         ScrollView {
@@ -67,7 +68,9 @@ struct DetailView: View {
 
                 BottleSection()
 
-                AuthorActions(isPublic: $isPublic)
+                AuthorActions(isPublic: $isPublic) {
+                    showDeleteConfirm = true
+                }
 
                 ModerationSection {
                     showModerationSheet = true
@@ -90,6 +93,12 @@ struct DetailView: View {
             Button("确定", role: .cancel) {}
         } message: {
             Text("举报/屏蔽/拉黑占位，后续接入逻辑")
+        }
+        .alert("确认删除", isPresented: $showDeleteConfirm) {
+            Button("删除", role: .destructive) {}
+            Button("取消", role: .cancel) {}
+        } message: {
+            Text("删除后不可恢复（占位）")
         }
     }
 }
@@ -173,6 +182,7 @@ private struct TemplateReplies: View {
 
 private struct AuthorActions: View {
     @Binding var isPublic: Bool
+    var onDelete: () -> Void = {}
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -194,7 +204,9 @@ private struct AuthorActions: View {
             HStack {
                 Text("删除片刻")
                 Spacer()
-                Button("删除") {}
+                Button("删除") {
+                    onDelete()
+                }
                     .font(.caption)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)

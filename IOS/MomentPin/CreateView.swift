@@ -143,6 +143,28 @@ private struct PhotoStep: View {
                 .background(Color.black)
                 .foregroundColor(.white)
                 .cornerRadius(999)
+            HStack(spacing: 12) {
+                Button("裁切") {}
+                    .font(.caption)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999)
+                            .stroke(Color.black.opacity(0.15), lineWidth: 1)
+                    )
+                    .cornerRadius(999)
+                Button("旋转") {}
+                    .font(.caption)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999)
+                            .stroke(Color.black.opacity(0.15), lineWidth: 1)
+                    )
+                    .cornerRadius(999)
+            }
         }
         .padding(20)
     }
