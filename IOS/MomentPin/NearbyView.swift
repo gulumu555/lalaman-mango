@@ -12,6 +12,7 @@ struct NearbyView: View {
     @State private var selectedZoneName: String? = nil
     @State private var showCreate = false
     @State private var moodFilter: MoodFilter? = nil
+    @State private var showRefreshHint = false
 
     private let moments: [Moment] = Moment.sample
     private var filteredMoments: [Moment] {
@@ -55,12 +56,17 @@ struct NearbyView: View {
                             .background(Color.white.opacity(0.95))
                             .cornerRadius(999)
                         Spacer()
-                        Button("刷新") {}
-                            .font(.footnote)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
-                            .background(Color.white.opacity(0.95))
-                            .cornerRadius(999)
+                        Button("刷新") {
+                            showRefreshHint = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                                showRefreshHint = false
+                            }
+                        }
+                        .font(.footnote)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color.white.opacity(0.95))
+                        .cornerRadius(999)
                     }
                     MoodCard(selectedFilter: $moodFilter)
                     Button("按情绪浏览") {
@@ -105,6 +111,18 @@ struct NearbyView: View {
                 }
                 .fullScreenCover(isPresented: $showCreate) {
                     CreateView(presetZoneName: selectedZoneName)
+                }
+                .overlay(alignment: .top) {
+                    if showRefreshHint {
+                        Text("已刷新")
+                            .font(.caption)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Color.black.opacity(0.75))
+                            .foregroundColor(.white)
+                            .cornerRadius(999)
+                            .padding(.top, 12)
+                    }
                 }
             }
             .navigationDestination(item: $selectedMoment) { moment in

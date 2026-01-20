@@ -7,6 +7,7 @@ struct DetailView: View {
     @State private var selectedReaction: String? = nil
     @State private var selectedTemplate: String? = nil
     @State private var showFeedback = false
+    @State private var showModerationSheet = false
 
     var body: some View {
         ScrollView {
@@ -52,7 +53,9 @@ struct DetailView: View {
 
                 AuthorActions(isPublic: $isPublic)
 
-                ModerationSection()
+                ModerationSection {
+                    showModerationSheet = true
+                }
 
                 Text("仅匿名公开可互动（占位）")
                     .font(.caption)
@@ -67,6 +70,11 @@ struct DetailView: View {
         }
         .navigationTitle("片刻")
         .navigationBarTitleDisplayMode(.inline)
+        .alert("风控", isPresented: $showModerationSheet) {
+            Button("确定", role: .cancel) {}
+        } message: {
+            Text("举报/屏蔽/拉黑占位，后续接入逻辑")
+        }
     }
 }
 
@@ -187,12 +195,15 @@ private struct AuthorActions: View {
 }
 
 private struct ModerationSection: View {
+    var onOpen: () -> Void = {}
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("风控")
                 .font(.headline)
             HStack(spacing: 12) {
-                Button("举报") {}
+                Button("举报") {
+                    onOpen()
+                }
                     .font(.caption)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
@@ -202,7 +213,9 @@ private struct ModerationSection: View {
                             .stroke(Color.black.opacity(0.2), lineWidth: 1)
                     )
                     .cornerRadius(999)
-                Button("屏蔽") {}
+                Button("屏蔽") {
+                    onOpen()
+                }
                     .font(.caption)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
@@ -212,7 +225,9 @@ private struct ModerationSection: View {
                             .stroke(Color.black.opacity(0.2), lineWidth: 1)
                     )
                     .cornerRadius(999)
-                Button("拉黑") {}
+                Button("拉黑") {
+                    onOpen()
+                }
                     .font(.caption)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
