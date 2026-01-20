@@ -6,6 +6,7 @@ struct DetailView: View {
     @State private var isPublic = true
     @State private var selectedReaction: String? = nil
     @State private var selectedTemplate: String? = nil
+    @State private var showFeedback = false
 
     var body: some View {
         ScrollView {
@@ -33,15 +34,25 @@ struct DetailView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                ReactionRow(selectedReaction: $selectedReaction)
+                ReactionRow(selectedReaction: $selectedReaction) {
+                    showFeedback = true
+                }
 
-                TemplateReplies(selectedTemplate: $selectedTemplate)
+                TemplateReplies(selectedTemplate: $selectedTemplate) {
+                    showFeedback = true
+                }
 
                 ShareRetrySection()
 
                 AuthorActions(isPublic: $isPublic)
 
                 ModerationSection()
+
+                if showFeedback {
+                    Text("已发送")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
             }
             .padding(20)
         }
@@ -52,6 +63,7 @@ struct DetailView: View {
 
 private struct ReactionRow: View {
     @Binding var selectedReaction: String?
+    var onReact: () -> Void = {}
 
     private let reactions = ["🫶", "🥺", "🙂", "😮‍💨", "✨", "👏"]
     @State private var counts: [String: Int] = [
@@ -67,6 +79,7 @@ private struct ReactionRow: View {
                     Button {
                         selectedReaction = emoji
                         counts[emoji, default: 0] += 1
+                        onReact()
                     } label: {
                         VStack(spacing: 4) {
                             Text(emoji)
@@ -92,6 +105,7 @@ private struct ReactionRow: View {
 
 private struct TemplateReplies: View {
     @Binding var selectedTemplate: String?
+    var onSend: () -> Void = {}
     private let templates = [
         "抱抱你", "今天也很棒", "慢慢来", "给你一点好运", "辛苦啦", "再试一次"
     ]
@@ -104,6 +118,7 @@ private struct TemplateReplies: View {
                 ForEach(templates, id: \.self) { text in
                     Button {
                         selectedTemplate = text
+                        onSend()
                     } label: {
                         Text(text)
                             .font(.caption)

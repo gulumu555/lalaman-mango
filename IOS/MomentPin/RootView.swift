@@ -15,7 +15,9 @@ struct RootView: View {
             case .nearby:
                 NearbyView()
             case .create:
-                CreateView()
+                CreateView(onPublished: {
+                    selectedTab = .nearby
+                })
             case .me:
                 MeView()
             }

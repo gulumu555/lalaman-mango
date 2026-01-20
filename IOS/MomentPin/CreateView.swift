@@ -2,6 +2,7 @@ import SwiftUI
 
 struct CreateView: View {
     var presetZoneName: String? = nil
+    var onPublished: () -> Void = {}
     enum Step: Int, CaseIterable {
         case photo = 1
         case style = 2
@@ -44,6 +45,14 @@ struct CreateView: View {
         .fullScreenCover(isPresented: $showDetail) {
             NavigationStack {
                 DetailView(moment: previewMoment)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button("完成") {
+                                showDetail = false
+                                onPublished()
+                            }
+                        }
+                    }
             }
         }
     }

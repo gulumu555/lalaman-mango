@@ -230,6 +230,7 @@ private struct PlaceSheet: View {
     let onCreate: () -> Void
 
     @State private var actionHint = "在这里留一句"
+    @State private var subHint = "发布后会回到此地点"
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -285,6 +286,9 @@ private struct PlaceSheet: View {
             .background(Color.black)
             .foregroundColor(.white)
             .cornerRadius(999)
+            Text(subHint)
+                .font(.caption)
+                .foregroundColor(.secondary)
         }
         .padding(20)
     }
