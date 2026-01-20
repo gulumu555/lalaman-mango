@@ -254,6 +254,12 @@ private struct PlaceSheet: View {
                 Text("共 \(items.count) 条")
                     .font(.caption)
                     .foregroundColor(.secondary)
+                Button("刷新") {}
+                    .font(.caption)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color.gray.opacity(0.15))
+                    .cornerRadius(8)
             }
             ScrollView {
                 VStack(spacing: 12) {
