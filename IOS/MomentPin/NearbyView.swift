@@ -264,6 +264,9 @@ private struct PlaceSheet: View {
                                         .foregroundColor(.secondary)
                                 }
                                 Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
                             }
                             .padding(12)
                             .background(Color.gray.opacity(0.08))
