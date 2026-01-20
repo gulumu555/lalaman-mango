@@ -26,6 +26,18 @@
 			<view class="title">{{ (moment?.mood_emoji || '') + ' ' + (moment?.title || '片刻') }}</view>
 			<view class="sub">{{ moment?.geo?.zone_name || '附近' }}</view>
 		</view>
+		<view class="author-actions" v-if="momentId">
+			<view class="action-row">
+				<text class="label">可见性</text>
+				<button class="pill" :disabled="isUpdatingVisibility" @click="toggleVisibility">
+					{{ visibilityLabel }}
+				</button>
+			</view>
+			<view class="action-row danger">
+				<text class="label">删除片刻</text>
+				<button class="pill danger" :disabled="isDeleting" @click="confirmDelete">删除</button>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -44,11 +56,16 @@ export default {
 			momentId: '',
 			isRefreshing: false,
 			pollTimer: null,
+			isUpdatingVisibility: false,
+			isDeleting: false,
 		};
 	},
 	computed: {
 		showDevTools() {
 			return process.env.NODE_ENV !== 'production';
+		},
+		visibilityLabel() {
+			return this.moment?.visibility === 'public_anonymous' ? '匿名公开' : '仅自己';
 		},
 		statusLabel() {
 			switch (this.moment?.render?.status) {
@@ -116,6 +133,44 @@ export default {
 				console.error(err);
 				uni.showToast({ title: '更新失败', icon: 'none' });
 			}
+		},
+		async toggleVisibility() {
+			if (!this.momentId || !this.moment?.visibility) return;
+			const nextVisibility =
+				this.moment.visibility === 'public_anonymous' ? 'private' : 'public_anonymous';
+			this.isUpdatingVisibility = true;
+			try {
+				await apiMoments.updateVisibility(this.momentId, { visibility: nextVisibility });
+				await this.fetchMoment(this.momentId);
+			} catch (err) {
+				console.error(err);
+				uni.showToast({ title: '更新失败', icon: 'none' });
+			} finally {
+				this.isUpdatingVisibility = false;
+			}
+		},
+		confirmDelete() {
+			if (!this.momentId) return;
+			uni.showModal({
+				title: '删除片刻',
+				content: '删除后无法恢复，确认删除？',
+				confirmText: '删除',
+				confirmColor: '#111',
+				success: async (res) => {
+					if (!res.confirm) return;
+					this.isDeleting = true;
+					try {
+						await apiMoments.delete(this.momentId);
+						uni.showToast({ title: '已删除', icon: 'none' });
+						setTimeout(() => uni.navigateBack(), 300);
+					} catch (err) {
+						console.error(err);
+						uni.showToast({ title: '删除失败', icon: 'none' });
+					} finally {
+						this.isDeleting = false;
+					}
+				},
+			});
 		},
 	},
 };
@@ -225,5 +280,42 @@ audio {
 	margin-top: 12rpx;
 	font-size: 24rpx;
 	color: #666;
+}
+
+.author-actions {
+	padding: 0 32rpx 40rpx;
+	display: flex;
+	flex-direction: column;
+	gap: 16rpx;
+}
+
+.action-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 16rpx 20rpx;
+	border-radius: 16rpx;
+	background: #f7f7f7;
+}
+
+.action-row.danger {
+	background: #fff5f5;
+}
+
+.action-row .label {
+	font-size: 24rpx;
+	color: #333;
+}
+
+.pill {
+	padding: 8rpx 18rpx;
+	border-radius: 999rpx;
+	background: #111;
+	color: #fff;
+	font-size: 22rpx;
+}
+
+.pill.danger {
+	background: #c62828;
 }
 </style>
