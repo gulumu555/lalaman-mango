@@ -82,12 +82,16 @@ private struct PhotoStep: View {
 
 private struct StyleStep: View {
     private let styles = ["治愈A", "治愈B", "治愈C", "治愈D"]
+    @State private var rotationHint = "模板：T02_Cloud"
 
     var body: some View {
         VStack(spacing: 16) {
             Text("选择风格")
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
+            Text(rotationHint)
+                .font(.caption)
+                .foregroundColor(.secondary)
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 120), spacing: 12)], spacing: 12) {
                 ForEach(styles, id: \.self) { style in
                     Text(style)
@@ -100,6 +104,16 @@ private struct StyleStep: View {
             Toggle("马年小马同框", isOn: .constant(true))
                 .toggleStyle(SwitchToggleStyle(tint: .black))
                 .padding(.top, 8)
+
+            Button("再来一个") {
+                rotationHint = "模板：T0\(Int.random(in: 1...8))_Random"
+            }
+            .font(.caption)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
+            .background(Color.black)
+            .foregroundColor(.white)
+            .cornerRadius(999)
         }
         .padding(20)
     }
