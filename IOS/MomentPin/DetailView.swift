@@ -39,6 +39,8 @@ struct DetailView: View {
                 ShareRetrySection()
 
                 AuthorActions(isPublic: $isPublic)
+
+                ModerationSection()
             }
             .padding(20)
         }
@@ -139,6 +141,51 @@ private struct AuthorActions: View {
         .padding(16)
         .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
+    }
+}
+
+private struct ModerationSection: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("风控")
+                .font(.headline)
+            HStack(spacing: 12) {
+                Button("举报") {}
+                    .font(.caption)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999)
+                            .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                    )
+                    .cornerRadius(999)
+                Button("屏蔽") {}
+                    .font(.caption)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999)
+                            .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                    )
+                    .cornerRadius(999)
+                Button("拉黑") {}
+                    .font(.caption)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999)
+                            .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                    )
+                    .cornerRadius(999)
+            }
+            Text("占位：后续接入举报/屏蔽/拉黑逻辑")
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
