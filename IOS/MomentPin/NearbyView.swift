@@ -9,6 +9,8 @@ struct NearbyView: View {
 
     @State private var showPlaceSheet = false
     @State private var selectedMoment: Moment? = nil
+    @State private var selectedZoneName: String? = nil
+    @State private var showCreate = false
     @State private var moodFilter: MoodFilter? = nil
 
     private let moments: [Moment] = Moment.sample
@@ -62,11 +64,20 @@ struct NearbyView: View {
                 .sheet(isPresented: $showPlaceSheet) {
                     PlaceSheet(
                         title: selectedMoment?.zoneName ?? "附近片刻",
-                        items: filteredMoments
-                    ) { moment in
-                        showPlaceSheet = false
-                        selectedMoment = moment
-                    }
+                        items: filteredMoments,
+                        onSelect: { moment in
+                            showPlaceSheet = false
+                            selectedMoment = moment
+                        },
+                        onCreate: {
+                            showPlaceSheet = false
+                            selectedZoneName = selectedMoment?.zoneName
+                            showCreate = true
+                        }
+                    )
+                }
+                .fullScreenCover(isPresented: $showCreate) {
+                    CreateView(presetZoneName: selectedZoneName)
                 }
             }
             .navigationDestination(item: $selectedMoment) { moment in
@@ -204,6 +215,7 @@ private struct PlaceSheet: View {
     let title: String
     let items: [Moment]
     let onSelect: (Moment) -> Void
+    let onCreate: () -> Void
             Rectangle()
                 .fill(Color.gray.opacity(0.2))
                 .frame(height: 180)
@@ -269,7 +281,9 @@ private struct PlaceSheet: View {
                     }
                 }
             }
-            Button("在这里留一句") {}
+            Button("在这里留一句") {
+                onCreate()
+            }
                 .font(.headline)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 12)

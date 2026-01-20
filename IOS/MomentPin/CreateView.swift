@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct CreateView: View {
+    var presetZoneName: String? = nil
     enum Step: Int, CaseIterable {
         case photo = 1
         case style = 2
@@ -27,7 +28,7 @@ struct CreateView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
 
-            PublishSettings(isPublic: $isPublic, includeBottle: $includeBottle)
+            PublishSettings(isPublic: $isPublic, includeBottle: $includeBottle, presetZoneName: presetZoneName)
                 .padding(.horizontal, 20)
                 .padding(.bottom, 12)
 
@@ -134,6 +135,7 @@ private struct VoiceStep: View {
 private struct PublishSettings: View {
     @Binding var isPublic: Bool
     @Binding var includeBottle: Bool
+    let presetZoneName: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -143,6 +145,11 @@ private struct PublishSettings: View {
                 .toggleStyle(SwitchToggleStyle(tint: .black))
             Toggle("放进漂流瓶", isOn: $includeBottle)
                 .toggleStyle(SwitchToggleStyle(tint: .black))
+            if let presetZoneName {
+                Text("地点：\(presetZoneName)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
             Text("靠岸时间：明年春节（占位）")
                 .font(.caption)
                 .foregroundColor(.secondary)
