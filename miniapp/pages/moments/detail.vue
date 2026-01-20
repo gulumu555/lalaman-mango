@@ -37,6 +37,14 @@
 				<text class="label">删除片刻</text>
 				<button class="pill danger" :disabled="isDeleting" @click="confirmDelete">删除</button>
 			</view>
+			<view class="action-row">
+				<text class="label">导出/分享</text>
+				<button class="pill ghost" @click="handleShare">导出</button>
+			</view>
+			<view class="action-row" v-if="moment?.render?.status === 'failed'">
+				<text class="label">生成失败</text>
+				<button class="pill ghost" :disabled="isRetrying" @click="retryRender">再试一次</button>
+			</view>
 		</view>
 	</view>
 </template>
@@ -58,6 +66,7 @@ export default {
 			pollTimer: null,
 			isUpdatingVisibility: false,
 			isDeleting: false,
+			isRetrying: false,
 		};
 	},
 	computed: {
@@ -132,6 +141,28 @@ export default {
 			} catch (err) {
 				console.error(err);
 				uni.showToast({ title: '更新失败', icon: 'none' });
+			}
+		},
+		handleShare() {
+			uni.showActionSheet({
+				itemList: ['保存到相册（占位）', '系统分享（占位）'],
+			});
+		},
+		async retryRender() {
+			if (!this.momentId) return;
+			this.isRetrying = true;
+			try {
+				if (this.showDevTools) {
+					await apiDev.updateRenderStatus(this.momentId, { status: 'rendering' });
+					await this.fetchMoment(this.momentId);
+				} else {
+					uni.showToast({ title: '已触发重试（占位）', icon: 'none' });
+				}
+			} catch (err) {
+				console.error(err);
+				uni.showToast({ title: '重试失败', icon: 'none' });
+			} finally {
+				this.isRetrying = false;
 			}
 		},
 		async toggleVisibility() {
@@ -313,6 +344,12 @@ audio {
 	background: #111;
 	color: #fff;
 	font-size: 22rpx;
+}
+
+.pill.ghost {
+	background: #fff;
+	color: #111;
+	border: 2rpx solid #111;
 }
 
 .pill.danger {
