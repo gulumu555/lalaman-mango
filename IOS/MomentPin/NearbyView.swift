@@ -48,6 +48,18 @@ struct NearbyView: View {
 
                 VStack(spacing: 16) {
                     MoodCard(selectedFilter: $moodFilter)
+                    Button("按情绪浏览") {
+                        moodFilter = .light
+                    }
+                    .font(.footnote)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(Color.white.opacity(0.95))
+                    .cornerRadius(999)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999)
+                            .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                    )
                     ScrollView {
                         VStack(spacing: 16) {
                             ForEach(filteredMoments) { moment in
@@ -216,34 +228,8 @@ private struct PlaceSheet: View {
     let items: [Moment]
     let onSelect: (Moment) -> Void
     let onCreate: () -> Void
-            Rectangle()
-                .fill(Color.gray.opacity(0.2))
-                .frame(height: 180)
-                .cornerRadius(14)
-                .overlay(
-                    Text("MP4 预览")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                )
-            HStack {
-                Text("\(moment.moodEmoji) \(moment.title)")
-                    .font(.headline)
-                Spacer()
-                Text(moment.zoneName)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-        }
-        .padding(14)
-        .background(Color.white.opacity(0.95))
-        .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.12), radius: 12, x: 0, y: 8)
-    }
-}
 
-private struct PlaceSheet: View {
-    let title: String
-    let items: [Moment]
+    @State private var actionHint = "在这里留一句"
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -287,15 +273,15 @@ private struct PlaceSheet: View {
                     }
                 }
             }
-            Button("在这里留一句") {
+            Button(actionHint) {
                 onCreate()
             }
-                .font(.headline)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .background(Color.black)
-                .foregroundColor(.white)
-                .cornerRadius(999)
+            .font(.headline)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
+            .background(Color.black)
+            .foregroundColor(.white)
+            .cornerRadius(999)
         }
         .padding(20)
     }
