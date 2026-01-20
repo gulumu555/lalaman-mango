@@ -36,6 +36,8 @@ struct DetailView: View {
 
                 TemplateReplies()
 
+                ShareRetrySection()
+
                 AuthorActions(isPublic: $isPublic)
             }
             .padding(20)
@@ -137,5 +139,37 @@ private struct AuthorActions: View {
         .padding(16)
         .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
+    }
+}
+
+private struct ShareRetrySection: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("导出与重试")
+                .font(.headline)
+            HStack(spacing: 12) {
+                Button("导出/分享") {}
+                    .font(.caption)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Color.black)
+                    .foregroundColor(.white)
+                    .cornerRadius(999)
+                Button("再试一次") {}
+                    .font(.caption)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999)
+                            .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                    )
+                    .cornerRadius(999)
+            }
+            Text("失败时仅重试渲染，不重复创建")
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
