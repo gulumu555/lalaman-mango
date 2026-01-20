@@ -54,6 +54,9 @@ private struct ReactionRow: View {
     @Binding var selectedReaction: String?
 
     private let reactions = ["🫶", "🥺", "🙂", "😮‍💨", "✨", "👏"]
+    @State private var counts: [String: Int] = [
+        "🫶": 12, "🥺": 6, "🙂": 18, "😮‍💨": 9, "✨": 7, "👏": 4
+    ]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -63,13 +66,22 @@ private struct ReactionRow: View {
                 ForEach(reactions, id: \.self) { emoji in
                     Button {
                         selectedReaction = emoji
+                        counts[emoji, default: 0] += 1
                     } label: {
-                        Text(emoji)
-                            .font(.title2)
-                            .frame(width: 48, height: 48)
-                            .background(selectedReaction == emoji ? Color.black.opacity(0.1) : Color.white)
-                            .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.black.opacity(0.1), lineWidth: 1))
+                        VStack(spacing: 4) {
+                            Text(emoji)
+                                .font(.title2)
+                            Text("\(counts[emoji, default: 0])")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
+                        .frame(width: 52, height: 60)
+                        .background(selectedReaction == emoji ? Color.black.opacity(0.1) : Color.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14)
+                                .stroke(Color.black.opacity(0.1), lineWidth: 1)
+                        )
                     }
                 }
             }

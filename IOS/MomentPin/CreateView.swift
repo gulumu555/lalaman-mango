@@ -159,6 +159,8 @@ private struct PublishSettings: View {
     @Binding var isPublic: Bool
     @Binding var includeBottle: Bool
     let presetZoneName: String?
+    @State private var showDatePicker = false
+    @State private var openDate = Date().addingTimeInterval(60 * 60 * 24 * 30)
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -173,9 +175,23 @@ private struct PublishSettings: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            Text("靠岸时间：明年春节（占位）")
+            HStack {
+                Text("靠岸时间")
+                Spacer()
+                Button(openDate, style: .date) {
+                    showDatePicker.toggle()
+                }
                 .font(.caption)
                 .foregroundColor(.secondary)
+            }
+            if showDatePicker {
+                DatePicker(
+                    "选择日期",
+                    selection: $openDate,
+                    displayedComponents: [.date]
+                )
+                .datePickerStyle(.graphical)
+            }
         }
         .padding(16)
         .background(Color.gray.opacity(0.08))
