@@ -47,6 +47,21 @@ struct NearbyView: View {
                 .ignoresSafeArea()
 
                 VStack(spacing: 16) {
+                    HStack {
+                        Text("附近 3km")
+                            .font(.footnote)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Color.white.opacity(0.95))
+                            .cornerRadius(999)
+                        Spacer()
+                        Button("刷新") {}
+                            .font(.footnote)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Color.white.opacity(0.95))
+                            .cornerRadius(999)
+                    }
                     MoodCard(selectedFilter: $moodFilter)
                     Button("按情绪浏览") {
                         moodFilter = .light
