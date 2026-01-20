@@ -5,6 +5,7 @@ struct DetailView: View {
 
     @State private var isPublic = true
     @State private var selectedReaction: String? = nil
+    @State private var selectedTemplate: String? = nil
 
     var body: some View {
         ScrollView {
@@ -34,7 +35,7 @@ struct DetailView: View {
 
                 ReactionRow(selectedReaction: $selectedReaction)
 
-                TemplateReplies()
+                TemplateReplies(selectedTemplate: $selectedTemplate)
 
                 ShareRetrySection()
 
@@ -78,6 +79,7 @@ private struct ReactionRow: View {
 }
 
 private struct TemplateReplies: View {
+    @Binding var selectedTemplate: String?
     private let templates = [
         "抱抱你", "今天也很棒", "慢慢来", "给你一点好运", "辛苦啦", "再试一次"
     ]
@@ -88,16 +90,20 @@ private struct TemplateReplies: View {
                 .font(.headline)
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 110), spacing: 10)], spacing: 10) {
                 ForEach(templates, id: \.self) { text in
-                    Button(text) {}
-                        .font(.caption)
-                        .padding(.vertical, 8)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.white)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.black.opacity(0.08), lineWidth: 1)
-                        )
-                        .cornerRadius(12)
+                    Button {
+                        selectedTemplate = text
+                    } label: {
+                        Text(text)
+                            .font(.caption)
+                            .padding(.vertical, 8)
+                            .frame(maxWidth: .infinity)
+                            .background(selectedTemplate == text ? Color.black.opacity(0.1) : Color.white)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                            )
+                            .cornerRadius(12)
+                    }
                 }
             }
         }

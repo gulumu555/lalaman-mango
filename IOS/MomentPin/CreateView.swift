@@ -11,6 +11,8 @@ struct CreateView: View {
     @State private var step: Step = .photo
     @State private var isPublic = false
     @State private var includeBottle = false
+    @State private var showDetail = false
+    private let previewMoment = Moment.sample.first!
 
     var body: some View {
         VStack(spacing: 0) {
@@ -32,11 +34,18 @@ struct CreateView: View {
                 .padding(.horizontal, 20)
                 .padding(.bottom, 12)
 
-            StepControls(step: $step)
+            StepControls(step: $step, onPublish: {
+                showDetail = true
+            })
                 .padding(.horizontal, 20)
                 .padding(.bottom, 28)
         }
         .background(Color.white)
+        .fullScreenCover(isPresented: $showDetail) {
+            NavigationStack {
+                DetailView(moment: previewMoment)
+            }
+        }
     }
 }
 
@@ -176,6 +185,7 @@ private struct PublishSettings: View {
 
 private struct StepControls: View {
     @Binding var step: CreateView.Step
+    var onPublish: () -> Void = {}
 
     var body: some View {
         HStack(spacing: 12) {
@@ -197,7 +207,7 @@ private struct StepControls: View {
 
             Button(step == .voice ? "发布" : "下一步") {
                 if step == .voice {
-                    // publish placeholder
+                    onPublish()
                 } else if let next = CreateView.Step(rawValue: step.rawValue + 1) {
                     step = next
                 }
