@@ -14,6 +14,7 @@ struct CreateView: View {
     @State private var includeBottle = false
     @State private var showDetail = false
     @State private var showGenerating = false
+    @State private var showPublished = false
     private let previewMoment = Moment.sample.first!
 
     var body: some View {
@@ -40,6 +41,7 @@ struct CreateView: View {
                 showGenerating = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                     showGenerating = false
+                    showPublished = true
                     showDetail = true
                 }
             })
@@ -57,6 +59,21 @@ struct CreateView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.black.opacity(0.2))
+            } else if showPublished {
+                VStack(spacing: 8) {
+                    Text("已发布")
+                        .font(.headline)
+                    Text("片刻已发布，可在附近查看")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.black.opacity(0.15))
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                        showPublished = false
+                    }
+                }
             }
         }
         .fullScreenCover(isPresented: $showDetail) {
