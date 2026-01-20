@@ -73,20 +73,6 @@ private struct BottomBar: View {
     }
 }
 
-private struct CreateView: View {
-    var body: some View {
-        VStack(spacing: 16) {
-            Text("创建片刻")
-                .font(.title2)
-            Text("Step 1: 选照片 / Step 2: 风格 / Step 3: 录语音")
-                .font(.footnote)
-                .foregroundColor(.secondary)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.white)
-    }
-}
-
 private struct MeView: View {
     var body: some View {
         VStack(spacing: 12) {
