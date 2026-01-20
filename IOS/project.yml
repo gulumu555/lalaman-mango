@@ -1,0 +1,15 @@
+name: MomentPin
+options:
+  bundleIdPrefix: com.lalaman
+  deploymentTarget:
+    iOS: 15.0
+targets:
+  MomentPin:
+    type: application
+    platform: iOS
+    deploymentTarget: 15.0
+    bundleId: com.lalaman.momentpin
+    sources:
+      - MomentPin
+    info:
+      path: MomentPin/Info.plist
