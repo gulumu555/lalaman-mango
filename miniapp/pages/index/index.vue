@@ -9,6 +9,8 @@
 			:scale="13"
 			:show-location="true"
 			:circles="mapCircles"
+			:markers="mapMarkers"
+			@markertap="handleMarkerTap"
 		></map>
 		<view class="map-mask"></view>
 	</view>
@@ -44,6 +46,9 @@
 				</view>
 			</template>
 		</InfiniteList>
+	</view>
+	<view class="map-quick" @click="openPlaceSheet">
+		<text>地点</text>
 	</view>
 	<view class="footer-float-wrapper" v-show="isLoadedUser">
 		<!-- shopping 图标 -->
@@ -85,11 +90,37 @@
 			</button>
 		</template>
 	</view>
+	<Popup :visible="showPlaceSheet" position="bottom" @update:visible="togglePlaceSheet">
+		<view class="place-sheet">
+			<view class="sheet-header">
+				<text class="sheet-title">{{ placeSheetTitle }}</text>
+				<button class="sheet-close" @click="closePlaceSheet">关闭</button>
+			</view>
+			<view class="sheet-sub">{{ placeSheetSub }}</view>
+			<scroll-view class="sheet-list" scroll-y="true">
+				<view
+					v-for="item in placeSheetItems"
+					:key="item.id"
+					class="sheet-item"
+					@click="openMoment(item.id)"
+				>
+					<text class="sheet-emoji">{{ item.mood_emoji }}</text>
+					<view class="sheet-text">
+						<view class="sheet-title-line">{{ item.title || '片刻' }}</view>
+						<view class="sheet-meta">{{ item.geo?.zone_name || '附近' }}</view>
+					</view>
+				</view>
+				<view class="sheet-empty" v-if="!placeSheetItems.length">暂无片刻</view>
+			</scroll-view>
+			<button class="sheet-cta" @click="openCreateFromSheet">在这里留一句</button>
+		</view>
+	</Popup>
 </template>
 
 <script lang="ts">
 	import Header from '@/components/Header.vue'
 	import InfiniteList from '@/components/InfiniteList.vue'
+	import Popup from '@/components/Popup.vue'
 	import { autoLogin, login, loginGetPhoneNumber } from '@/utils/user'
 	import { checkLoginThen, getThumbnailUrl } from '@/utils/base'
 	import { getLocalToken } from '@/utils/user'
@@ -100,6 +131,7 @@
 		components: {
 			Header,
 			InfiniteList,
+			Popup,
 		},
 		data() {
 			return {
@@ -119,6 +151,10 @@
 				radiusM: 3000,
 				moodWeather: null,
 				selectedMood: '',
+				nearbyItems: [],
+				nearbyClusters: [],
+				showPlaceSheet: false,
+				selectedClusterKey: '',
 				mapCircles: [
 					{
 						latitude: 30.6570,
@@ -130,6 +166,40 @@
 					}
 				],
 			}
+		},
+		computed: {
+			mapMarkers() {
+				return (this.nearbyClusters || []).map((cluster, index) => ({
+					id: index,
+					latitude: cluster.lat,
+					longitude: cluster.lng,
+					width: 36,
+					height: 36,
+					callout: {
+						content: String(cluster.count || 0),
+						color: '#111',
+						fontSize: 12,
+						bgColor: '#fff',
+						borderRadius: 6,
+						padding: 4,
+						display: 'ALWAYS'
+					}
+				}));
+			},
+			placeSheetTitle() {
+				if (this.selectedClusterKey) {
+					return '地点片刻';
+				}
+				return '附近片刻';
+			},
+			placeSheetSub() {
+				const count = this.placeSheetItems.length;
+				return `共 ${count} 条`;
+			},
+			placeSheetItems() {
+				if (!this.selectedClusterKey) return this.nearbyItems;
+				return this.nearbyItems.filter(item => this.clusterKey(item.lat, item.lng) === this.selectedClusterKey);
+			},
 		},
 		onLoad(options) {
 			this.initPid(options)
@@ -201,6 +271,8 @@
 					mood_code: moodCode || undefined,
 				});
 				const items = res?.items || res?.data?.items || [];
+				this.nearbyItems = items;
+				this.nearbyClusters = res?.clusters || res?.data?.clusters || [];
 				this.moodWeather = res?.mood_weather || res?.data?.mood_weather || this.moodWeather;
 				return { data: { current_page: 1, last_page: 1, data: items } };
 			},
@@ -239,6 +311,32 @@
 						const fullUrl = `/pages/moments/create?photo=${encodeURIComponent(tmpUrl)}`;
 						uni.navigateTo({ url: fullUrl });
 					});
+				},
+				clusterKey(lat, lng) {
+					if (lat === undefined || lng === undefined || lat === null || lng === null) return '';
+					return `${Number(lat).toFixed(3)}:${Number(lng).toFixed(3)}`;
+				},
+				handleMarkerTap(event) {
+					const markerId = event?.detail?.markerId;
+					const cluster = this.nearbyClusters[markerId];
+					if (!cluster) return;
+					this.selectedClusterKey = this.clusterKey(cluster.lat, cluster.lng);
+					this.openPlaceSheet();
+				},
+				openPlaceSheet() {
+					this.showPlaceSheet = true;
+				},
+				closePlaceSheet() {
+					this.showPlaceSheet = false;
+					this.selectedClusterKey = '';
+				},
+				togglePlaceSheet(value) {
+					this.showPlaceSheet = value;
+					if (!value) this.selectedClusterKey = '';
+				},
+				openCreateFromSheet() {
+					this.closePlaceSheet();
+					this.openCreate();
 				},
 handleCancelChooseImage() {
 				this.openChooseImage = false;
@@ -424,5 +522,101 @@ handleCancelChooseImage() {
 		inset: 0;
 		background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(245, 245, 245, 0.6) 65%, rgba(255, 255, 255, 0.95) 100%);
 		pointer-events: none;
+	}
+
+	.map-quick {
+		position: fixed;
+		right: 28rpx;
+		bottom: 360rpx;
+		padding: 12rpx 18rpx;
+		border-radius: 999rpx;
+		background: rgba(255, 255, 255, 0.96);
+		border: 2rpx solid rgba(0, 0, 0, 0.1);
+		box-shadow: 0 12rpx 24rpx rgba(0, 0, 0, 0.12);
+		z-index: 4;
+		font-size: 22rpx;
+		color: #111;
+	}
+
+	.place-sheet {
+		padding: 24rpx 24rpx 36rpx;
+		max-height: 70vh;
+		display: flex;
+		flex-direction: column;
+		gap: 16rpx;
+	}
+
+	.sheet-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.sheet-title {
+		font-size: 28rpx;
+		font-weight: 600;
+		color: #111;
+	}
+
+	.sheet-close {
+		font-size: 22rpx;
+		padding: 6rpx 16rpx;
+		border-radius: 999rpx;
+		background: #f2f2f2;
+		color: #333;
+	}
+
+	.sheet-sub {
+		font-size: 22rpx;
+		color: #777;
+	}
+
+	.sheet-list {
+		flex: 1;
+		overflow: hidden;
+	}
+
+	.sheet-item {
+		display: flex;
+		gap: 12rpx;
+		padding: 16rpx 12rpx;
+		border-bottom: 1rpx solid #f0f0f0;
+		align-items: center;
+	}
+
+	.sheet-emoji {
+		font-size: 28rpx;
+	}
+
+	.sheet-text {
+		flex: 1;
+	}
+
+	.sheet-title-line {
+		font-size: 24rpx;
+		color: #111;
+	}
+
+	.sheet-meta {
+		margin-top: 6rpx;
+		font-size: 20rpx;
+		color: #777;
+	}
+
+	.sheet-empty {
+		text-align: center;
+		padding: 24rpx 0;
+		color: #999;
+		font-size: 22rpx;
+	}
+
+	.sheet-cta {
+		margin-top: 8rpx;
+		width: 100%;
+		padding: 14rpx 0;
+		border-radius: 999rpx;
+		background: #111;
+		color: #fff;
+		font-size: 24rpx;
 	}
 </style>
