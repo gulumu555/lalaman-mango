@@ -12,6 +12,7 @@ struct DetailView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isInteractive = true
     @State private var visibilityHint = "仅匿名公开可互动（占位）"
+    @State private var allowReplies = true
 
     var body: some View {
         ScrollView {
@@ -67,7 +68,10 @@ struct DetailView: View {
                     }
                 }
 
-                TemplateReplies(selectedTemplate: $selectedTemplate, isEnabled: isInteractive && isPublic) {
+                TemplateReplies(
+                    selectedTemplate: $selectedTemplate,
+                    isEnabled: isInteractive && isPublic && allowReplies
+                ) {
                     showFeedback = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                         showFeedback = false
@@ -79,12 +83,17 @@ struct DetailView: View {
                 Text("仅模板回应（无评论区）")
                     .font(.caption)
                     .foregroundColor(.secondary)
+                if !allowReplies {
+                    Text("已关闭回复")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
 
                 ShareRetrySection()
 
                 BottleSection()
 
-                AuthorActions(isPublic: $isPublic) {
+                AuthorActions(isPublic: $isPublic, allowReplies: $allowReplies) {
                     showDeleteConfirm = true
                 }
 
@@ -211,8 +220,8 @@ private struct TemplateReplies: View {
 
 private struct AuthorActions: View {
     @Binding var isPublic: Bool
+    @Binding var allowReplies: Bool
     var onDelete: () -> Void = {}
-    @State private var allowReplies = true
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
