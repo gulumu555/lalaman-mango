@@ -30,6 +30,7 @@ struct NearbyView: View {
                 MapAnnotation(coordinate: moment.coordinate) {
                     Button {
                         selectedMoment = moment
+                        selectedZoneName = moment.zoneName
                         showPlaceSheet = true
                         #if canImport(UIKit)
                         UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -111,15 +112,15 @@ struct NearbyView: View {
                 .padding(.top, 90)
                 .sheet(isPresented: $showPlaceSheet) {
                     PlaceSheet(
-                        title: selectedMoment?.zoneName ?? "附近片刻",
+                        title: selectedZoneName ?? "附近片刻",
                         items: filteredMoments,
                         onSelect: { moment in
                             showPlaceSheet = false
                             selectedMoment = moment
+                            selectedZoneName = moment.zoneName
                         },
                         onCreate: {
                             showPlaceSheet = false
-                            selectedZoneName = selectedMoment?.zoneName
                             showCreate = true
                         }
                     )

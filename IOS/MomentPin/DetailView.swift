@@ -303,6 +303,7 @@ private struct ModerationSection: View {
 private struct BottleSection: View {
     @State private var showDatePicker = false
     @State private var openDate = Date().addingTimeInterval(60 * 60 * 24 * 365)
+    @State private var quickHint = "快捷时间未选择"
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -325,16 +326,22 @@ private struct BottleSection: View {
             HStack(spacing: 8) {
                 Button("明年春节") {
                     openDate = Calendar.current.date(byAdding: .day, value: 365, to: Date()) ?? openDate
+                    quickHint = "已选：明年春节"
                 }
                 Button("3个月后") {
                     openDate = Calendar.current.date(byAdding: .month, value: 3, to: Date()) ?? openDate
+                    quickHint = "已选：3个月后"
                 }
                 Button("自定义") {
                     showDatePicker.toggle()
+                    quickHint = "已选：自定义"
                 }
             }
             .font(.caption)
             .buttonStyle(.bordered)
+            Text(quickHint)
+                .font(.caption2)
+                .foregroundColor(.secondary)
             if showDatePicker {
                 DatePicker("选择日期", selection: $openDate, displayedComponents: [.date])
                     .datePickerStyle(.graphical)
