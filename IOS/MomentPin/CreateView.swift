@@ -58,6 +58,12 @@ struct CreateView: View {
                     Text("生成中...")
                         .font(.caption)
                         .foregroundColor(.secondary)
+                    Text("成功率 95%（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text("失败会自动降级为静图+声波")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.black.opacity(0.2))

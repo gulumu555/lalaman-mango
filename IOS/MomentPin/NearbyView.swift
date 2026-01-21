@@ -377,6 +377,11 @@ private struct PlaceSheet: View {
                     }
                 }
             }
+            if items.isEmpty {
+                Text("附近还没有片刻，先留一句吧")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
             Button(actionHint) {
                 onCreate()
                 actionHint = "已进入创建"

@@ -314,6 +314,19 @@ private struct BottleSection: View {
                 .font(.caption)
                 .foregroundColor(.secondary)
             }
+            HStack(spacing: 8) {
+                Button("明年春节") {
+                    openDate = Calendar.current.date(byAdding: .day, value: 365, to: Date()) ?? openDate
+                }
+                Button("3个月后") {
+                    openDate = Calendar.current.date(byAdding: .month, value: 3, to: Date()) ?? openDate
+                }
+                Button("自定义") {
+                    showDatePicker.toggle()
+                }
+            }
+            .font(.caption)
+            .buttonStyle(.bordered)
             if showDatePicker {
                 DatePicker("选择日期", selection: $openDate, displayedComponents: [.date])
                     .datePickerStyle(.graphical)
