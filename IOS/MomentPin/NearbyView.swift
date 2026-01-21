@@ -243,6 +243,9 @@ private struct MoodBrowseSheet: View {
         VStack(spacing: 16) {
             Text("按情绪浏览")
                 .font(.headline)
+            Text(statusHint)
+                .font(.caption)
+                .foregroundColor(.secondary)
             Picker("情绪", selection: Binding(get: {
                 selectedFilter ?? .light
             }, set: { value in
@@ -266,6 +269,21 @@ private struct MoodBrowseSheet: View {
             Spacer()
         }
         .padding(20)
+    }
+
+    private var statusHint: String {
+        switch selectedFilter {
+        case .none:
+            return "当前：全部"
+        case .some(.all):
+            return "当前：全部"
+        case .some(.light):
+            return "当前：轻松"
+        case .some(.tired):
+            return "当前：疲惫"
+        case .some(.emo):
+            return "当前：emo"
+        }
     }
 }
 private struct MoodChip: View {

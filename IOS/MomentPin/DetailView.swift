@@ -310,6 +310,9 @@ private struct BottleSection: View {
                 .font(.headline)
             Toggle("放进漂流瓶", isOn: .constant(true))
                 .toggleStyle(SwitchToggleStyle(tint: .black))
+            Text("到期通知：你有一个漂流瓶靠岸了 🎁")
+                .font(.caption)
+                .foregroundColor(.secondary)
             HStack {
                 Text("靠岸时间")
                 Spacer()
