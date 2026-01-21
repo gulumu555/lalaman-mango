@@ -412,8 +412,25 @@ private struct PlaceSheet: View {
     let onSelect: (Moment) -> Void
     let onCreate: () -> Void
 
-    @State private var actionHint = "在这里留一句"
+    @State private var actionHint: String
     @State private var subHint = "发布后会回到此地点"
+
+    init(
+        title: String,
+        items: [Moment],
+        onSelect: @escaping (Moment) -> Void,
+        onCreate: @escaping () -> Void
+    ) {
+        self.title = title
+        self.items = items
+        self.onSelect = onSelect
+        self.onCreate = onCreate
+        _actionHint = State(initialValue: items.isEmpty ? "成为第一条" : "在这里留一句")
+    }
+
+    private var baseActionTitle: String {
+        items.isEmpty ? "成为第一条" : "在这里留一句"
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -492,12 +509,12 @@ private struct PlaceSheet: View {
         .onChange(of: actionHint) { _ in
             if actionHint == "已刷新" {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-                    actionHint = "在这里留一句"
+                    actionHint = baseActionTitle
                 }
             }
             if actionHint == "已进入创建" {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-                    actionHint = "在这里留一句"
+                    actionHint = baseActionTitle
                 }
             }
         }
