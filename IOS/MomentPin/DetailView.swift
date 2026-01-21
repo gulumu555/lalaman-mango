@@ -9,6 +9,7 @@ struct DetailView: View {
     @State private var showFeedback = false
     @State private var showModerationSheet = false
     @State private var showDeleteConfirm = false
+    @State private var isInteractive = true
 
     var body: some View {
         ScrollView {
@@ -53,11 +54,11 @@ struct DetailView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                ReactionRow(selectedReaction: $selectedReaction) {
+                ReactionRow(selectedReaction: $selectedReaction, isEnabled: isInteractive) {
                     showFeedback = true
                 }
 
-                TemplateReplies(selectedTemplate: $selectedTemplate) {
+                TemplateReplies(selectedTemplate: $selectedTemplate, isEnabled: isInteractive) {
                     showFeedback = true
                 }
                 Text("模板回应：每日最多 1 条（占位）")
@@ -84,6 +85,8 @@ struct DetailView: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
+                Toggle("互动开关（占位）", isOn: $isInteractive)
+                    .toggleStyle(SwitchToggleStyle(tint: .black))
             }
             .padding(20)
         }
@@ -105,6 +108,7 @@ struct DetailView: View {
 
 private struct ReactionRow: View {
     @Binding var selectedReaction: String?
+    var isEnabled: Bool = true
     var onReact: () -> Void = {}
 
     private let reactions = ["🫶", "🥺", "🙂", "😮‍💨", "✨", "👏"]
@@ -119,6 +123,7 @@ private struct ReactionRow: View {
             HStack(spacing: 12) {
                 ForEach(reactions, id: \.self) { emoji in
                     Button {
+                        guard isEnabled else { return }
                         selectedReaction = emoji
                         counts[emoji, default: 0] += 1
                         onReact()
@@ -138,6 +143,7 @@ private struct ReactionRow: View {
                                 .stroke(Color.black.opacity(0.1), lineWidth: 1)
                         )
                     }
+                    .opacity(isEnabled ? 1 : 0.4)
                 }
             }
         }
@@ -147,6 +153,7 @@ private struct ReactionRow: View {
 
 private struct TemplateReplies: View {
     @Binding var selectedTemplate: String?
+    var isEnabled: Bool = true
     var onSend: () -> Void = {}
     private let templates = [
         "抱抱你", "今天也很棒", "慢慢来", "给你一点好运", "辛苦啦", "再试一次"
@@ -159,6 +166,7 @@ private struct TemplateReplies: View {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 110), spacing: 10)], spacing: 10) {
                 ForEach(templates, id: \.self) { text in
                     Button {
+                        guard isEnabled else { return }
                         selectedTemplate = text
                         onSend()
                     } label: {
@@ -173,6 +181,7 @@ private struct TemplateReplies: View {
                             )
                             .cornerRadius(12)
                     }
+                    .opacity(isEnabled ? 1 : 0.4)
                 }
             }
         }

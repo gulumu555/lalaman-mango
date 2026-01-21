@@ -371,6 +371,7 @@ private struct PlaceSheet: View {
             }
             Button(actionHint) {
                 onCreate()
+                actionHint = "已进入创建"
             }
             .font(.headline)
             .frame(maxWidth: .infinity)
@@ -384,6 +385,11 @@ private struct PlaceSheet: View {
         }
         .onChange(of: actionHint) { _ in
             if actionHint == "已刷新" {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                    actionHint = "在这里留一句"
+                }
+            }
+            if actionHint == "已进入创建" {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                     actionHint = "在这里留一句"
                 }
