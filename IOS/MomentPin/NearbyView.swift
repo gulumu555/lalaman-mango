@@ -18,6 +18,7 @@ struct NearbyView: View {
     private let moments: [Moment] = Moment.sample
     private var filteredMoments: [Moment] {
         guard let moodFilter else { return moments }
+        if moodFilter == .all { return moments }
         return moments.filter { moodFilter.match(emoji: $0.moodEmoji) }
     }
 
@@ -148,12 +149,15 @@ struct NearbyView: View {
 }
 
 private enum MoodFilter {
+    case all
     case tired
     case light
     case emo
 
     func match(emoji: String) -> Bool {
         switch self {
+        case .all:
+            return true
         case .tired:
             return emoji == "😮‍💨"
         case .light:
@@ -237,6 +241,7 @@ private struct MoodBrowseSheet: View {
             }, set: { value in
                 selectedFilter = value
             })) {
+                Text("全部").tag(MoodFilter.all)
                 Text("轻松").tag(MoodFilter.light)
                 Text("疲惫").tag(MoodFilter.tired)
                 Text("emo").tag(MoodFilter.emo)

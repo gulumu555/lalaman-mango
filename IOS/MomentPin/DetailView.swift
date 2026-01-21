@@ -149,6 +149,9 @@ private struct ReactionRow: View {
                     .opacity(isEnabled ? 1 : 0.4)
                 }
             }
+            Text("反应 1 秒内完成（占位）")
+                .font(.caption)
+                .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
