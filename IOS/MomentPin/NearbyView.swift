@@ -151,7 +151,7 @@ struct NearbyView: View {
                 }
                 .overlay(alignment: .top) {
                     if showRefreshHint {
-                        Text("已刷新")
+                        Text("已定位")
                             .font(.caption)
                             .padding(.horizontal, 12)
                             .padding(.vertical, 6)

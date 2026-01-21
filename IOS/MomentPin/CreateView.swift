@@ -371,6 +371,8 @@ private struct PublishSettings: View {
                 .datePickerStyle(.graphical)
             }
         }
+        .opacity(includeBottle ? 1.0 : 0.4)
+        .animation(.easeInOut(duration: 0.2), value: includeBottle)
         .padding(16)
         .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
