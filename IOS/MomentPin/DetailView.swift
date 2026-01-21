@@ -217,6 +217,9 @@ private struct AuthorActions: View {
                 .font(.headline)
             Toggle("允许回复", isOn: $allowReplies)
                 .toggleStyle(SwitchToggleStyle(tint: .black))
+            Text(isPublic ? "匿名公开可互动" : "仅自己时互动将关闭")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             HStack {
                 Text("可见性")
                 Spacer()

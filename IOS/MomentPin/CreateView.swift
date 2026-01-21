@@ -98,7 +98,7 @@ struct CreateView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.black.opacity(0.15))
                 .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
                         showPublished = false
                     }
                 }
