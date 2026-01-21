@@ -7,6 +7,7 @@ struct DetailView: View {
     @State private var selectedReaction: String? = nil
     @State private var selectedTemplate: String? = nil
     @State private var showFeedback = false
+    @State private var feedbackText = "已发送"
     @State private var showModerationSheet = false
     @State private var showDeleteConfirm = false
     @Environment(\.dismiss) private var dismiss
@@ -62,6 +63,7 @@ struct DetailView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
 
                 ReactionRow(selectedReaction: $selectedReaction, isEnabled: isInteractive && isPublic) {
+                    feedbackText = "反应已发送"
                     showFeedback = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                         showFeedback = false
@@ -72,6 +74,7 @@ struct DetailView: View {
                     selectedTemplate: $selectedTemplate,
                     isEnabled: isInteractive && isPublic && allowReplies
                 ) {
+                    feedbackText = "模板回复已发送"
                     showFeedback = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                         showFeedback = false
@@ -105,7 +108,7 @@ struct DetailView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
                 if showFeedback {
-                    Text("已发送")
+                    Text(feedbackText)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
