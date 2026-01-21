@@ -56,10 +56,16 @@ struct DetailView: View {
 
                 ReactionRow(selectedReaction: $selectedReaction, isEnabled: isInteractive) {
                     showFeedback = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        showFeedback = false
+                    }
                 }
 
                 TemplateReplies(selectedTemplate: $selectedTemplate, isEnabled: isInteractive) {
                     showFeedback = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        showFeedback = false
+                    }
                 }
                 Text("模板回应：每日最多 1 条（占位）")
                     .font(.caption)

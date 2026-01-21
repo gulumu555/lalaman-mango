@@ -187,6 +187,7 @@ private struct StyleStep: View {
                 ForEach(styles, id: \.self) { style in
                     Button {
                         selectedStyle = style
+                        rotationHint = "模板：\(style)"
                     } label: {
                         Text(style)
                             .font(.caption)

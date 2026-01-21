@@ -276,11 +276,11 @@ private struct MoodChip: View {
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
-            .background(isSelected ? Color.black.opacity(0.1) : Color.white)
+            .background(isSelected ? Color.black.opacity(0.12) : Color.white)
             .cornerRadius(999)
             .overlay(
                 RoundedRectangle(cornerRadius: 999)
-                    .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                    .stroke(isSelected ? Color.black.opacity(0.2) : Color.black.opacity(0.08), lineWidth: 1)
             )
         }
         .buttonStyle(.plain)
