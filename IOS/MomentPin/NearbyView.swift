@@ -76,11 +76,16 @@ struct NearbyView: View {
                                 showRefreshHint = false
                             }
                         } label: {
-                            Image(systemName: "location.fill")
-                                .font(.footnote)
-                                .padding(8)
-                                .background(Color.white.opacity(0.95))
-                                .clipShape(Circle())
+                            HStack(spacing: 6) {
+                                Image(systemName: "location.fill")
+                                    .font(.footnote)
+                                Text("定位")
+                                    .font(.caption)
+                            }
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .background(Color.white.opacity(0.95))
+                            .cornerRadius(999)
                         }
                         Button("刷新") {
                             showRefreshHint = true

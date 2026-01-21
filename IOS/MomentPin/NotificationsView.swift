@@ -10,14 +10,16 @@ struct NotificationsView: View {
     var body: some View {
         List {
             ForEach(notifications, id: \.self) { item in
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(item)
-                        .font(.subheadline)
-                    Text("刚刚 · 占位")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
+                NavigationLink(destination: DetailView(moment: Moment.sample.first!)) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(item)
+                            .font(.subheadline)
+                        Text("刚刚 · 占位")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.vertical, 6)
                 }
-                .padding(.vertical, 6)
             }
         }
         .navigationTitle("通知中心")
