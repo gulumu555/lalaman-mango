@@ -59,14 +59,14 @@ struct DetailView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                ReactionRow(selectedReaction: $selectedReaction, isEnabled: isInteractive) {
+                ReactionRow(selectedReaction: $selectedReaction, isEnabled: isInteractive && isPublic) {
                     showFeedback = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                         showFeedback = false
                     }
                 }
 
-                TemplateReplies(selectedTemplate: $selectedTemplate, isEnabled: isInteractive) {
+                TemplateReplies(selectedTemplate: $selectedTemplate, isEnabled: isInteractive && isPublic) {
                     showFeedback = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                         showFeedback = false

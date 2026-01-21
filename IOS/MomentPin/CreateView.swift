@@ -232,6 +232,7 @@ private struct StyleStep: View {
 
 private struct VoiceStep: View {
     @Binding var hasVoice: Bool
+    @State private var recordHint = "未录音"
 
     var body: some View {
         VStack(spacing: 16) {
@@ -259,6 +260,7 @@ private struct VoiceStep: View {
                 .cornerRadius(999)
                 .onTapGesture {
                     hasVoice = true
+                    recordHint = "已录 0:08"
                 }
             Button("重录") {}
                 .font(.caption)
@@ -270,6 +272,13 @@ private struct VoiceStep: View {
                         .stroke(Color.black.opacity(0.15), lineWidth: 1)
                 )
                 .cornerRadius(999)
+                .onTapGesture {
+                    hasVoice = false
+                    recordHint = "未录音"
+                }
+            Text(recordHint)
+                .font(.caption2)
+                .foregroundColor(.secondary)
         }
         .padding(20)
     }

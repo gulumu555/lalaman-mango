@@ -148,7 +148,9 @@ struct NearbyView: View {
                 DetailView(moment: moment)
             }
             .sheet(isPresented: $showMoodSheet) {
-                MoodBrowseSheet(selectedFilter: $moodFilter)
+                MoodBrowseSheet(selectedFilter: $moodFilter) {
+                    showMoodSheet = false
+                }
             }
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
@@ -248,6 +250,7 @@ private struct MoodCard: View {
 
 private struct MoodBrowseSheet: View {
     @Binding var selectedFilter: MoodFilter?
+    var onClose: () -> Void = {}
 
     var body: some View {
         VStack(spacing: 16) {
@@ -260,6 +263,9 @@ private struct MoodBrowseSheet: View {
                 selectedFilter ?? .light
             }, set: { value in
                 selectedFilter = value
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    onClose()
+                }
             })) {
                 Text("全部").tag(MoodFilter.all)
                 Text("轻松").tag(MoodFilter.light)
@@ -269,6 +275,7 @@ private struct MoodBrowseSheet: View {
             .pickerStyle(.segmented)
             Button("清除筛选") {
                 selectedFilter = nil
+                onClose()
             }
             .font(.footnote)
             .frame(maxWidth: .infinity)
