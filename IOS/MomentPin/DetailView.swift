@@ -372,6 +372,8 @@ private struct BottleSection: View {
                     .foregroundColor(.secondary)
             }
         }
+        .transition(.opacity)
+        .animation(.easeInOut(duration: 0.2), value: includeBottle)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
         .background(Color.gray.opacity(0.08))

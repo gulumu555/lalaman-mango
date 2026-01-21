@@ -94,6 +94,18 @@ struct CreateView: View {
                     .background(Color.black)
                     .foregroundColor(.white)
                     .cornerRadius(999)
+                    Button("再次创作") {
+                        showPublished = false
+                    }
+                    .font(.caption)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999)
+                            .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                    )
+                    .cornerRadius(999)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.black.opacity(0.15))
