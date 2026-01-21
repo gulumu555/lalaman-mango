@@ -342,49 +342,52 @@ private struct PublishSettings: View {
                 .font(.subheadline)
             Toggle("放进漂流瓶", isOn: $includeBottle)
                 .toggleStyle(SwitchToggleStyle(tint: .black))
-            if includeBottle {
-                Text("靠岸时间到期后会通知你回听")
+            VStack(alignment: .leading, spacing: 12) {
+                if includeBottle {
+                    Text("靠岸时间到期后会通知你回听")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                if let presetZoneName {
+                    Text("地点：\(presetZoneName)")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                HStack {
+                    Text("靠岸时间")
+                    Spacer()
+                    Button(openDate, style: .date) {
+                        showDatePicker.toggle()
+                    }
                     .font(.caption)
                     .foregroundColor(.secondary)
-            }
-            if let presetZoneName {
-                Text("地点：\(presetZoneName)")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            HStack {
-                Text("靠岸时间")
-                Spacer()
-                Button(openDate, style: .date) {
-                    showDatePicker.toggle()
+                }
+                HStack(spacing: 8) {
+                    Button("明年春节") {
+                        openDate = Calendar.current.date(byAdding: .day, value: 365, to: Date()) ?? openDate
+                    }
+                    Button("3个月后") {
+                        openDate = Calendar.current.date(byAdding: .month, value: 3, to: Date()) ?? openDate
+                    }
+                    Button("自定义") {
+                        showDatePicker.toggle()
+                    }
                 }
                 .font(.caption)
-                .foregroundColor(.secondary)
-            }
-            HStack(spacing: 8) {
-                Button("明年春节") {
-                    openDate = Calendar.current.date(byAdding: .day, value: 365, to: Date()) ?? openDate
-                }
-                Button("3个月后") {
-                    openDate = Calendar.current.date(byAdding: .month, value: 3, to: Date()) ?? openDate
-                }
-                Button("自定义") {
-                    showDatePicker.toggle()
+                .buttonStyle(.bordered)
+                if showDatePicker {
+                    DatePicker(
+                        "选择日期",
+                        selection: $openDate,
+                        displayedComponents: [.date]
+                    )
+                    .datePickerStyle(.graphical)
                 }
             }
-            .font(.caption)
-            .buttonStyle(.bordered)
-            if showDatePicker {
-                DatePicker(
-                    "选择日期",
-                    selection: $openDate,
-                    displayedComponents: [.date]
-                )
-                .datePickerStyle(.graphical)
-            }
+            .opacity(includeBottle ? 1.0 : 0.4)
+            .animation(.easeInOut(duration: 0.2), value: includeBottle)
+            .allowsHitTesting(includeBottle)
         }
-        .opacity(includeBottle ? 1.0 : 0.4)
-        .animation(.easeInOut(duration: 0.2), value: includeBottle)
         .padding(16)
         .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
