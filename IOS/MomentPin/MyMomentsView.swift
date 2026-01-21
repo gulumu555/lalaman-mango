@@ -1,19 +1,32 @@
 import SwiftUI
 
 struct MyMomentsView: View {
-    private let items = [
-        "私密 · 在这儿停一下",
-        "匿名公开 · 桥上有风",
-        "私密 · 给未来的我"
+    private let privateItems = [
+        "在这儿停一下",
+        "给未来的我"
+    ]
+    private let publicItems = [
+        "桥上有风"
     ]
 
     var body: some View {
         List {
-            ForEach(items, id: \.self) { item in
-                NavigationLink(destination: DetailView(moment: Moment.sample.first!)) {
-                    Text(item)
-                        .font(.subheadline)
-                        .padding(.vertical, 6)
+            Section("私密") {
+                ForEach(privateItems, id: \.self) { item in
+                    NavigationLink(destination: DetailView(moment: Moment.sample.first!)) {
+                        Text(item)
+                            .font(.subheadline)
+                            .padding(.vertical, 6)
+                    }
+                }
+            }
+            Section("匿名公开") {
+                ForEach(publicItems, id: \.self) { item in
+                    NavigationLink(destination: DetailView(moment: Moment.sample.first!)) {
+                        Text(item)
+                            .font(.subheadline)
+                            .padding(.vertical, 6)
+                    }
                 }
             }
         }

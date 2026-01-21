@@ -9,6 +9,7 @@ struct NearbyView: View {
 
     @State private var showPlaceSheet = false
     @State private var selectedMoment: Moment? = nil
+    @State private var selectedMomentId: UUID? = nil
     @State private var selectedZoneName: String? = nil
     @State private var showCreate = false
     @State private var moodFilter: MoodFilter? = nil
@@ -31,6 +32,7 @@ struct NearbyView: View {
                     Button {
                         selectedMoment = moment
                         selectedZoneName = moment.zoneName
+                        selectedMomentId = moment.id
                         showPlaceSheet = true
                         #if canImport(UIKit)
                         UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -127,8 +129,9 @@ struct NearbyView: View {
                         .padding(.vertical, 12)
                 } else {
                     ForEach(filteredMoments) { moment in
-                        MomentCard(moment: moment) {
+                        MomentCard(moment: moment, isSelected: selectedMomentId == moment.id) {
                             selectedMoment = moment
+                            selectedMomentId = moment.id
                         }
                     }
                 }
@@ -363,6 +366,7 @@ private struct MoodChip: View {
 
 private struct MomentCard: View {
     let moment: Moment
+    var isSelected: Bool = false
     let onTap: () -> Void
 
     var body: some View {
@@ -389,8 +393,12 @@ private struct MomentCard: View {
         }
         .buttonStyle(.plain)
         .padding(14)
-        .background(Color.white.opacity(0.95))
+        .background(isSelected ? Color.black.opacity(0.08) : Color.white.opacity(0.95))
         .cornerRadius(16)
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(isSelected ? Color.black.opacity(0.3) : Color.clear, lineWidth: 1)
+        )
         .shadow(color: Color.black.opacity(0.12), radius: 12, x: 0, y: 8)
     }
 }

@@ -10,9 +10,11 @@ struct BottlesView: View {
     var body: some View {
         List {
             ForEach(items, id: \.self) { item in
-                Text(item)
-                    .font(.subheadline)
-                    .padding(.vertical, 6)
+                NavigationLink(destination: DetailView(moment: Moment.sample.first!)) {
+                    Text(item)
+                        .font(.subheadline)
+                        .padding(.vertical, 6)
+                }
             }
         }
         .navigationTitle("漂流瓶")
