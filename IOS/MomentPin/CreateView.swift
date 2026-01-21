@@ -320,6 +320,9 @@ private struct PublishSettings: View {
                 .font(.caption)
                 .fontWeight(.semibold)
                 .foregroundColor(.secondary)
+            Text("开启隐藏后仅显示商圈/区域级位置")
+                .font(.caption2)
+                .foregroundColor(.secondary)
 
             Divider().padding(.vertical, 4)
 

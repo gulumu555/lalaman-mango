@@ -69,6 +69,19 @@ struct NearbyView: View {
                             .background(Color.white.opacity(0.95))
                             .cornerRadius(999)
                         Spacer()
+                        Button {
+                            showRefreshHint = true
+                            locationStatus = "已定位"
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                showRefreshHint = false
+                            }
+                        } label: {
+                            Image(systemName: "location.fill")
+                                .font(.footnote)
+                                .padding(8)
+                                .background(Color.white.opacity(0.95))
+                                .clipShape(Circle())
+                        }
                         Button("刷新") {
                             showRefreshHint = true
                             locationStatus = "已定位"
