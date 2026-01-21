@@ -74,17 +74,3 @@ private struct BottomBar: View {
         .padding(.bottom, 28)
     }
 }
-
-private struct MeView: View {
-    var body: some View {
-        VStack(spacing: 12) {
-            Text("我的")
-                .font(.title2)
-            Text("片刻 / 漂流瓶 / 设置")
-                .font(.footnote)
-                .foregroundColor(.secondary)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.white)
-    }
-}
