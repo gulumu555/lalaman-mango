@@ -344,9 +344,16 @@ private struct PublishSettings: View {
 private struct StepControls: View {
     @Binding var step: CreateView.Step
     var onPublish: () -> Void = {}
+    @State private var canPublish = true
 
     var body: some View {
         HStack(spacing: 12) {
+            if !canPublish {
+                Text("请完成当前步骤")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 6)
+            }
             Button("上一步") {
                 if let prev = CreateView.Step(rawValue: step.rawValue - 1) {
                     step = prev
@@ -376,6 +383,8 @@ private struct StepControls: View {
             .background(Color.black)
             .foregroundColor(.white)
             .cornerRadius(999)
+            .opacity(canPublish ? 1 : 0.4)
+            .disabled(!canPublish)
         }
     }
 }

@@ -362,6 +362,9 @@ private struct BottleSection: View {
 }
 
 private struct ShareRetrySection: View {
+    @State private var canShare = true
+    @State private var canRetry = true
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("导出与重试")
@@ -374,6 +377,8 @@ private struct ShareRetrySection: View {
                     .background(Color.black)
                     .foregroundColor(.white)
                     .cornerRadius(999)
+                    .opacity(canShare ? 1 : 0.4)
+                    .disabled(!canShare)
                 Button("再试一次") {}
                     .font(.caption)
                     .padding(.horizontal, 12)
@@ -384,6 +389,8 @@ private struct ShareRetrySection: View {
                             .stroke(Color.black.opacity(0.2), lineWidth: 1)
                     )
                     .cornerRadius(999)
+                    .opacity(canRetry ? 1 : 0.4)
+                    .disabled(!canRetry)
             }
             Text("失败时仅重试渲染，不重复创建")
                 .font(.caption)

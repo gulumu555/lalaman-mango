@@ -179,6 +179,7 @@ private enum MoodFilter {
 private struct MoodCard: View {
     @Binding var selectedFilter: MoodFilter?
     var onBrowse: () -> Void = {}
+    @State private var hintText = "去听听"
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -219,8 +220,10 @@ private struct MoodCard: View {
             Button(selectedFilter == nil ? "去听听" : "清除筛选") {
                 if selectedFilter == nil {
                     onBrowse()
+                    hintText = "正在打开情绪浏览..."
                 } else {
                     selectedFilter = nil
+                    hintText = "去听听"
                 }
             }
             .font(.footnote)
@@ -229,6 +232,9 @@ private struct MoodCard: View {
             .background(Color.black)
             .foregroundColor(.white)
             .cornerRadius(999)
+            Text(hintText)
+                .font(.caption2)
+                .foregroundColor(.secondary)
         }
         .padding(16)
         .background(Color.white.opacity(0.95))
