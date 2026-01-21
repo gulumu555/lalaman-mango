@@ -75,6 +75,9 @@ struct NearbyView: View {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                                 showRefreshHint = false
                             }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                                locationStatus = "已定位"
+                            }
                         }
                         .font(.footnote)
                         .padding(.horizontal, 12)

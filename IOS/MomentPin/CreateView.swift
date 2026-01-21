@@ -16,6 +16,8 @@ struct CreateView: View {
     @State private var showGenerating = false
     @State private var showPublished = false
     private let previewMoment = Moment.sample.first!
+    @State private var draftStyle = "治愈A"
+    @State private var hasVoice = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -26,11 +28,11 @@ struct CreateView: View {
                 .padding(.top, 8)
 
             TabView(selection: $step) {
-                PhotoStep()
+                PhotoStep(hasVoice: $hasVoice)
                     .tag(Step.photo)
-                StyleStep()
+                StyleStep(selectedStyle: $draftStyle)
                     .tag(Step.style)
-                VoiceStep()
+                VoiceStep(hasVoice: $hasVoice)
                     .tag(Step.voice)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
@@ -44,7 +46,7 @@ struct CreateView: View {
                 .foregroundColor(.secondary)
                 .padding(.horizontal, 20)
                 .padding(.bottom, 6)
-            StepControls(step: $step, onPublish: {
+            StepControls(step: $step, canPublish: hasVoice, onPublish: {
                 showGenerating = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                     showGenerating = false
@@ -136,6 +138,8 @@ private struct StepDots: View {
 }
 
 private struct PhotoStep: View {
+    @Binding var hasVoice: Bool
+
     var body: some View {
         VStack(spacing: 16) {
             Rectangle()
@@ -184,7 +188,7 @@ private struct PhotoStep: View {
 private struct StyleStep: View {
     private let styles = ["治愈A", "治愈B", "治愈C", "治愈D"]
     @State private var rotationHint = "模板：T02_Cloud"
-    @State private var selectedStyle = "治愈A"
+    @Binding var selectedStyle: String
 
     var body: some View {
         VStack(spacing: 16) {
@@ -227,6 +231,8 @@ private struct StyleStep: View {
 }
 
 private struct VoiceStep: View {
+    @Binding var hasVoice: Bool
+
     var body: some View {
         VStack(spacing: 16) {
             Text("录一段语音（3-8秒）")
@@ -251,6 +257,9 @@ private struct VoiceStep: View {
                 .background(Color.black)
                 .foregroundColor(.white)
                 .cornerRadius(999)
+                .onTapGesture {
+                    hasVoice = true
+                }
             Button("重录") {}
                 .font(.caption)
                 .frame(maxWidth: .infinity)
@@ -343,8 +352,8 @@ private struct PublishSettings: View {
 
 private struct StepControls: View {
     @Binding var step: CreateView.Step
+    var canPublish: Bool = true
     var onPublish: () -> Void = {}
-    @State private var canPublish = true
 
     var body: some View {
         HStack(spacing: 12) {

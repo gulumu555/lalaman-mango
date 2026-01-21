@@ -379,6 +379,9 @@ private struct ShareRetrySection: View {
                     .cornerRadius(999)
                     .opacity(canShare ? 1 : 0.4)
                     .disabled(!canShare)
+                Text(canShare ? "可用" : "不可用")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 Button("再试一次") {}
                     .font(.caption)
                     .padding(.horizontal, 12)
@@ -391,6 +394,9 @@ private struct ShareRetrySection: View {
                     .cornerRadius(999)
                     .opacity(canRetry ? 1 : 0.4)
                     .disabled(!canRetry)
+                Text(canRetry ? "可用" : "不可用")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             Text("失败时仅重试渲染，不重复创建")
                 .font(.caption)
