@@ -9,6 +9,7 @@ struct DetailView: View {
     @State private var showFeedback = false
     @State private var showModerationSheet = false
     @State private var showDeleteConfirm = false
+    @Environment(\.dismiss) private var dismiss
     @State private var isInteractive = true
     @State private var visibilityHint = "仅匿名公开可互动（占位）"
 
@@ -112,7 +113,9 @@ struct DetailView: View {
             Text("举报/屏蔽/拉黑占位，后续接入逻辑")
         }
         .alert("确认删除", isPresented: $showDeleteConfirm) {
-            Button("删除", role: .destructive) {}
+            Button("删除", role: .destructive) {
+                dismiss()
+            }
             Button("取消", role: .cancel) {}
         } message: {
             Text("删除后不可恢复（占位）")

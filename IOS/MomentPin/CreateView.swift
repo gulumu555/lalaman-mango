@@ -111,6 +111,7 @@ struct CreateView: View {
                         ToolbarItem(placement: .topBarTrailing) {
                             Button("完成") {
                                 showDetail = false
+                                hasVoice = false
                                 onPublished()
                             }
                         }
