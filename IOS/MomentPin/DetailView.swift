@@ -209,11 +209,14 @@ private struct TemplateReplies: View {
 private struct AuthorActions: View {
     @Binding var isPublic: Bool
     var onDelete: () -> Void = {}
+    @State private var allowReplies = true
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("作者控制")
                 .font(.headline)
+            Toggle("允许回复", isOn: $allowReplies)
+                .toggleStyle(SwitchToggleStyle(tint: .black))
             HStack {
                 Text("可见性")
                 Spacer()

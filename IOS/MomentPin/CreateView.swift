@@ -84,6 +84,16 @@ struct CreateView: View {
                     Text("片刻已发布，可在附近查看")
                         .font(.caption)
                         .foregroundColor(.secondary)
+                    Button("去附近看看") {
+                        showPublished = false
+                        onPublished()
+                    }
+                    .font(.caption)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(Color.black)
+                    .foregroundColor(.white)
+                    .cornerRadius(999)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.black.opacity(0.15))
