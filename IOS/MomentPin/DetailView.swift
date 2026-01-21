@@ -64,6 +64,9 @@ struct DetailView: View {
                 Text("模板回应：每日最多 1 条（占位）")
                     .font(.caption)
                     .foregroundColor(.secondary)
+                Text("仅模板回应（无评论区）")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
 
                 ShareRetrySection()
 

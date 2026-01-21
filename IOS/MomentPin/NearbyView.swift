@@ -29,6 +29,9 @@ struct NearbyView: View {
                     Button {
                         selectedMoment = moment
                         showPlaceSheet = true
+                        #if canImport(UIKit)
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                        #endif
                     } label: {
                         Text("\(moment.count)")
                             .font(.caption2)
