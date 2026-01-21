@@ -10,6 +10,7 @@ struct DetailView: View {
     @State private var showModerationSheet = false
     @State private var showDeleteConfirm = false
     @State private var isInteractive = true
+    @State private var visibilityHint = "仅匿名公开可互动（占位）"
 
     var body: some View {
         ScrollView {
@@ -39,12 +40,16 @@ struct DetailView: View {
                     Text("\(moment.moodEmoji) \(moment.title)")
                         .font(.title3)
                         .fontWeight(.semibold)
-                    Text(isPublic ? "匿名公开" : "仅自己")
-                        .font(.caption)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color.black.opacity(0.1))
-                        .cornerRadius(8)
+                Text(isPublic ? "匿名公开" : "仅自己")
+                    .font(.caption)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color.black.opacity(0.1))
+                    .cornerRadius(8)
+                    .onChange(of: isPublic) { value in
+                        visibilityHint = value ? "匿名公开可互动" : "仅自己，互动关闭"
+                        isInteractive = value
+                    }
                     Text(moment.zoneName)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
@@ -86,7 +91,7 @@ struct DetailView: View {
                     showModerationSheet = true
                 }
 
-                Text("仅匿名公开可互动（占位）")
+                Text(visibilityHint)
                     .font(.caption)
                     .foregroundColor(.secondary)
                 if showFeedback {

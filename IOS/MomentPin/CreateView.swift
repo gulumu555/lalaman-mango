@@ -273,8 +273,17 @@ private struct PublishSettings: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("发布设置")
                 .font(.headline)
+            Text("隐私")
+                .font(.subheadline)
             Toggle("匿名公开", isOn: $isPublic)
                 .toggleStyle(SwitchToggleStyle(tint: .black))
+            Toggle("隐藏位置", isOn: $hideLocation)
+                .toggleStyle(SwitchToggleStyle(tint: .black))
+
+            Divider().padding(.vertical, 4)
+
+            Text("漂流瓶")
+                .font(.subheadline)
             Toggle("放进漂流瓶", isOn: $includeBottle)
                 .toggleStyle(SwitchToggleStyle(tint: .black))
             if includeBottle {
@@ -287,8 +296,6 @@ private struct PublishSettings: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            Toggle("隐藏位置", isOn: $hideLocation)
-                .toggleStyle(SwitchToggleStyle(tint: .black))
             HStack {
                 Text("靠岸时间")
                 Spacer()

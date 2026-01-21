@@ -14,6 +14,7 @@ struct NearbyView: View {
     @State private var moodFilter: MoodFilter? = nil
     @State private var showMoodSheet = false
     @State private var showRefreshHint = false
+    @State private var locationStatus = "定位中..."
 
     private let moments: [Moment] = Moment.sample
     private var filteredMoments: [Moment] {
@@ -60,7 +61,7 @@ struct NearbyView: View {
 
                 VStack(spacing: 16) {
                     HStack {
-                        Text("附近 3km")
+                        Text("附近 3km · \(locationStatus)")
                             .font(.footnote)
                             .padding(.horizontal, 12)
                             .padding(.vertical, 6)
@@ -69,6 +70,7 @@ struct NearbyView: View {
                         Spacer()
                         Button("刷新") {
                             showRefreshHint = true
+                            locationStatus = "已定位"
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                                 showRefreshHint = false
                             }
@@ -143,6 +145,11 @@ struct NearbyView: View {
             }
             .sheet(isPresented: $showMoodSheet) {
                 MoodBrowseSheet(selectedFilter: $moodFilter)
+            }
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                    locationStatus = "已定位"
+                }
             }
         }
     }
