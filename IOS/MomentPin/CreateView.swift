@@ -318,6 +318,7 @@ private struct PublishSettings: View {
                 .toggleStyle(SwitchToggleStyle(tint: .black))
             Text(isPublic ? "匿名公开可互动" : "默认仅自己可见（占位）")
                 .font(.caption)
+                .fontWeight(.semibold)
                 .foregroundColor(.secondary)
 
             Divider().padding(.vertical, 4)
