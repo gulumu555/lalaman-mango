@@ -10,6 +10,15 @@ struct NotificationsView: View {
 
     var body: some View {
         List {
+            Section {
+                HStack {
+                    Text("未读：\(unreadCount)")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                }
+                .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
+            }
             if notifications.isEmpty {
                 VStack(spacing: 8) {
                     Text("暂无通知")
@@ -62,5 +71,9 @@ struct NotificationsView: View {
                 .font(.caption)
             }
         }
+    }
+
+    private var unreadCount: Int {
+        notifications.indices.filter { readStates[$0] != true }.count
     }
 }
