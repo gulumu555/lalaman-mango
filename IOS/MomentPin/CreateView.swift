@@ -284,7 +284,7 @@ private struct PublishSettings: View {
                 .toggleStyle(SwitchToggleStyle(tint: .black))
             Toggle("隐藏位置", isOn: $hideLocation)
                 .toggleStyle(SwitchToggleStyle(tint: .black))
-            Text("默认仅自己可见（占位）")
+            Text(isPublic ? "匿名公开可互动" : "默认仅自己可见（占位）")
                 .font(.caption)
                 .foregroundColor(.secondary)
 

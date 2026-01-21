@@ -391,6 +391,14 @@ private struct PlaceSheet: View {
                                         .foregroundColor(.secondary)
                                 }
                                 Spacer()
+                                VStack(alignment: .trailing, spacing: 4) {
+                                    Text("回应 3")
+                                        .font(.caption2)
+                                        .foregroundColor(.secondary)
+                                    Text("0:08")
+                                        .font(.caption2)
+                                        .foregroundColor(.secondary)
+                                }
                                 Image(systemName: "chevron.right")
                                     .font(.caption)
                                     .foregroundColor(.secondary)

@@ -304,47 +304,54 @@ private struct BottleSection: View {
     @State private var showDatePicker = false
     @State private var openDate = Date().addingTimeInterval(60 * 60 * 24 * 365)
     @State private var quickHint = "快捷时间未选择"
+    @State private var includeBottle = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("漂流瓶")
                 .font(.headline)
-            Toggle("放进漂流瓶", isOn: .constant(true))
+            Toggle("放进漂流瓶", isOn: $includeBottle)
                 .toggleStyle(SwitchToggleStyle(tint: .black))
             Text("到期通知：你有一个漂流瓶靠岸了 🎁")
                 .font(.caption)
                 .foregroundColor(.secondary)
-            HStack {
-                Text("靠岸时间")
-                Spacer()
-                Button(openDate, style: .date) {
-                    showDatePicker.toggle()
+            if includeBottle {
+                HStack {
+                    Text("靠岸时间")
+                    Spacer()
+                    Button(openDate, style: .date) {
+                        showDatePicker.toggle()
+                    }
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                }
+                HStack(spacing: 8) {
+                    Button("明年春节") {
+                        openDate = Calendar.current.date(byAdding: .day, value: 365, to: Date()) ?? openDate
+                        quickHint = "已选：明年春节"
+                    }
+                    Button("3个月后") {
+                        openDate = Calendar.current.date(byAdding: .month, value: 3, to: Date()) ?? openDate
+                        quickHint = "已选：3个月后"
+                    }
+                    Button("自定义") {
+                        showDatePicker.toggle()
+                        quickHint = "已选：自定义"
+                    }
                 }
                 .font(.caption)
-                .foregroundColor(.secondary)
-            }
-            HStack(spacing: 8) {
-                Button("明年春节") {
-                    openDate = Calendar.current.date(byAdding: .day, value: 365, to: Date()) ?? openDate
-                    quickHint = "已选：明年春节"
+                .buttonStyle(.bordered)
+                Text(quickHint)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                if showDatePicker {
+                    DatePicker("选择日期", selection: $openDate, displayedComponents: [.date])
+                        .datePickerStyle(.graphical)
                 }
-                Button("3个月后") {
-                    openDate = Calendar.current.date(byAdding: .month, value: 3, to: Date()) ?? openDate
-                    quickHint = "已选：3个月后"
-                }
-                Button("自定义") {
-                    showDatePicker.toggle()
-                    quickHint = "已选：自定义"
-                }
-            }
-            .font(.caption)
-            .buttonStyle(.bordered)
-            Text(quickHint)
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            if showDatePicker {
-                DatePicker("选择日期", selection: $openDate, displayedComponents: [.date])
-                    .datePickerStyle(.graphical)
+            } else {
+                Text("默认关闭，可在创作时开启")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
