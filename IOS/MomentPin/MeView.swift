@@ -18,6 +18,10 @@ struct MeView: View {
                     "隐私与安全（占位）",
                     "举报记录（占位）"
                 ])
+                SectionCard(title: "通知中心", items: [
+                    "漂流瓶到期提醒（占位）",
+                    "系统通知（占位）"
+                ])
             }
             .padding(20)
         }
