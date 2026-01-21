@@ -1,19 +1,33 @@
 import SwiftUI
 
 struct BottlesView: View {
-    private let items = [
-        "在漂流中 · 2025-02-01",
-        "已靠岸 · 2024-12-31",
-        "已捡起 · 2024-08-08"
+    private let floatingItems = [
+        "2025-02-01 · 成都",
+        "2025-05-20 · 宽窄巷子"
+    ]
+    private let openedItems = [
+        "2024-12-31 · 太古里",
+        "2024-08-08 · 九眼桥"
     ]
 
     var body: some View {
         List {
-            ForEach(items, id: \.self) { item in
-                NavigationLink(destination: DetailView(moment: Moment.sample.first!)) {
-                    Text(item)
-                        .font(.subheadline)
-                        .padding(.vertical, 6)
+            Section("在漂流中") {
+                ForEach(floatingItems, id: \.self) { item in
+                    NavigationLink(destination: DetailView(moment: Moment.sample.first!)) {
+                        Text(item)
+                            .font(.subheadline)
+                            .padding(.vertical, 6)
+                    }
+                }
+            }
+            Section("已靠岸") {
+                ForEach(openedItems, id: \.self) { item in
+                    NavigationLink(destination: DetailView(moment: Moment.sample.first!)) {
+                        Text(item)
+                            .font(.subheadline)
+                            .padding(.vertical, 6)
+                    }
                 }
             }
         }
