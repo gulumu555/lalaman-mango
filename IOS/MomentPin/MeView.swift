@@ -2,6 +2,8 @@ import SwiftUI
 
 struct MeView: View {
     @State private var showNotifications = false
+    @State private var showMyMoments = false
+    @State private var showBottles = false
 
     var body: some View {
         NavigationStack {
@@ -10,12 +12,16 @@ struct MeView: View {
                     SectionCard(title: "我的片刻", items: [
                         "私密（占位）",
                         "匿名公开（占位）"
-                    ])
+                    ], onTap: {
+                        showMyMoments = true
+                    })
                     SectionCard(title: "漂流瓶", items: [
                         "在漂流中（占位）",
                         "已靠岸（占位）",
                         "已捡起（占位）"
-                    ])
+                    ], onTap: {
+                        showBottles = true
+                    })
                     SectionCard(title: "设置", items: [
                         "定位权限（占位）",
                         "隐私与安全（占位）",
@@ -34,6 +40,12 @@ struct MeView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(isPresented: $showNotifications) {
                 NotificationsView()
+            }
+            .navigationDestination(isPresented: $showMyMoments) {
+                MyMomentsView()
+            }
+            .navigationDestination(isPresented: $showBottles) {
+                BottlesView()
             }
         }
         .background(Color.white)

@@ -120,12 +120,19 @@ struct NearbyView: View {
                     )
                     ScrollView {
                         VStack(spacing: 16) {
-                            ForEach(filteredMoments) { moment in
-                                MomentCard(moment: moment) {
-                                    selectedMoment = moment
-                                }
-                            }
+                if filteredMoments.isEmpty {
+                    Text("暂无该情绪片刻")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.vertical, 12)
+                } else {
+                    ForEach(filteredMoments) { moment in
+                        MomentCard(moment: moment) {
+                            selectedMoment = moment
                         }
+                    }
+                }
+            }
                         .padding(.bottom, 120)
                     }
                 }
