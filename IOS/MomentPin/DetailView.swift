@@ -340,11 +340,13 @@ private struct BottleSection: View {
                 HStack {
                     Text("靠岸时间")
                     Spacer()
-                    Button(openDate, style: .date) {
+                    Button {
                         showDatePicker.toggle()
+                    } label: {
+                        Text(openDate, style: .date)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
-                    .font(.caption)
-                    .foregroundColor(.secondary)
                 }
                 HStack(spacing: 8) {
                     Button("明年春节") {

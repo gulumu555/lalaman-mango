@@ -7,17 +7,31 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0055B785137EDB04F533089D /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAF23E7472D21E56F42CFED /* NotificationsView.swift */; };
+		12A524A8A2FE9CD4C81FC360 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2D13AE7C229C6E1037568B /* Models.swift */; };
+		1CD6D51B11F205EC509E7F0C /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF6AAEADDFDB417C02C652 /* DetailView.swift */; };
 		21B32B3F05F00741ECA3F781 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26EB767148F82649BF3A4002 /* RootView.swift */; };
+		264CD7D30AC25030E8C81C17 /* MeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6C308D4E9720E14A229A38 /* MeView.swift */; };
 		4DB4826205B4D970A6D577E4 /* NearbyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24DA9E263BF7D600C8732D4 /* NearbyView.swift */; };
+		60511C43485CB3B6B3124900 /* MyMomentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E0DFEB6ECCFAC9335A6800A /* MyMomentsView.swift */; };
+		AE8B58007DEA74792D1F50E2 /* BottlesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD14FC90FE17F463EA62E25E /* BottlesView.swift */; };
+		B4FD061B8570AD0ABDC02EB6 /* CreateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E90E091F7F4466425C07DD /* CreateView.swift */; };
 		E6D02370B134142B056402EF /* MomentPinApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96AB567EEF36CE46FAAF340 /* MomentPinApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0AAF23E7472D21E56F42CFED /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
+		1D6C308D4E9720E14A229A38 /* MeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeView.swift; sourceTree = "<group>"; };
 		26EB767148F82649BF3A4002 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		52E90E091F7F4466425C07DD /* CreateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateView.swift; sourceTree = "<group>"; };
+		5E0DFEB6ECCFAC9335A6800A /* MyMomentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMomentsView.swift; sourceTree = "<group>"; };
 		814CD9AB55C3DAE45563798A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		9CCF6AAEADDFDB417C02C652 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		AC420022E4DFA2FB5213C155 /* MomentPin.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MomentPin.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BD14FC90FE17F463EA62E25E /* BottlesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottlesView.swift; sourceTree = "<group>"; };
 		E24DA9E263BF7D600C8732D4 /* NearbyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyView.swift; sourceTree = "<group>"; };
 		E96AB567EEF36CE46FAAF340 /* MomentPinApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentPinApp.swift; sourceTree = "<group>"; };
+		EF2D13AE7C229C6E1037568B /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -32,9 +46,16 @@
 		B268793957FDC5797D16A85F /* MomentPin */ = {
 			isa = PBXGroup;
 			children = (
+				BD14FC90FE17F463EA62E25E /* BottlesView.swift */,
+				52E90E091F7F4466425C07DD /* CreateView.swift */,
+				9CCF6AAEADDFDB417C02C652 /* DetailView.swift */,
 				814CD9AB55C3DAE45563798A /* Info.plist */,
+				1D6C308D4E9720E14A229A38 /* MeView.swift */,
+				EF2D13AE7C229C6E1037568B /* Models.swift */,
 				E96AB567EEF36CE46FAAF340 /* MomentPinApp.swift */,
+				5E0DFEB6ECCFAC9335A6800A /* MyMomentsView.swift */,
 				E24DA9E263BF7D600C8732D4 /* NearbyView.swift */,
+				0AAF23E7472D21E56F42CFED /* NotificationsView.swift */,
 				26EB767148F82649BF3A4002 /* RootView.swift */,
 			);
 			path = MomentPin;
@@ -101,8 +122,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE8B58007DEA74792D1F50E2 /* BottlesView.swift in Sources */,
+				B4FD061B8570AD0ABDC02EB6 /* CreateView.swift in Sources */,
+				1CD6D51B11F205EC509E7F0C /* DetailView.swift in Sources */,
+				264CD7D30AC25030E8C81C17 /* MeView.swift in Sources */,
+				12A524A8A2FE9CD4C81FC360 /* Models.swift in Sources */,
 				E6D02370B134142B056402EF /* MomentPinApp.swift in Sources */,
+				60511C43485CB3B6B3124900 /* MyMomentsView.swift in Sources */,
 				4DB4826205B4D970A6D577E4 /* NearbyView.swift in Sources */,
+				0055B785137EDB04F533089D /* NotificationsView.swift in Sources */,
 				21B32B3F05F00741ECA3F781 /* RootView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

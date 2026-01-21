@@ -117,7 +117,7 @@ struct CreateView: View {
             }
         }
         .fullScreenCover(isPresented: $showDetail) {
-            NavigationStack {
+            NavigationView {
                 DetailView(moment: previewMoment)
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
@@ -353,15 +353,17 @@ private struct PublishSettings: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
-                HStack {
-                    Text("靠岸时间")
-                    Spacer()
-                    Button(openDate, style: .date) {
-                        showDatePicker.toggle()
-                    }
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+            HStack {
+                Text("靠岸时间")
+                Spacer()
+                Button {
+                    showDatePicker.toggle()
+                } label: {
+                    Text(openDate, style: .date)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
+            }
                 HStack(spacing: 8) {
                     Button("明年春节") {
                         openDate = Calendar.current.date(byAdding: .day, value: 365, to: Date()) ?? openDate

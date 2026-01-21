@@ -12,6 +12,7 @@ struct NearbyView: View {
     @State private var selectedMomentId: UUID? = nil
     @State private var selectedZoneName: String? = nil
     @State private var showCreate = false
+    @State private var showDetail = false
     @State private var moodFilter: MoodFilter? = nil
     @State private var showMoodSheet = false
     @State private var showLocationHint = false
@@ -26,7 +27,7 @@ struct NearbyView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        NavigationView {
             ZStack {
                 Map(coordinateRegion: $region, annotationItems: filteredMoments) { moment in
                 MapAnnotation(coordinate: moment.coordinate) {
@@ -135,6 +136,7 @@ struct NearbyView: View {
                         MomentCard(moment: moment, isSelected: selectedMomentId == moment.id) {
                             selectedMoment = moment
                             selectedMomentId = moment.id
+                            showDetail = true
                         }
                     }
                 }
@@ -152,6 +154,7 @@ struct NearbyView: View {
                             showPlaceSheet = false
                             selectedMoment = moment
                             selectedZoneName = moment.zoneName
+                            showDetail = true
                         },
                         onCreate: {
                             showPlaceSheet = false
@@ -175,9 +178,14 @@ struct NearbyView: View {
                     }
                 }
             }
-            .navigationDestination(item: $selectedMoment) { moment in
-                DetailView(moment: moment)
-            }
+            .background(
+                NavigationLink(
+                    destination: DetailView(moment: selectedMoment ?? moments.first!),
+                    isActive: $showDetail
+                ) {
+                    EmptyView()
+                }
+            )
             .sheet(isPresented: $showMoodSheet) {
                 MoodBrowseSheet(selectedFilter: $moodFilter) {
                     showMoodSheet = false

@@ -1,52 +1,44 @@
 import SwiftUI
 
 struct MeView: View {
-    @State private var showNotifications = false
-    @State private var showMyMoments = false
-    @State private var showBottles = false
-
     var body: some View {
-        NavigationStack {
+        NavigationView {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    SectionCard(title: "我的片刻", items: [
-                        "私密（占位）",
-                        "匿名公开（占位）"
-                    ], onTap: {
-                        showMyMoments = true
-                    })
-                    SectionCard(title: "漂流瓶", items: [
-                        "在漂流中（占位）",
-                        "已靠岸（占位）",
-                        "已捡起（占位）"
-                    ], onTap: {
-                        showBottles = true
-                    })
+                    NavigationLink(destination: MyMomentsView()) {
+                        SectionCard(title: "我的片刻", items: [
+                            "私密（占位）",
+                            "匿名公开（占位）"
+                        ])
+                    }
+                    .buttonStyle(.plain)
+
+                    NavigationLink(destination: BottlesView()) {
+                        SectionCard(title: "漂流瓶", items: [
+                            "在漂流中（占位）",
+                            "已靠岸（占位）",
+                            "已捡起（占位）"
+                        ])
+                    }
+                    .buttonStyle(.plain)
+
                     SectionCard(title: "设置", items: [
                         "定位权限（占位）",
                         "隐私与安全（占位）",
                         "举报记录（占位）"
                     ])
-                    SectionCard(title: "通知中心", items: [
-                        "漂流瓶到期提醒（占位）",
-                        "系统通知（占位）"
-                    ], onTap: {
-                        showNotifications = true
-                    })
+                    NavigationLink(destination: NotificationsView()) {
+                        SectionCard(title: "通知中心", items: [
+                            "漂流瓶到期提醒（占位）",
+                            "系统通知（占位）"
+                        ])
+                    }
+                    .buttonStyle(.plain)
                 }
                 .padding(20)
             }
             .navigationTitle("我")
             .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(isPresented: $showNotifications) {
-                NotificationsView()
-            }
-            .navigationDestination(isPresented: $showMyMoments) {
-                MyMomentsView()
-            }
-            .navigationDestination(isPresented: $showBottles) {
-                BottlesView()
-            }
         }
         .background(Color.white)
     }
@@ -55,7 +47,6 @@ struct MeView: View {
 private struct SectionCard: View {
     let title: String
     let items: [String]
-    var onTap: (() -> Void)? = nil
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -76,8 +67,5 @@ private struct SectionCard: View {
         .padding(16)
         .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
-        .onTapGesture {
-            onTap?()
-        }
     }
 }
