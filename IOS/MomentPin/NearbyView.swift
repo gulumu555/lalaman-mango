@@ -14,7 +14,8 @@ struct NearbyView: View {
     @State private var showCreate = false
     @State private var moodFilter: MoodFilter? = nil
     @State private var showMoodSheet = false
-    @State private var showRefreshHint = false
+    @State private var showLocationHint = false
+    @State private var locationHintText = "已定位"
     @State private var locationStatus = "定位中..."
 
     private let moments: [Moment] = Moment.sample
@@ -72,10 +73,11 @@ struct NearbyView: View {
                             .cornerRadius(999)
                         Spacer()
                         Button {
-                            showRefreshHint = true
+                            locationHintText = "已定位"
+                            showLocationHint = true
                             locationStatus = "已定位"
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                showRefreshHint = false
+                                showLocationHint = false
                             }
                         } label: {
                             HStack(spacing: 6) {
@@ -90,10 +92,11 @@ struct NearbyView: View {
                             .cornerRadius(999)
                         }
                         Button("刷新") {
-                            showRefreshHint = true
+                            locationHintText = "已刷新"
+                            showLocationHint = true
                             locationStatus = "已定位"
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-                                showRefreshHint = false
+                                showLocationHint = false
                             }
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                                 locationStatus = "已定位"
@@ -160,8 +163,8 @@ struct NearbyView: View {
                     CreateView(presetZoneName: selectedZoneName)
                 }
                 .overlay(alignment: .top) {
-                    if showRefreshHint {
-                        Text("已定位")
+                    if showLocationHint {
+                        Text(locationHintText)
                             .font(.caption)
                             .padding(.horizontal, 12)
                             .padding(.vertical, 6)
