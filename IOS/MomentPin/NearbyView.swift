@@ -245,6 +245,13 @@ private struct MoodCard: View {
         .background(Color.white.opacity(0.95))
         .cornerRadius(20)
         .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 6)
+        .onChange(of: selectedFilter) { value in
+            if value != nil {
+                hintText = "已应用筛选"
+            } else {
+                hintText = "去听听"
+            }
+        }
     }
 }
 

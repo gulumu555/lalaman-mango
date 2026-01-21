@@ -364,13 +364,19 @@ private struct BottleSection: View {
 private struct ShareRetrySection: View {
     @State private var canShare = true
     @State private var canRetry = true
+    @State private var showShareHint = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("导出与重试")
                 .font(.headline)
             HStack(spacing: 12) {
-                Button("导出/分享") {}
+                Button("导出/分享") {
+                    showShareHint = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        showShareHint = false
+                    }
+                }
                     .font(.caption)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
@@ -401,6 +407,11 @@ private struct ShareRetrySection: View {
             Text("失败时仅重试渲染，不重复创建")
                 .font(.caption)
                 .foregroundColor(.secondary)
+            if showShareHint {
+                Text("系统分享（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
