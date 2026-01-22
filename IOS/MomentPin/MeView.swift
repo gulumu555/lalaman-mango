@@ -7,30 +7,30 @@ struct MeView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     NavigationLink(destination: MyMomentsView()) {
                         SectionCard(title: "我的片刻", items: [
-                            "私密（占位）",
-                            "匿名公开（占位）"
+                            "私密 2",
+                            "匿名公开 1"
                         ])
                     }
                     .buttonStyle(.plain)
 
                     NavigationLink(destination: BottlesView()) {
                         SectionCard(title: "漂流瓶", items: [
-                            "在漂流中（占位）",
-                            "已靠岸（占位）",
-                            "已捡起（占位）"
+                            "在漂流中 2",
+                            "已靠岸 2",
+                            "已捡起 0"
                         ])
                     }
                     .buttonStyle(.plain)
 
                     SectionCard(title: "设置", items: [
-                        "定位权限（占位）",
-                        "隐私与安全（占位）",
-                        "举报记录（占位）"
+                        "定位权限",
+                        "隐私与安全",
+                        "举报记录"
                     ])
                     NavigationLink(destination: NotificationsView()) {
                         SectionCard(title: "通知中心", items: [
-                            "漂流瓶到期提醒（占位）",
-                            "系统通知（占位）"
+                            "漂流瓶到期提醒 1",
+                            "系统通知 1"
                         ])
                     }
                     .buttonStyle(.plain)
