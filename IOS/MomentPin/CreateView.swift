@@ -497,6 +497,7 @@ private struct VoiceStep: View {
     @State private var recordHint = "未录音"
     @State private var isRecording = false
     @State private var micAuthorized = false
+    @State private var recordProgress: CGFloat = 0.0
 
     var body: some View {
         VStack(spacing: 16) {
@@ -524,14 +525,28 @@ private struct VoiceStep: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                 )
+            GeometryReader { proxy in
+                ZStack(alignment: .leading) {
+                    Capsule()
+                        .fill(Color.gray.opacity(0.2))
+                        .frame(height: 6)
+                    Capsule()
+                        .fill(Color.black)
+                        .frame(width: proxy.size.width * recordProgress, height: 6)
+                        .animation(.easeInOut(duration: 0.6), value: recordProgress)
+                }
+            }
+            .frame(height: 6)
             Button(isRecording ? "停止录音" : "开始录音") {
                 if isRecording {
                     isRecording = false
                     hasVoice = true
                     recordHint = "已录 0:08"
+                    recordProgress = 1.0
                 } else {
                     micAuthorized = true
                     isRecording = true
+                    recordProgress = 0.2
                 }
             }
                 .font(.headline)
@@ -574,6 +589,13 @@ private struct VoiceStep: View {
                 Text("需要麦克风权限（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+            }
+        }
+        .onChange(of: isRecording) { recording in
+            if recording {
+                recordProgress = 0.6
+            } else if !hasVoice {
+                recordProgress = 0.0
             }
         }
         .padding(20)
