@@ -116,7 +116,7 @@ struct NearbyView: View {
                     }
                     if !bubbleMoments.isEmpty {
                         HStack(spacing: 8) {
-                            Text("点位气泡")
+                            Text("点位")
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
                             ForEach(bubbleMoments) { moment in
@@ -161,37 +161,38 @@ struct NearbyView: View {
                                 .stroke(Color.black.opacity(0.08), lineWidth: 1)
                         )
                     }
-                    Button("按情绪浏览") {
-                        showMoodSheet = true
-                    }
-                    .font(.footnote)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
-                    .background(Color.white.opacity(0.95))
-                    .cornerRadius(999)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 999)
-                            .stroke(Color.black.opacity(0.08), lineWidth: 1)
-                    )
-                    Button {
-                        showListSheet = true
-                    } label: {
-                        HStack(spacing: 8) {
-                            Image(systemName: "list.bullet")
-                                .font(.footnote)
-                            Text("片刻列表")
-                                .font(.footnote)
-                            Spacer()
-                            Text("\(filteredMoments.count) 条")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
+                    HStack(spacing: 12) {
+                        Button("按情绪浏览") {
+                            showMoodSheet = true
                         }
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 10)
+                        .font(.footnote)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
                         .background(Color.white.opacity(0.95))
-                        .cornerRadius(16)
+                        .cornerRadius(999)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 999)
+                                .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                        )
+                        Button {
+                            showListSheet = true
+                        } label: {
+                            HStack(spacing: 6) {
+                                Image(systemName: "list.bullet")
+                                    .font(.footnote)
+                                Text("列表")
+                                    .font(.footnote)
+                                Text("\(filteredMoments.count)")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(Color.white.opacity(0.95))
+                            .cornerRadius(999)
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                     Button("随机听听") {
                         selectedMoment = filteredMoments.first ?? moments.first
                         showDetail = true
@@ -307,7 +308,7 @@ private struct MoodCard: View {
     @State private var hintText = "去听听"
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text("情绪天气")
                     .font(.headline)
@@ -318,8 +319,8 @@ private struct MoodCard: View {
                 .font(.caption2)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
-                .background(Color.black.opacity(0.08))
-                .cornerRadius(8)
+                    .background(Color.black.opacity(0.08))
+                    .cornerRadius(8)
                 Text("Top3")
                     .font(.caption2)
                     .padding(.horizontal, 8)
@@ -327,7 +328,7 @@ private struct MoodCard: View {
                     .background(Color.black.opacity(0.06))
                     .cornerRadius(8)
             }
-            HStack(spacing: 12) {
+            HStack(spacing: 8) {
                 MoodChip(
                     emoji: "😮‍💨",
                     label: "疲惫 45%",
@@ -369,7 +370,7 @@ private struct MoodCard: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
         }
-        .padding(16)
+        .padding(12)
         .background(Color.white.opacity(0.95))
         .cornerRadius(20)
         .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 6)
