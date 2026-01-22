@@ -21,6 +21,8 @@ struct DetailView: View {
     @State private var isMuted = false
     @State private var hasRepliedToday = false
     @State private var hasReactedToday = false
+    @State private var renderStatus = "ready"
+    @State private var renderHint = "已生成"
 
     var body: some View {
         ScrollView {
@@ -61,6 +63,8 @@ struct DetailView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+
+                RenderStatusCard(renderStatus: $renderStatus, renderHint: $renderHint)
 
                 PlaybackControls(
                     playbackRate: $playbackRate,
@@ -337,6 +341,78 @@ private struct PlaybackControls: View {
         .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+private struct RenderStatusCard: View {
+    @Binding var renderStatus: String
+    @Binding var renderHint: String
+
+    private let statuses: [String] = ["ready", "rendering", "failed"]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text("渲染状态")
+                    .font(.headline)
+                Spacer()
+                Picker("状态", selection: $renderStatus) {
+                    ForEach(statuses, id: \.self) { status in
+                        Text(status).tag(status)
+                    }
+                }
+                .pickerStyle(.menu)
+            }
+            Text(renderHintText)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            HStack(spacing: 12) {
+                Button("重试渲染") {
+                    renderHint = "已触发重试"
+                }
+                .font(.caption)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(Color.black)
+                .foregroundColor(.white)
+                .cornerRadius(999)
+                .disabled(renderStatus == "rendering")
+                Button("查看日志") {}
+                    .font(.caption)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999)
+                            .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                    )
+                    .cornerRadius(999)
+            }
+            if renderStatus == "failed" {
+                Text("失败原因：render_failed（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .padding(16)
+        .background(Color.gray.opacity(0.08))
+        .cornerRadius(16)
+        .onChange(of: renderStatus) { value in
+            switch value {
+            case "ready":
+                renderHint = "已生成，可播放"
+            case "rendering":
+                renderHint = "渲染中..."
+            case "failed":
+                renderHint = "渲染失败，可重试"
+            default:
+                renderHint = "未知状态"
+            }
+        }
+    }
+
+    private var renderHintText: String {
+        renderHint
     }
 }
 
