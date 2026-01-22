@@ -433,6 +433,31 @@ private struct PhotoStep: View {
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
+            if hasPhoto {
+                HStack(spacing: 12) {
+                    Text("画幅")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Button("1:1") {}
+                        .font(.caption2)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 6)
+                        .background(Color.gray.opacity(0.12))
+                        .cornerRadius(999)
+                    Button("4:5") {}
+                        .font(.caption2)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 6)
+                        .background(Color.gray.opacity(0.12))
+                        .cornerRadius(999)
+                    Button("9:16") {}
+                        .font(.caption2)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 6)
+                        .background(Color.gray.opacity(0.12))
+                        .cornerRadius(999)
+                }
+            }
         }
         .padding(20)
     }
