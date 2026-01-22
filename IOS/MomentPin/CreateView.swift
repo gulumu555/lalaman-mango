@@ -183,6 +183,7 @@ private struct PublishSheet: View {
     var onConfirm: () -> Void = {}
     @State private var shareToMoments = false
     @State private var hideLocation = false
+    @State private var openDate = Date().addingTimeInterval(60 * 60 * 24 * 90)
 
     var body: some View {
         VStack(spacing: 16) {
@@ -228,24 +229,30 @@ private struct PublishSheet: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                         Spacer()
-                        Text(Date(), style: .date)
+                        Text(openDate, style: .date)
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
                     HStack(spacing: 8) {
-                        Button("明年春节") {}
+                        Button("明年春节") {
+                            openDate = Calendar.current.date(byAdding: .day, value: 365, to: Date()) ?? openDate
+                        }
                             .font(.caption2)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 6)
                             .background(Color.gray.opacity(0.12))
                             .cornerRadius(999)
-                        Button("3个月后") {}
+                        Button("3个月后") {
+                            openDate = Calendar.current.date(byAdding: .month, value: 3, to: Date()) ?? openDate
+                        }
                             .font(.caption2)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 6)
                             .background(Color.gray.opacity(0.12))
                             .cornerRadius(999)
-                        Button("自定义") {}
+                        Button("自定义") {
+                            openDate = Calendar.current.date(byAdding: .month, value: 1, to: Date()) ?? openDate
+                        }
                             .font(.caption2)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 6)
