@@ -559,6 +559,7 @@ private struct PlaceSheet: View {
 
     @State private var actionHint: String
     @State private var subHint = "发布后会回到此地点"
+    @State private var sortMode = "最新"
 
     init(
         title: String,
@@ -594,6 +595,24 @@ private struct PlaceSheet: View {
                     .padding(.vertical, 4)
                     .background(Color.gray.opacity(0.15))
                     .cornerRadius(8)
+            }
+            HStack(spacing: 8) {
+                Text("位置已模糊到商圈")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Spacer()
+                Button("最新") { sortMode = "最新" }
+                    .font(.caption2)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(sortMode == "最新" ? Color.black.opacity(0.1) : Color.gray.opacity(0.12))
+                    .cornerRadius(999)
+                Button("热门") { sortMode = "热门" }
+                    .font(.caption2)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(sortMode == "热门" ? Color.black.opacity(0.1) : Color.gray.opacity(0.12))
+                    .cornerRadius(999)
             }
             ScrollView {
                 VStack(spacing: 12) {
