@@ -14,26 +14,43 @@ struct DetailView: View {
     @State private var isInteractive = true
     @State private var visibilityHint = "仅匿名公开可互动（占位）"
     @State private var allowReplies = true
+    @State private var isPlaying = false
 
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 VStack(spacing: 12) {
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.2))
-                        .frame(height: 280)
-                        .cornerRadius(16)
-                        .overlay(
-                            Text("视频播放区 (MP4 + 声波)")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        )
+                    ZStack {
+                        Rectangle()
+                            .fill(Color.gray.opacity(0.2))
+                            .frame(height: 280)
+                            .cornerRadius(16)
+                        Button {
+                            isPlaying.toggle()
+                        } label: {
+                            Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                                .font(.title2)
+                                .foregroundColor(.white)
+                                .frame(width: 56, height: 56)
+                                .background(Color.black.opacity(0.7))
+                                .clipShape(Circle())
+                        }
+                        .accessibilityLabel(isPlaying ? "暂停" : "播放")
+                    }
+                    HStack(spacing: 8) {
+                        Capsule()
+                            .fill(Color.black.opacity(0.2))
+                            .frame(height: 4)
+                        Text("0:00 / 0:08")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
                     HStack {
-                        Text("声波占位")
+                        Text("声波 · 占位")
                             .font(.caption)
                             .foregroundColor(.secondary)
                         Spacer()
-                        Text("时长 0:08")
+                        Text(isPlaying ? "播放中" : "已暂停")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
