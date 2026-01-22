@@ -159,7 +159,7 @@ struct DetailView: View {
                     }
                 }
                 Text("模板回应：每日最多 1 条 · 无评论区（占位）")
-                    .font(.caption)
+                    .font(.caption2)
                     .foregroundColor(.secondary)
                 if !allowReplies {
                     Text("已关闭回复")
@@ -255,7 +255,7 @@ private struct ReactionRow: View {
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
                         }
-                        .frame(width: 52, height: 60)
+                        .frame(width: 44, height: 54)
                         .background(selectedReaction == emoji ? Color.black.opacity(0.1) : Color.white)
                         .clipShape(RoundedRectangle(cornerRadius: 14))
                         .overlay(
@@ -267,7 +267,7 @@ private struct ReactionRow: View {
                 }
             }
             Text("反应 1 秒内完成（占位）")
-                .font(.caption)
+                .font(.caption2)
                 .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -436,8 +436,8 @@ private struct TemplateReplies: View {
                         onSend()
                     } label: {
                         Text(text)
-                            .font(.caption)
-                            .padding(.vertical, 8)
+                            .font(.caption2)
+                            .padding(.vertical, 6)
                             .frame(maxWidth: .infinity)
                             .background(selectedTemplate == text ? Color.black.opacity(0.1) : Color.white)
                             .overlay(
