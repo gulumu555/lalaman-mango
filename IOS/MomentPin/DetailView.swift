@@ -124,9 +124,9 @@ struct DetailView: View {
                         .foregroundColor(.secondary)
                 }
 
-                ShareRetrySection()
-
                 BottleSection()
+
+                ShareRetrySection()
 
                 AuthorActions(isPublic: $isPublic, allowReplies: $allowReplies) {
                     showDeleteConfirm = true
