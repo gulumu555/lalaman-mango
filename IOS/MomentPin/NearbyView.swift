@@ -469,6 +469,17 @@ private struct MomentsListSheet: View {
                                     Text(moment.zoneName)
                                         .font(.caption)
                                         .foregroundColor(.secondary)
+                                    HStack(spacing: 6) {
+                                        Text("治愈")
+                                            .font(.caption2)
+                                            .padding(.horizontal, 6)
+                                            .padding(.vertical, 2)
+                                            .background(Color.gray.opacity(0.12))
+                                            .cornerRadius(6)
+                                        Text("回应 3")
+                                            .font(.caption2)
+                                            .foregroundColor(.secondary)
+                                    }
                                 }
                                 Spacer()
                                 Text("0:08")
