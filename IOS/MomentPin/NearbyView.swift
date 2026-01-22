@@ -47,16 +47,16 @@ struct NearbyView: View {
                     } label: {
                         Text("\(moment.count)")
                             .font(.caption2)
-                            .foregroundColor(.white)
+                            .foregroundColor(.black)
                             .padding(.horizontal, 8)
-                            .padding(.vertical, 6)
-                            .background(Color.black)
-                            .cornerRadius(12)
+                            .padding(.vertical, 5)
+                            .background(Color.white.opacity(0.95))
+                            .cornerRadius(999)
                             .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color.white.opacity(0.4), lineWidth: 1)
+                                RoundedRectangle(cornerRadius: 999)
+                                    .stroke(Color.black.opacity(0.2), lineWidth: 1)
                             )
-                            .shadow(color: Color.black.opacity(0.2), radius: 6, x: 0, y: 4)
+                            .shadow(color: Color.black.opacity(0.12), radius: 4, x: 0, y: 3)
                     }
                 }
             }
@@ -128,11 +128,15 @@ struct NearbyView: View {
                                 } label: {
                                     Text("\(moment.count)")
                                         .font(.caption2)
-                                        .foregroundColor(.white)
+                                        .foregroundColor(.black)
                                         .padding(.horizontal, 8)
-                                        .padding(.vertical, 4)
-                                        .background(Color.black)
+                                        .padding(.vertical, 5)
+                                        .background(Color.white)
                                         .cornerRadius(999)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 999)
+                                                .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                                        )
                                 }
                             }
                         }
