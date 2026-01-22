@@ -8,6 +8,7 @@ struct RootView: View {
     }
 
     @State private var selectedTab: Tab = .nearby
+    @State private var showCreate = false
 
     var body: some View {
         ZStack {
@@ -15,24 +16,31 @@ struct RootView: View {
             case .nearby:
                 NearbyView()
             case .create:
-                CreateView(onPublished: {
-                    selectedTab = .nearby
-                })
+                NearbyView()
             case .me:
                 MeView()
             }
 
             VStack {
                 Spacer()
-                BottomBar(selectedTab: $selectedTab)
+                BottomBar(selectedTab: $selectedTab) {
+                    showCreate = true
+                }
             }
         }
         .ignoresSafeArea(edges: [.bottom])
+        .fullScreenCover(isPresented: $showCreate) {
+            CreateView(onPublished: {
+                showCreate = false
+                selectedTab = .nearby
+            })
+        }
     }
 }
 
 private struct BottomBar: View {
     @Binding var selectedTab: RootView.Tab
+    var onCreate: () -> Void = {}
 
     var body: some View {
         HStack(spacing: 24) {
@@ -48,7 +56,7 @@ private struct BottomBar: View {
             }
 
             Button {
-                selectedTab = .create
+                onCreate()
             } label: {
                 Image(systemName: "plus")
                     .font(.system(size: 32, weight: .bold))
