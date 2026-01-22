@@ -15,6 +15,7 @@ struct CreateView: View {
     @State private var showDetail = false
     @State private var showGenerating = false
     @State private var showPublished = false
+    @State private var showPublishSheet = false
     private let previewMoment = Moment.sample.first!
     @State private var draftStyle = "治愈A"
     @State private var hasVoice = false
@@ -37,29 +38,37 @@ struct CreateView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
 
-            if step == .voice {
-                PublishSettings(isPublic: $isPublic, includeBottle: $includeBottle, presetZoneName: presetZoneName)
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 12)
-
-                Text("发布后会出现在附近（占位）")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 6)
-            }
+            Text("发布时可设置可见性/漂流瓶")
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 6)
             StepControls(step: $step, canPublish: hasVoice, onPublish: {
-                showGenerating = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-                    showGenerating = false
-                    showPublished = true
-                    showDetail = true
-                }
+                showPublishSheet = true
             })
                 .padding(.horizontal, 20)
                 .padding(.bottom, 28)
         }
         .background(Color.white)
+        .sheet(isPresented: $showPublishSheet) {
+            PublishSheet(
+                isPublic: $isPublic,
+                includeBottle: $includeBottle,
+                presetZoneName: presetZoneName,
+                onCancel: {
+                    showPublishSheet = false
+                },
+                onConfirm: {
+                    showPublishSheet = false
+                    showGenerating = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                        showGenerating = false
+                        showPublished = true
+                        showDetail = true
+                    }
+                }
+            )
+        }
         .overlay {
             if showGenerating {
                 VStack(spacing: 12) {
@@ -148,6 +157,47 @@ private struct StepHeader: View {
                 .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+private struct PublishSheet: View {
+    @Binding var isPublic: Bool
+    @Binding var includeBottle: Bool
+    var presetZoneName: String? = nil
+    var onCancel: () -> Void = {}
+    var onConfirm: () -> Void = {}
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("发布设置")
+                .font(.headline)
+            PublishSettings(isPublic: $isPublic, includeBottle: $includeBottle, presetZoneName: presetZoneName)
+            HStack(spacing: 12) {
+                Button("取消") {
+                    onCancel()
+                }
+                .font(.headline)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(Color.white)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 999)
+                        .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                )
+                .cornerRadius(999)
+
+                Button("确认发布") {
+                    onConfirm()
+                }
+                .font(.headline)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(Color.black)
+                .foregroundColor(.white)
+                .cornerRadius(999)
+            }
+        }
+        .padding(20)
     }
 }
 
