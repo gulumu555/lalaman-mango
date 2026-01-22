@@ -95,9 +95,7 @@ struct DetailView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                Text("匿名公开可互动（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
+                InteractionNotice(isPublic: isPublic, allowReplies: allowReplies, isInteractive: isInteractive)
 
                 ReactionRow(selectedReaction: $selectedReaction, isEnabled: isInteractive && isPublic) {
                     feedbackText = "反应已发送"
@@ -117,10 +115,7 @@ struct DetailView: View {
                         showFeedback = false
                     }
                 }
-                Text("模板回应：每日最多 1 条（占位）")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                Text("仅模板回应（无评论区）")
+                Text("模板回应：每日最多 1 条 · 无评论区（占位）")
                     .font(.caption)
                     .foregroundColor(.secondary)
                 if !allowReplies {
@@ -255,6 +250,35 @@ private struct TemplateReplies: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+private struct InteractionNotice: View {
+    let isPublic: Bool
+    let allowReplies: Bool
+    let isInteractive: Bool
+
+    var body: some View {
+        if isPublic && allowReplies && isInteractive {
+            HStack(spacing: 8) {
+                Image(systemName: "hand.thumbsup.fill")
+                    .font(.caption)
+                Text("匿名公开可互动（占位）")
+                    .font(.caption2)
+            }
+            .foregroundColor(.secondary)
+        } else {
+            HStack(spacing: 8) {
+                Image(systemName: "lock.fill")
+                    .font(.caption)
+                Text("互动已关闭")
+                    .font(.caption2)
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(Color.gray.opacity(0.12))
+            .cornerRadius(12)
+        }
     }
 }
 
