@@ -231,15 +231,37 @@ private struct PhotoStep: View {
 
     var body: some View {
         VStack(spacing: 16) {
+            HStack(spacing: 12) {
+                Button("拍照") {}
+                    .font(.caption)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                    .background(Color.black)
+                    .foregroundColor(.white)
+                    .cornerRadius(999)
+                Button("相册") {}
+                    .font(.caption)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                    .background(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999)
+                            .stroke(Color.black.opacity(0.15), lineWidth: 1)
+                    )
+                    .cornerRadius(999)
+            }
             Rectangle()
                 .fill(Color.gray.opacity(0.15))
                 .frame(height: 240)
                 .cornerRadius(16)
                 .overlay(
-                    Text("选择照片 / 拍照（占位）")
+                    Text("图片预览（占位）")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 )
+            Text("支持裁切与旋转（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             Button("选择照片") {}
                 .font(.headline)
                 .frame(maxWidth: .infinity)
@@ -287,6 +309,15 @@ private struct StyleStep: View {
             Text(rotationHint)
                 .font(.caption)
                 .foregroundColor(.secondary)
+            Rectangle()
+                .fill(Color.gray.opacity(0.12))
+                .frame(height: 180)
+                .cornerRadius(16)
+                .overlay(
+                    Text("风格预览（占位）")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                )
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 120), spacing: 12)], spacing: 12) {
                 ForEach(styles, id: \.self) { style in
                     Button {
@@ -304,6 +335,9 @@ private struct StyleStep: View {
             Toggle("马年小马同框", isOn: .constant(true))
                 .toggleStyle(SwitchToggleStyle(tint: .black))
                 .padding(.top, 8)
+            Text("默认开启，可切换姿态（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
 
             Button("再来一个") {
                 rotationHint = "模板：T0\(Int.random(in: 1...8))_Random"
@@ -331,27 +365,38 @@ private struct VoiceStep: View {
             Text("建议 3–8 秒，上限 15 秒")
                 .font(.caption)
                 .foregroundColor(.secondary)
+            HStack {
+                Text("当前时长")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                Spacer()
+                Text(hasVoice ? "0:08" : "0:00")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
             Rectangle()
                 .fill(Color.gray.opacity(0.15))
                 .frame(height: 180)
                 .cornerRadius(16)
                 .overlay(
-                    Text("语音录制占位")
+                    Text("声波占位")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 )
-            Button("按住录音") {}
+            Button("按住录音") {
+                hasVoice = true
+                recordHint = "已录 0:08"
+            }
                 .font(.headline)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 12)
                 .background(Color.black)
                 .foregroundColor(.white)
                 .cornerRadius(999)
-                .onTapGesture {
-                    hasVoice = true
-                    recordHint = "已录 0:08"
-                }
-            Button("重录") {}
+            Button("重录") {
+                hasVoice = false
+                recordHint = "未录音"
+            }
                 .font(.caption)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 8)
@@ -361,10 +406,6 @@ private struct VoiceStep: View {
                         .stroke(Color.black.opacity(0.15), lineWidth: 1)
                 )
                 .cornerRadius(999)
-                .onTapGesture {
-                    hasVoice = false
-                    recordHint = "未录音"
-                }
             Text(recordHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
