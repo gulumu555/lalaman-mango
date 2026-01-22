@@ -375,6 +375,7 @@ private struct StatusOverlay: View {
 private struct MotionEffectCard: View {
     @Binding var motionLevel: String
     private let levels = ["轻", "中", "静"]
+    @State private var motionTemplate = "T02_Cloud"
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -392,10 +393,18 @@ private struct MotionEffectCard: View {
                     .cornerRadius(999)
                 }
                 Spacer()
-                Text("模板：T02_Cloud")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
+                Button("换模板") {
+                    motionTemplate = "T0\(Int.random(in: 1...8))_Random"
+                }
+                .font(.caption2)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(Color.gray.opacity(0.12))
+                .cornerRadius(999)
             }
+            Text("模板：\(motionTemplate)")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             Text("轻动效模板占位（安全动效）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
