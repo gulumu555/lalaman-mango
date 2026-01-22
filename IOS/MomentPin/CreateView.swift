@@ -37,15 +37,17 @@ struct CreateView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
 
-            PublishSettings(isPublic: $isPublic, includeBottle: $includeBottle, presetZoneName: presetZoneName)
-                .padding(.horizontal, 20)
-                .padding(.bottom, 12)
+            if step == .voice {
+                PublishSettings(isPublic: $isPublic, includeBottle: $includeBottle, presetZoneName: presetZoneName)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 12)
 
-            Text("发布后会出现在附近（占位）")
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .padding(.horizontal, 20)
-                .padding(.bottom, 6)
+                Text("发布后会出现在附近（占位）")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 6)
+            }
             StepControls(step: $step, canPublish: hasVoice, onPublish: {
                 showGenerating = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
