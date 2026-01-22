@@ -188,6 +188,14 @@ POST /api/dev/moments/:id/render
 Body: { status: "pending" | "rendering" | "ready" | "failed", preview_url?, error? }
 Response: { ok: true }
 
+### 2.11.1 Local Render（dev only）
+POST /api/dev/render/local
+Body: { moment_id: string, duration_s? }
+Response: { ok: true, mp4_url } | { ok: false, error }
+Notes:
+- 本地 ffmpeg 生成 MP4，输出保存到 /static/renders
+- 会更新 moments.mp4_url / render_status / preview_url
+
 ### 2.12 Render 状态流转（说明）
 - pending → rendering → ready
 - pending → failed
