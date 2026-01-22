@@ -146,3 +146,64 @@ echo "Notifications: $notifications_response"
 
 delete_response=$(curl -s -X DELETE "$BASE_URL/api/moments/$moment_id")
 echo "Delete moment: $delete_response"
+
+if [[ "${LOCAL_RENDER:-0}" == "1" ]]; then
+  if command -v ffmpeg >/dev/null 2>&1; then
+    echo "Local render: generating temp assets..."
+    ffmpeg -y -f lavfi -i color=c=skyblue:s=1080x1440:d=1 -frames:v 1 -update 1 /tmp/momentpin_photo.jpg >/dev/null 2>&1
+    python3 - <<'PY'
+import base64
+from pathlib import Path
+b64 = (
+    "UklGRngAAABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YVQAAABhYWFh"
+    "YWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFh"
+)
+Path('/tmp/momentpin_sine.wav').write_bytes(base64.b64decode(b64))
+PY
+    local_create_payload=$(cat <<JSON
+{
+  "user_id": "$USER_ID",
+  "title": "本地渲染测试",
+  "mood_code": "light",
+  "visibility": "public_anonymous",
+  "geo": {"lat": 30.6570, "lng": 104.0800, "zone_name": "成都", "radius_m": 3000},
+  "motion_template_id": "T02_Cloud",
+  "pony": false,
+  "assets": {
+    "photo_url": "file:///tmp/momentpin_photo.jpg",
+    "audio_url": "file:///tmp/momentpin_sine.wav",
+    "mp4_url": null,
+    "thumb_url": null,
+    "duration_s": 6.0
+  }
+}
+JSON
+)
+    local_create_response=$(curl -s -X POST "$BASE_URL/api/moments" \
+      -H "Content-Type: application/json" \
+      -d "$local_create_payload")
+    echo "Local create: $local_create_response"
+    local_moment_id=$(python3 - <<PY
+import json
+print(json.loads('''$local_create_response''')["id"])
+PY
+)
+    local_render_response=$(curl -s -X POST "$BASE_URL/api/dev/render/local" \
+      -H "Content-Type: application/json" \
+      -d '{"moment_id":"'$local_moment_id'"}')
+    echo "Local render: $local_render_response"
+    python3 - <<PY
+import json,urllib.request
+data = json.loads('''$local_render_response''')
+if not data.get("ok"):
+    raise SystemExit("Local render failed")
+mp4_url = data.get("mp4_url")
+with urllib.request.urlopen("$BASE_URL" + mp4_url) as resp:
+    if resp.status != 200:
+        raise SystemExit("MP4 not reachable")
+print("Local render ok:", mp4_url)
+PY
+  else
+    echo "Local render: skipped (ffmpeg not found)"
+  fi
+fi
