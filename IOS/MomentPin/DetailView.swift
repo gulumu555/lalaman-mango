@@ -85,6 +85,9 @@ struct DetailView: View {
                     Text("\(moment.moodEmoji) \(moment.title)")
                         .font(.title3)
                         .fontWeight(.semibold)
+                    Text("发布于 \(moment.zoneName) · 仅展示商圈级位置")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     HStack(spacing: 8) {
                         Text(isPublic ? "匿名公开" : "仅自己")
                             .font(.caption)
