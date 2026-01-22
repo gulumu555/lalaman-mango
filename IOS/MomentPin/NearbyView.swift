@@ -256,14 +256,22 @@ struct NearbyView: View {
                     }
                 }
                 .overlay(alignment: .bottom) {
-                    Text("地图点位为示例，后续接入真实数据")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .background(Color.white.opacity(0.9))
-                        .cornerRadius(12)
-                        .padding(.bottom, 110)
+                    HStack(spacing: 8) {
+                        Text("地图点位为示例，后续接入真实数据")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                        Button("了解") {}
+                            .font(.caption2)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.gray.opacity(0.12))
+                            .cornerRadius(999)
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(Color.white.opacity(0.9))
+                    .cornerRadius(12)
+                    .padding(.bottom, 110)
                 }
             }
             .background(
