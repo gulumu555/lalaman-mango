@@ -27,6 +27,9 @@ struct NearbyView: View {
         if moodFilter == .all { return moments }
         return moments.filter { moodFilter.match(emoji: $0.moodEmoji) }
     }
+    private var bubbleMoments: [Moment] {
+        Array(filteredMoments.prefix(3))
+    }
 
     var body: some View {
         NavigationView {
@@ -111,6 +114,33 @@ struct NearbyView: View {
                         .background(Color.white.opacity(0.95))
                         .cornerRadius(999)
                     }
+                    if !bubbleMoments.isEmpty {
+                        HStack(spacing: 8) {
+                            Text("点位气泡")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                            ForEach(bubbleMoments) { moment in
+                                Button {
+                                    selectedMoment = moment
+                                    selectedZoneName = moment.zoneName
+                                    selectedMomentId = moment.id
+                                    showPlaceSheet = true
+                                } label: {
+                                    Text("\(moment.count)")
+                                        .font(.caption2)
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 8)
+                                        .padding(.vertical, 4)
+                                        .background(Color.black)
+                                        .cornerRadius(999)
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .background(Color.white.opacity(0.95))
+                        .cornerRadius(16)
+                    }
                     if showMoodCard {
                         MoodCard(selectedFilter: $moodFilter, onBrowse: {
                             showMoodSheet = true
@@ -162,6 +192,16 @@ struct NearbyView: View {
                         .cornerRadius(16)
                     }
                     .buttonStyle(.plain)
+                    Button("随机听听") {
+                        selectedMoment = filteredMoments.first ?? moments.first
+                        showDetail = true
+                    }
+                    .font(.footnote)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(Color.black)
+                    .foregroundColor(.white)
+                    .cornerRadius(999)
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 90)
