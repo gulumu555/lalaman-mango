@@ -413,8 +413,11 @@ private struct PhotoStep: View {
 
 private struct StyleStep: View {
     private let styles = ["治愈A", "治愈B", "治愈C", "治愈D"]
+    private let poses = ["挥手", "眨眼", "小跳", "静坐"]
     @State private var rotationHint = "模板：T02_Cloud"
     @Binding var selectedStyle: String
+    @State private var showPartner = true
+    @State private var selectedPose = "挥手"
 
     var body: some View {
         VStack(spacing: 16) {
@@ -447,12 +450,33 @@ private struct StyleStep: View {
                     }
                 }
             }
-            Toggle("马年小马同框", isOn: .constant(true))
+            Toggle("马年小马同框", isOn: $showPartner)
                 .toggleStyle(SwitchToggleStyle(tint: .black))
                 .padding(.top, 8)
-            Text("默认开启，可切换姿态（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
+            if showPartner {
+                HStack(spacing: 8) {
+                    Text("姿态")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    ForEach(poses, id: \.self) { pose in
+                        Button(pose) {
+                            selectedPose = pose
+                        }
+                        .font(.caption2)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(selectedPose == pose ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
+                        .cornerRadius(999)
+                    }
+                }
+                Text("已选姿态：\(selectedPose)")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            } else {
+                Text("同框已关闭，仅风格输出")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
 
             Button("再来一个") {
                 rotationHint = "模板：T0\(Int.random(in: 1...8))_Random"
