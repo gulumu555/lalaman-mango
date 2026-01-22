@@ -44,7 +44,14 @@ struct DetailView: View {
                                 .background(Color.black.opacity(0.7))
                                 .clipShape(Circle())
                         }
+                        .disabled(renderStatus != "ready")
+                        .opacity(renderStatus == "ready" ? 1 : 0.4)
                         .accessibilityLabel(isPlaying ? "暂停" : "播放")
+                        if renderStatus == "rendering" {
+                            StatusOverlay(text: "渲染中...")
+                        } else if renderStatus == "failed" {
+                            StatusOverlay(text: "渲染失败")
+                        }
                     }
                     HStack(spacing: 8) {
                         Capsule()
@@ -343,6 +350,25 @@ private struct PlaybackControls: View {
         .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+private struct StatusOverlay: View {
+    let text: String
+
+    var body: some View {
+        VStack(spacing: 6) {
+            Text(text)
+                .font(.caption)
+                .foregroundColor(.white)
+            Text("可在下方重试")
+                .font(.caption2)
+                .foregroundColor(.white.opacity(0.8))
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(Color.black.opacity(0.6))
+        .cornerRadius(12)
     }
 }
 
