@@ -59,7 +59,7 @@ struct NearbyView: View {
                 .ignoresSafeArea()
 
                 LinearGradient(
-                    colors: [Color.white.opacity(0.15), Color.white.opacity(0.55), Color.white.opacity(0.95)],
+                    colors: [Color.white.opacity(0.12), Color.white.opacity(0.45), Color.white.opacity(0.85)],
                     startPoint: .top,
                     endPoint: .bottom
                 )
@@ -128,7 +128,9 @@ struct NearbyView: View {
                     Button {
                         showListSheet = true
                     } label: {
-                        HStack {
+                        HStack(spacing: 8) {
+                            Image(systemName: "list.bullet")
+                                .font(.footnote)
                             Text("片刻列表")
                                 .font(.footnote)
                             Spacer()
@@ -186,6 +188,16 @@ struct NearbyView: View {
                             .cornerRadius(999)
                             .padding(.top, 12)
                     }
+                }
+                .overlay(alignment: .bottom) {
+                    Text("地图点位为示例，后续接入真实数据")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color.white.opacity(0.9))
+                        .cornerRadius(12)
+                        .padding(.bottom, 110)
                 }
             }
             .background(
