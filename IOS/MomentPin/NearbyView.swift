@@ -16,6 +16,7 @@ struct NearbyView: View {
     @State private var moodFilter: MoodFilter? = nil
     @State private var showMoodSheet = false
     @State private var showListSheet = false
+    @State private var showMoodCard = true
     @State private var showLocationHint = false
     @State private var locationHintText = "已定位"
     @State private var locationStatus = "定位中..."
@@ -110,8 +111,25 @@ struct NearbyView: View {
                         .background(Color.white.opacity(0.95))
                         .cornerRadius(999)
                     }
-                    MoodCard(selectedFilter: $moodFilter) {
-                        showMoodSheet = true
+                    if showMoodCard {
+                        MoodCard(selectedFilter: $moodFilter, onBrowse: {
+                            showMoodSheet = true
+                        }, onCollapse: {
+                            showMoodCard = false
+                        })
+                    } else {
+                        Button("展开情绪天气") {
+                            showMoodCard = true
+                        }
+                        .font(.footnote)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                        .background(Color.white.opacity(0.95))
+                        .cornerRadius(999)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 999)
+                                .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                        )
                     }
                     Button("按情绪浏览") {
                         showMoodSheet = true
@@ -245,6 +263,7 @@ private enum MoodFilter {
 private struct MoodCard: View {
     @Binding var selectedFilter: MoodFilter?
     var onBrowse: () -> Void = {}
+    var onCollapse: () -> Void = {}
     @State private var hintText = "去听听"
 
     var body: some View {
@@ -253,12 +272,14 @@ private struct MoodCard: View {
                 Text("情绪天气")
                     .font(.headline)
                 Spacer()
-                Text("Top3")
-                    .font(.caption2)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.black.opacity(0.1))
-                    .cornerRadius(8)
+                Button("收起") {
+                    onCollapse()
+                }
+                .font(.caption2)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(Color.black.opacity(0.08))
+                .cornerRadius(8)
             }
             HStack(spacing: 12) {
                 MoodChip(
