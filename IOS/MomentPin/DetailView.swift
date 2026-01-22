@@ -68,7 +68,7 @@ struct DetailView: View {
                     isPlaying: $isPlaying
                 )
 
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 10) {
                     Text("\(moment.moodEmoji) \(moment.title)")
                         .font(.title3)
                         .fontWeight(.semibold)
@@ -79,7 +79,7 @@ struct DetailView: View {
                             .padding(.vertical, 4)
                             .background(Color.black.opacity(0.1))
                             .cornerRadius(8)
-                        Text("治愈")
+                        Text("治愈 A")
                             .font(.caption2)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 4)
@@ -97,12 +97,29 @@ struct DetailView: View {
                         isInteractive = value
                     }
                     HStack(spacing: 12) {
-                        Label(moment.zoneName, systemImage: "mappin.and.ellipse")
+                        Label("商圈：\(moment.zoneName)", systemImage: "mappin.and.ellipse")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        Label("2025-春节前", systemImage: "clock")
+                        Label("今日 09:12", systemImage: "clock")
                             .font(.caption)
                             .foregroundColor(.secondary)
+                    }
+                    HStack(spacing: 8) {
+                        Text("情绪")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                        Text("🙂 轻松")
+                            .font(.caption2)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.gray.opacity(0.12))
+                            .cornerRadius(999)
+                        Text("✨ 小确幸")
+                            .font(.caption2)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.gray.opacity(0.12))
+                            .cornerRadius(999)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
