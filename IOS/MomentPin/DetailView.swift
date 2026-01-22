@@ -23,6 +23,7 @@ struct DetailView: View {
     @State private var hasReactedToday = false
     @State private var renderStatus = "ready"
     @State private var renderHint = "已生成"
+    @State private var motionLevel = "轻"
 
     var body: some View {
         ScrollView {
@@ -71,6 +72,7 @@ struct DetailView: View {
                     isMuted: $isMuted,
                     isPlaying: $isPlaying
                 )
+                MotionEffectCard(motionLevel: $motionLevel)
 
                 VStack(alignment: .leading, spacing: 10) {
                     Text("\(moment.moodEmoji) \(moment.title)")
@@ -341,6 +343,40 @@ private struct PlaybackControls: View {
         .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+private struct MotionEffectCard: View {
+    @Binding var motionLevel: String
+    private let levels = ["轻", "中", "静"]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("动效")
+                .font(.headline)
+            HStack(spacing: 8) {
+                ForEach(levels, id: \.self) { level in
+                    Button(level) {
+                        motionLevel = level
+                    }
+                    .font(.caption2)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(motionLevel == level ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
+                    .cornerRadius(999)
+                }
+                Spacer()
+                Text("模板：T02_Cloud")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
+            Text("轻动效模板占位（安全动效）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+        }
+        .padding(16)
+        .background(Color.gray.opacity(0.08))
+        .cornerRadius(16)
     }
 }
 

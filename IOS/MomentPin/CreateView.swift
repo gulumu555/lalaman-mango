@@ -232,6 +232,26 @@ private struct PublishSheet: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
+                    HStack(spacing: 8) {
+                        Button("明年春节") {}
+                            .font(.caption2)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 6)
+                            .background(Color.gray.opacity(0.12))
+                            .cornerRadius(999)
+                        Button("3个月后") {}
+                            .font(.caption2)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 6)
+                            .background(Color.gray.opacity(0.12))
+                            .cornerRadius(999)
+                        Button("自定义") {}
+                            .font(.caption2)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 6)
+                            .background(Color.gray.opacity(0.12))
+                            .cornerRadius(999)
+                    }
                 }
             }
             .padding(12)
