@@ -280,6 +280,12 @@ private struct MoodCard: View {
                 .padding(.vertical, 4)
                 .background(Color.black.opacity(0.08))
                 .cornerRadius(8)
+                Text("Top3")
+                    .font(.caption2)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color.black.opacity(0.06))
+                    .cornerRadius(8)
             }
             HStack(spacing: 12) {
                 MoodChip(
