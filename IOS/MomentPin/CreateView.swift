@@ -185,53 +185,53 @@ private struct PublishSheet: View {
     @State private var hideLocation = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(spacing: 16) {
             HStack {
-                Text("发布")
-                    .font(.headline)
-                Spacer()
                 Button("取消") {
                     onCancel()
                 }
                 .font(.caption)
                 .foregroundColor(.secondary)
-            }
-            VStack(alignment: .leading, spacing: 12) {
-                Text("可见性")
+                Spacer()
+                Text("发布")
+                    .font(.headline)
+                Spacer()
+                Button("草稿") {}
                     .font(.caption)
                     .foregroundColor(.secondary)
+            }
+
+            VStack(alignment: .leading, spacing: 10) {
+                Text("发布到")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                HStack(spacing: 8) {
+                    CapsuleLabel(text: isPublic ? "匿名公开" : "仅自己", isPrimary: true)
+                    CapsuleLabel(text: hideLocation ? "隐藏位置" : "显示位置", isPrimary: false)
+                    if includeBottle {
+                        CapsuleLabel(text: "漂流瓶", isPrimary: false)
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            VStack(spacing: 12) {
                 Toggle("匿名公开", isOn: $isPublic)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
                 Toggle("隐藏位置", isOn: $hideLocation)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
-                Text(isPublic ? "匿名公开可互动" : "仅自己可见")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-            }
-            .padding(12)
-            .background(Color.gray.opacity(0.08))
-            .cornerRadius(16)
-
-            VStack(alignment: .leading, spacing: 12) {
-                Text("漂流瓶")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
                 Toggle("放进漂流瓶", isOn: $includeBottle)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
                 if includeBottle {
                     HStack {
                         Text("靠岸时间")
-                            .font(.caption2)
+                            .font(.caption)
                             .foregroundColor(.secondary)
                         Spacer()
                         Text(Date(), style: .date)
-                            .font(.caption2)
+                            .font(.caption)
                             .foregroundColor(.secondary)
                     }
-                } else {
-                    Text("关闭时不会通知回听")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
                 }
             }
             .padding(12)
@@ -252,6 +252,20 @@ private struct PublishSheet: View {
             .cornerRadius(999)
         }
         .padding(20)
+    }
+}
+
+private struct CapsuleLabel: View {
+    let text: String
+    var isPrimary: Bool = false
+
+    var body: some View {
+        Text(text)
+            .font(.caption2)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(isPrimary ? Color.black.opacity(0.1) : Color.gray.opacity(0.12))
+            .cornerRadius(999)
     }
 }
 
