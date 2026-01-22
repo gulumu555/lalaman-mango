@@ -15,18 +15,46 @@ struct BottlesView: View {
             Section("在漂流中") {
                 ForEach(floatingItems, id: \.self) { item in
                     NavigationLink(destination: DetailView(moment: Moment.sample.first!)) {
-                        Text(item)
-                            .font(.subheadline)
-                            .padding(.vertical, 6)
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(item)
+                                    .font(.subheadline)
+                                Text("靠岸倒计时 · 12 天")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                            Text("漂流中")
+                                .font(.caption2)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(Color.gray.opacity(0.12))
+                                .cornerRadius(999)
+                        }
+                        .padding(.vertical, 6)
                     }
                 }
             }
             Section("已靠岸") {
                 ForEach(openedItems, id: \.self) { item in
                     NavigationLink(destination: DetailView(moment: Moment.sample.first!)) {
-                        Text(item)
-                            .font(.subheadline)
-                            .padding(.vertical, 6)
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(item)
+                                    .font(.subheadline)
+                                Text("已靠岸 · 可回听")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                            Text("已靠岸")
+                                .font(.caption2)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(Color.black.opacity(0.1))
+                                .cornerRadius(999)
+                        }
+                        .padding(.vertical, 6)
                     }
                 }
             }
