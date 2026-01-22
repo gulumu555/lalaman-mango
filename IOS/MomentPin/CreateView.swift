@@ -432,9 +432,14 @@ private struct StyleStep: View {
                 .frame(height: 180)
                 .cornerRadius(16)
                 .overlay(
-                    Text("风格预览（占位）")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    VStack(spacing: 8) {
+                        Text("风格预览（占位）")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Text(showPartner ? "同框：小马 \(selectedPose)" : "无同框伙伴")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
                 )
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 120), spacing: 12)], spacing: 12) {
                 ForEach(styles, id: \.self) { style in
