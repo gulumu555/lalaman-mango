@@ -166,12 +166,23 @@ private struct PublishSheet: View {
     var presetZoneName: String? = nil
     var onCancel: () -> Void = {}
     var onConfirm: () -> Void = {}
+    @State private var shareToMoments = false
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(alignment: .leading, spacing: 16) {
             Text("发布设置")
                 .font(.headline)
             PublishSettings(isPublic: $isPublic, includeBottle: $includeBottle, presetZoneName: presetZoneName)
+                .padding(12)
+                .background(Color.gray.opacity(0.08))
+                .cornerRadius(16)
+            VStack(alignment: .leading, spacing: 8) {
+                Toggle("同步到朋友圈（占位）", isOn: $shareToMoments)
+                    .toggleStyle(SwitchToggleStyle(tint: .black))
+                Text("仅发布成功后触发分享（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
             HStack(spacing: 12) {
                 Button("取消") {
                     onCancel()
