@@ -3,10 +3,12 @@ import SwiftUI
 struct MyMomentsView: View {
     private let privateItems = [
         "在这儿停一下",
-        "给未来的我"
+        "给未来的我",
+        "深夜地铁口"
     ]
     private let publicItems = [
-        "桥上有风"
+        "桥上有风",
+        "河边的安静"
     ]
 
     var body: some View {
@@ -14,18 +16,40 @@ struct MyMomentsView: View {
             Section("私密") {
                 ForEach(privateItems, id: \.self) { item in
                     NavigationLink(destination: DetailView(moment: Moment.sample.first!)) {
-                        Text(item)
-                            .font(.subheadline)
-                            .padding(.vertical, 6)
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(item)
+                                    .font(.subheadline)
+                                Text("仅自己可见 · 0:08")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                            Text("未生成")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.vertical, 6)
                     }
                 }
             }
             Section("匿名公开") {
                 ForEach(publicItems, id: \.self) { item in
                     NavigationLink(destination: DetailView(moment: Moment.sample.first!)) {
-                        Text(item)
-                            .font(.subheadline)
-                            .padding(.vertical, 6)
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(item)
+                                    .font(.subheadline)
+                                Text("匿名公开 · 0:08")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                            Text("已发布")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.vertical, 6)
                     }
                 }
             }
