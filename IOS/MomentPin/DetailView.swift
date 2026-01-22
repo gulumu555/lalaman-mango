@@ -19,6 +19,8 @@ struct DetailView: View {
     @State private var showModerationOptions = false
     @State private var playbackRate: Double = 1.0
     @State private var isMuted = false
+    @State private var hasRepliedToday = false
+    @State private var hasReactedToday = false
 
     var body: some View {
         ScrollView {
@@ -107,20 +109,30 @@ struct DetailView: View {
 
                 InteractionNotice(isPublic: isPublic, allowReplies: allowReplies, isInteractive: isInteractive)
 
-                ReactionRow(selectedReaction: $selectedReaction, isEnabled: isInteractive && isPublic) {
+                ReactionRow(
+                    selectedReaction: $selectedReaction,
+                    isEnabled: isInteractive && isPublic && !hasReactedToday
+                ) {
                     feedbackText = "反应已发送"
                     showFeedback = true
+                    hasReactedToday = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                         showFeedback = false
                     }
                 }
+                if hasReactedToday {
+                    Text("今日已反应")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
 
                 TemplateReplies(
                     selectedTemplate: $selectedTemplate,
-                    isEnabled: isInteractive && isPublic && allowReplies
+                    isEnabled: isInteractive && isPublic && allowReplies && !hasRepliedToday
                 ) {
                     feedbackText = "模板回复已发送"
                     showFeedback = true
+                    hasRepliedToday = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                         showFeedback = false
                     }
