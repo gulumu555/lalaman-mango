@@ -43,8 +43,14 @@ struct NotificationsView: View {
                                 Text(readStates[index] == true ? "已读 · 占位" : "未读 · 占位")
                                     .font(.caption2)
                                     .foregroundColor(.secondary)
+                                Text("打开回听")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
                             }
                             Spacer()
+                            Text("09:30")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
                         }
                         .padding(.vertical, 6)
                     }
