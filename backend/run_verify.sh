@@ -7,6 +7,7 @@ LOG_FILE="/tmp/momentpin_uvicorn.log"
 VENV_DIR="$ROOT_DIR/.venv"
 PORT="${PORT:-8001}"
 PYTHON_BIN="${PYTHON_BIN:-python3}"
+LOCAL_RENDER="${LOCAL_RENDER:-0}"
 
 if [ ! -f "$VENV_DIR/bin/python" ]; then
   echo "未发现虚拟环境，正在创建 $VENV_DIR ..."
@@ -31,7 +32,7 @@ if ! kill -0 "$UVICORN_PID" 2>/dev/null; then
   exit 1
 fi
 
-BASE_URL="http://127.0.0.1:$PORT" "$ROOT_DIR/backend/smoke_test.sh"
+BASE_URL="http://127.0.0.1:$PORT" LOCAL_RENDER="$LOCAL_RENDER" "$ROOT_DIR/backend/smoke_test.sh"
 
 echo "验证完成，正在关闭后端..."
 kill "$UVICORN_PID" || true
