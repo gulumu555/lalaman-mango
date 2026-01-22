@@ -15,6 +15,7 @@ struct NearbyView: View {
     @State private var showDetail = false
     @State private var moodFilter: MoodFilter? = nil
     @State private var showMoodSheet = false
+    @State private var showListSheet = false
     @State private var showLocationHint = false
     @State private var locationHintText = "已定位"
     @State private var locationStatus = "定位中..."
@@ -124,25 +125,23 @@ struct NearbyView: View {
                         RoundedRectangle(cornerRadius: 999)
                             .stroke(Color.black.opacity(0.08), lineWidth: 1)
                     )
-                    ScrollView {
-                        VStack(spacing: 16) {
-                if filteredMoments.isEmpty {
-                    Text("暂无该情绪片刻")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.vertical, 12)
-                } else {
-                    ForEach(filteredMoments) { moment in
-                        MomentCard(moment: moment, isSelected: selectedMomentId == moment.id) {
-                            selectedMoment = moment
-                            selectedMomentId = moment.id
-                            showDetail = true
+                    Button {
+                        showListSheet = true
+                    } label: {
+                        HStack {
+                            Text("片刻列表")
+                                .font(.footnote)
+                            Spacer()
+                            Text("\(filteredMoments.count) 条")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
                         }
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(Color.white.opacity(0.95))
+                        .cornerRadius(16)
                     }
-                }
-            }
-                        .padding(.bottom, 120)
-                    }
+                    .buttonStyle(.plain)
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 90)
@@ -164,6 +163,17 @@ struct NearbyView: View {
                 }
                 .fullScreenCover(isPresented: $showCreate) {
                     CreateView(presetZoneName: selectedZoneName)
+                }
+                .sheet(isPresented: $showListSheet) {
+                    MomentsListSheet(
+                        items: filteredMoments,
+                        onSelect: { moment in
+                            showListSheet = false
+                            selectedMoment = moment
+                            selectedMomentId = moment.id
+                            showDetail = true
+                        }
+                    )
                 }
                 .overlay(alignment: .top) {
                     if showLocationHint {
@@ -346,6 +356,53 @@ private struct MoodBrowseSheet: View {
             return "当前：疲惫"
         case .some(.emo):
             return "当前：emo"
+        }
+    }
+}
+
+private struct MomentsListSheet: View {
+    let items: [Moment]
+    let onSelect: (Moment) -> Void
+
+    var body: some View {
+        NavigationView {
+            List {
+                if items.isEmpty {
+                    Text("暂无片刻")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .listRowSeparator(.hidden)
+                } else {
+                    ForEach(items) { moment in
+                        Button {
+                            onSelect(moment)
+                        } label: {
+                            HStack(spacing: 12) {
+                                Text(moment.moodEmoji)
+                                    .font(.title3)
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(moment.title)
+                                        .font(.subheadline)
+                                    Text(moment.zoneName)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                Spacer()
+                                Text("0:08")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(.vertical, 4)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+            .navigationTitle("片刻列表")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
