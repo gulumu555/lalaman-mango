@@ -19,3 +19,5 @@ node_modules/
 # local data
 backend/data/*.db
 backend/momentpin.db
+backend/static/
+backend/tmp/

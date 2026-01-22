@@ -9,17 +9,27 @@ import json
 import logging
 import math
 import os
+import shutil
+import subprocess
 import time
+import urllib.parse
+import urllib.request
 from typing import Any, Dict, List, Optional, Tuple
 from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from .db import get_connection, init_db, row_to_dict, rows_to_dicts
 from .seed_data import build_seed_payloads
 
 app = FastAPI(title="MomentPin MVP API", version="0.1.0")
+
+BASE_DIR = os.path.dirname(__file__)
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+RENDER_DIR = os.path.join(STATIC_DIR, "renders")
+TMP_DIR = os.path.join(BASE_DIR, "tmp")
 
 logger = logging.getLogger("momentpin")
 if not logger.handlers:
@@ -31,6 +41,11 @@ DB = get_connection()
 @app.on_event("startup")
 def on_startup() -> None:
     init_db(DB)
+    os.makedirs(RENDER_DIR, exist_ok=True)
+    os.makedirs(TMP_DIR, exist_ok=True)
+
+
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
 @app.middleware("http")
@@ -93,6 +108,11 @@ class SeedreamRenderInput(BaseModel):
     moment_id: str
     prompt: Optional[str] = None
     image_urls: Optional[List[str]] = None
+
+
+class LocalRenderInput(BaseModel):
+    moment_id: str
+    duration_s: Optional[float] = None
 
 
 class ModerationEventInput(BaseModel):
@@ -208,6 +228,65 @@ def moment_row_to_payload(row: Dict[str, Any]) -> Dict[str, Any]:
 
 def seedream_configured() -> bool:
     return bool(os.getenv("ARK_API_KEY"))
+
+
+def _download_asset(url: str, dst_path: str) -> None:
+    parsed = urllib.parse.urlparse(url)
+    if parsed.scheme in {"http", "https"}:
+        urllib.request.urlretrieve(url, dst_path)
+        return
+    if parsed.scheme == "file":
+        src_path = urllib.request.url2pathname(parsed.path)
+        shutil.copyfile(src_path, dst_path)
+        return
+    if os.path.exists(url):
+        shutil.copyfile(url, dst_path)
+        return
+    raise ValueError("unsupported_asset_url")
+
+
+def _render_mp4(photo_url: str, audio_url: Optional[str], duration_s: float, output_path: str) -> None:
+    duration = max(3.0, min(duration_s, 12.0))
+    photo_path = os.path.join(TMP_DIR, f"photo_{uuid4().hex}.jpg")
+    audio_path = os.path.join(TMP_DIR, f"audio_{uuid4().hex}.m4a")
+    try:
+        _download_asset(photo_url, photo_path)
+        if audio_url:
+            _download_asset(audio_url, audio_path)
+        cmd = [
+            "ffmpeg",
+            "-y",
+            "-loop",
+            "1",
+            "-i",
+            photo_path,
+        ]
+        if audio_url:
+            cmd += ["-i", audio_path]
+        cmd += [
+            "-t",
+            f"{duration:.2f}",
+            "-vf",
+            "scale=1080:1440,format=yuv420p",
+            "-c:v",
+            "libx264",
+            "-profile:v",
+            "high",
+            "-crf",
+            "20",
+            "-preset",
+            "medium",
+        ]
+        if audio_url:
+            cmd += ["-c:a", "aac", "-b:a", "128k", "-ar", "44100"]
+        cmd.append(output_path)
+        result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+        if result.returncode != 0:
+            raise RuntimeError("ffmpeg_failed")
+    finally:
+        for path in (photo_path, audio_path):
+            if os.path.exists(path):
+                os.remove(path)
 
 @app.get("/api/moments/nearby")
 async def list_moments_nearby(
@@ -729,6 +808,53 @@ async def dev_update_render(moment_id: str, body: Dict[str, Any]) -> Dict[str, A
     )
     DB.commit()
     return {"ok": True}
+
+
+@app.post("/api/dev/render/local")
+async def dev_local_render(body: LocalRenderInput) -> Dict[str, Any]:
+    """Dev-only: render MP4 locally from photo/audio."""
+    row = DB.execute(
+        "SELECT photo_url, audio_url, duration_s FROM moments WHERE id = ?",
+        (body.moment_id,),
+    ).fetchone()
+    if not row:
+        raise HTTPException(status_code=404, detail="Moment not found")
+    DB.execute(
+        """
+        UPDATE moments
+        SET render_status = ?, render_error = ?, updated_at = ?
+        WHERE id = ?
+        """,
+        ("rendering", None, now_ms(), body.moment_id),
+    )
+    DB.commit()
+    output_name = f"{body.moment_id}_{int(time.time())}.mp4"
+    output_path = os.path.join(RENDER_DIR, output_name)
+    mp4_url = f"/static/renders/{output_name}"
+    duration_s = body.duration_s or row["duration_s"] or 8
+    try:
+        _render_mp4(row["photo_url"], row["audio_url"], float(duration_s), output_path)
+    except Exception as exc:
+        DB.execute(
+            """
+            UPDATE moments
+            SET render_status = ?, render_error = ?, updated_at = ?
+            WHERE id = ?
+            """,
+            ("failed", str(exc), now_ms(), body.moment_id),
+        )
+        DB.commit()
+        return {"ok": False, "error": str(exc)}
+    DB.execute(
+        """
+        UPDATE moments
+        SET mp4_url = ?, render_status = ?, render_error = ?, preview_url = ?, updated_at = ?
+        WHERE id = ?
+        """,
+        (mp4_url, "ready", None, mp4_url, now_ms(), body.moment_id),
+    )
+    DB.commit()
+    return {"ok": True, "mp4_url": mp4_url}
 
 
 @app.post("/api/dev/render/seedream")
