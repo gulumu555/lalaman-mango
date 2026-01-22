@@ -193,6 +193,9 @@ struct NearbyView: View {
                         }
                         .buttonStyle(.plain)
                     }
+                    Text("入口：点位气泡 / 列表 / 随机听听")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     Button("随机听听") {
                         selectedMoment = filteredMoments.first ?? moments.first
                         showDetail = true
