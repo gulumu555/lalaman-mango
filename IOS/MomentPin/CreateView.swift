@@ -19,6 +19,7 @@ struct CreateView: View {
     private let previewMoment = Moment.sample.first!
     @State private var draftStyle = "治愈A"
     @State private var hasVoice = false
+    @State private var hasPhoto = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -29,7 +30,7 @@ struct CreateView: View {
                 .padding(.top, 8)
 
             TabView(selection: $step) {
-                PhotoStep(hasVoice: $hasVoice)
+                PhotoStep(hasPhoto: $hasPhoto)
                     .tag(Step.photo)
                 StyleStep(selectedStyle: $draftStyle)
                     .tag(Step.style)
@@ -43,7 +44,10 @@ struct CreateView: View {
                 .foregroundColor(.secondary)
                 .padding(.horizontal, 20)
                 .padding(.bottom, 6)
-            StepControls(step: $step, canPublish: hasVoice, onPublish: {
+            StepControls(
+                step: $step,
+                canProceed: canProceed,
+                onPublish: {
                 showPublishSheet = true
             })
                 .padding(.horizontal, 20)
@@ -140,6 +144,17 @@ struct CreateView: View {
                         }
                     }
             }
+        }
+    }
+
+    private var canProceed: Bool {
+        switch step {
+        case .photo:
+            return hasPhoto
+        case .style:
+            return true
+        case .voice:
+            return hasVoice
         }
     }
 }
@@ -255,19 +270,26 @@ private struct StepDots: View {
 }
 
 private struct PhotoStep: View {
-    @Binding var hasVoice: Bool
+    @Binding var hasPhoto: Bool
+    @State private var photoHint = "未选择照片"
 
     var body: some View {
         VStack(spacing: 16) {
             HStack(spacing: 12) {
-                Button("拍照") {}
+                Button("拍照") {
+                    hasPhoto = true
+                    photoHint = "已选择 1 张（拍照）"
+                }
                     .font(.caption)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
                     .background(Color.black)
                     .foregroundColor(.white)
                     .cornerRadius(999)
-                Button("相册") {}
+                Button("相册") {
+                    hasPhoto = true
+                    photoHint = "已选择 1 张（相册）"
+                }
                     .font(.caption)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
@@ -283,14 +305,17 @@ private struct PhotoStep: View {
                 .frame(height: 240)
                 .cornerRadius(16)
                 .overlay(
-                    Text("图片预览（占位）")
+                    Text(hasPhoto ? "图片预览（已选）" : "图片预览（占位）")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 )
             Text("支持裁切与旋转（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
-            Button("选择照片") {}
+            Button(hasPhoto ? "更换照片" : "选择照片") {
+                hasPhoto = true
+                photoHint = "已选择 1 张（占位）"
+            }
                 .font(.headline)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 12)
@@ -318,6 +343,25 @@ private struct PhotoStep: View {
                             .stroke(Color.black.opacity(0.15), lineWidth: 1)
                     )
                     .cornerRadius(999)
+            }
+            HStack(spacing: 12) {
+                Button("移除") {
+                    hasPhoto = false
+                    photoHint = "未选择照片"
+                }
+                .font(.caption)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
+                .background(Color.white)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 999)
+                        .stroke(Color.black.opacity(0.15), lineWidth: 1)
+                )
+                .cornerRadius(999)
+                .disabled(!hasPhoto)
+                Text(photoHint)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
         }
         .padding(20)
@@ -384,6 +428,7 @@ private struct StyleStep: View {
 private struct VoiceStep: View {
     @Binding var hasVoice: Bool
     @State private var recordHint = "未录音"
+    @State private var isRecording = false
 
     var body: some View {
         VStack(spacing: 16) {
@@ -407,13 +452,18 @@ private struct VoiceStep: View {
                 .frame(height: 180)
                 .cornerRadius(16)
                 .overlay(
-                    Text("声波占位")
+                    Text(isRecording ? "声波录制中..." : "声波占位")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 )
-            Button("按住录音") {
-                hasVoice = true
-                recordHint = "已录 0:08"
+            Button(isRecording ? "停止录音" : "开始录音") {
+                if isRecording {
+                    isRecording = false
+                    hasVoice = true
+                    recordHint = "已录 0:08"
+                } else {
+                    isRecording = true
+                }
             }
                 .font(.headline)
                 .frame(maxWidth: .infinity)
@@ -421,19 +471,33 @@ private struct VoiceStep: View {
                 .background(Color.black)
                 .foregroundColor(.white)
                 .cornerRadius(999)
-            Button("重录") {
-                hasVoice = false
-                recordHint = "未录音"
+            HStack(spacing: 12) {
+                Button("试听") {}
+                    .font(.caption)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999)
+                            .stroke(Color.black.opacity(0.15), lineWidth: 1)
+                    )
+                    .cornerRadius(999)
+                    .disabled(!hasVoice)
+                Button("重录") {
+                    hasVoice = false
+                    isRecording = false
+                    recordHint = "未录音"
+                }
+                    .font(.caption)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999)
+                            .stroke(Color.black.opacity(0.15), lineWidth: 1)
+                    )
+                    .cornerRadius(999)
             }
-                .font(.caption)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 8)
-                .background(Color.white)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 999)
-                        .stroke(Color.black.opacity(0.15), lineWidth: 1)
-                )
-                .cornerRadius(999)
             Text(recordHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
@@ -530,12 +594,12 @@ private struct PublishSettings: View {
 
 private struct StepControls: View {
     @Binding var step: CreateView.Step
-    var canPublish: Bool = true
+    var canProceed: Bool = true
     var onPublish: () -> Void = {}
 
     var body: some View {
         HStack(spacing: 12) {
-            if !canPublish {
+            if !canProceed {
                 Text("请完成当前步骤")
                     .font(.caption2)
                     .foregroundColor(.secondary)
@@ -570,8 +634,8 @@ private struct StepControls: View {
             .background(Color.black)
             .foregroundColor(.white)
             .cornerRadius(999)
-            .opacity(canPublish ? 1 : 0.4)
-            .disabled(!canPublish)
+            .opacity(canProceed ? 1 : 0.4)
+            .disabled(!canProceed)
         }
     }
 }
