@@ -60,24 +60,44 @@ struct DetailView: View {
                     Text("\(moment.moodEmoji) \(moment.title)")
                         .font(.title3)
                         .fontWeight(.semibold)
-                Text(isPublic ? "匿名公开" : "仅自己")
-                    .font(.caption)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.black.opacity(0.1))
-                    .cornerRadius(8)
+                    HStack(spacing: 8) {
+                        Text(isPublic ? "匿名公开" : "仅自己")
+                            .font(.caption)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.black.opacity(0.1))
+                            .cornerRadius(8)
+                        Text("治愈")
+                            .font(.caption2)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.gray.opacity(0.15))
+                            .cornerRadius(8)
+                        Text("轻松")
+                            .font(.caption2)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.gray.opacity(0.15))
+                            .cornerRadius(8)
+                    }
                     .onChange(of: isPublic) { value in
                         visibilityHint = value ? "匿名公开可互动" : "仅自己，互动关闭"
                         isInteractive = value
                     }
-                    Text(moment.zoneName)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                    Text("2025-春节前")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    HStack(spacing: 12) {
+                        Label(moment.zoneName, systemImage: "mappin.and.ellipse")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Label("2025-春节前", systemImage: "clock")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+
+                Text("匿名公开可互动（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
 
                 ReactionRow(selectedReaction: $selectedReaction, isEnabled: isInteractive && isPublic) {
                     feedbackText = "反应已发送"
