@@ -15,6 +15,8 @@ struct DetailView: View {
     @State private var visibilityHint = "仅匿名公开可互动（占位）"
     @State private var allowReplies = true
     @State private var isPlaying = false
+    @State private var showAuthorControls = false
+    @State private var showModerationOptions = false
 
     var body: some View {
         ScrollView {
@@ -128,13 +130,29 @@ struct DetailView: View {
 
                 ShareRetrySection()
 
-                AuthorActions(isPublic: $isPublic, allowReplies: $allowReplies) {
-                    showDeleteConfirm = true
+                DisclosureGroup(isExpanded: $showAuthorControls) {
+                    AuthorActions(isPublic: $isPublic, allowReplies: $allowReplies, showTitle: false) {
+                        showDeleteConfirm = true
+                    }
+                } label: {
+                    Text("作者控制")
+                        .font(.headline)
                 }
+                .padding(16)
+                .background(Color.gray.opacity(0.08))
+                .cornerRadius(16)
 
-                ModerationSection {
-                    showModerationSheet = true
+                DisclosureGroup(isExpanded: $showModerationOptions) {
+                    ModerationSection(showTitle: false) {
+                        showModerationSheet = true
+                    }
+                } label: {
+                    Text("风控与举报")
+                        .font(.headline)
                 }
+                .padding(16)
+                .background(Color.gray.opacity(0.08))
+                .cornerRadius(16)
 
                 Text(visibilityHint)
                     .font(.caption)
@@ -285,12 +303,15 @@ private struct InteractionNotice: View {
 private struct AuthorActions: View {
     @Binding var isPublic: Bool
     @Binding var allowReplies: Bool
+    var showTitle: Bool = true
     var onDelete: () -> Void = {}
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("作者控制")
-                .font(.headline)
+            if showTitle {
+                Text("作者控制")
+                    .font(.headline)
+            }
             Toggle("允许回复", isOn: $allowReplies)
                 .toggleStyle(SwitchToggleStyle(tint: .black))
             Text(isPublic ? "匿名公开可互动" : "仅自己时互动将关闭")
@@ -324,18 +345,18 @@ private struct AuthorActions: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(16)
-        .background(Color.gray.opacity(0.08))
-        .cornerRadius(16)
     }
 }
 
 private struct ModerationSection: View {
+    var showTitle: Bool = true
     var onOpen: () -> Void = {}
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("风控")
-                .font(.headline)
+            if showTitle {
+                Text("风控")
+                    .font(.headline)
+            }
             HStack(spacing: 12) {
                 Button("举报") {
                     onOpen()
