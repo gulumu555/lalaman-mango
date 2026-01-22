@@ -17,6 +17,8 @@ struct DetailView: View {
     @State private var isPlaying = false
     @State private var showAuthorControls = false
     @State private var showModerationOptions = false
+    @State private var playbackRate: Double = 1.0
+    @State private var isMuted = false
 
     var body: some View {
         ScrollView {
@@ -57,6 +59,12 @@ struct DetailView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+
+                PlaybackControls(
+                    playbackRate: $playbackRate,
+                    isMuted: $isMuted,
+                    isPlaying: $isPlaying
+                )
 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("\(moment.moodEmoji) \(moment.title)")
@@ -229,6 +237,76 @@ private struct ReactionRow: View {
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+private struct PlaybackControls: View {
+    @Binding var playbackRate: Double
+    @Binding var isMuted: Bool
+    @Binding var isPlaying: Bool
+
+    private let rates: [Double] = [0.8, 1.0, 1.2]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("播放控制")
+                .font(.headline)
+            HStack(spacing: 12) {
+                Button {
+                    isPlaying.toggle()
+                } label: {
+                    Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                        .font(.title2)
+                }
+                .foregroundColor(.black)
+                HStack(spacing: 6) {
+                    Image(systemName: "speaker.wave.2.fill")
+                        .font(.caption)
+                    Text(isMuted ? "已静音" : "音量正常")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(Color.gray.opacity(0.12))
+                .cornerRadius(999)
+                .onTapGesture {
+                    isMuted.toggle()
+                }
+                Spacer()
+                HStack(spacing: 6) {
+                    ForEach(rates, id: \.self) { rate in
+                        Button("\(rate, specifier: "%.1fx")") {
+                            playbackRate = rate
+                        }
+                        .font(.caption)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 6)
+                        .background(playbackRate == rate ? Color.black.opacity(0.1) : Color.white)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 999)
+                                .stroke(Color.black.opacity(0.12), lineWidth: 1)
+                        )
+                        .cornerRadius(999)
+                    }
+                }
+            }
+            HStack(spacing: 8) {
+                Circle()
+                    .fill(Color.black)
+                    .frame(width: 8, height: 8)
+                Capsule()
+                    .fill(Color.black.opacity(0.1))
+                    .frame(height: 4)
+                Text("可拖动进度（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .padding(16)
+        .background(Color.gray.opacity(0.08))
+        .cornerRadius(16)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
