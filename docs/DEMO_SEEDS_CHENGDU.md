@@ -164,5 +164,6 @@
 - 导入方式：调用 `POST /api/dev/seed/chengdu`（后端已内置种子）
 - 校验方式（示例）：
   - 运行 `backend/smoke_test.sh` 或 `backend/run_verify.sh`
+  - 本地渲染校验：`LOCAL_RENDER=1 backend/run_verify.sh`（需已安装 `ffmpeg`）
   - 检查返回 `seed_count >= 30`
   - 地图接口 `GET /api/moments/nearby` 能返回 items 与 mood_weather
