@@ -286,11 +286,31 @@ private struct StepDots: View {
 private struct PhotoStep: View {
     @Binding var hasPhoto: Bool
     @State private var photoHint = "未选择照片"
+    @State private var cameraAuthorized = false
+    @State private var albumAuthorized = false
 
     var body: some View {
         VStack(spacing: 16) {
+            HStack(spacing: 8) {
+                Text("权限")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text(cameraAuthorized ? "相机已授权" : "相机未授权")
+                    .font(.caption2)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color.gray.opacity(0.12))
+                    .cornerRadius(999)
+                Text(albumAuthorized ? "相册已授权" : "相册未授权")
+                    .font(.caption2)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color.gray.opacity(0.12))
+                    .cornerRadius(999)
+            }
             HStack(spacing: 12) {
                 Button("拍照") {
+                    cameraAuthorized = true
                     hasPhoto = true
                     photoHint = "已选择 1 张（拍照）"
                 }
@@ -301,6 +321,7 @@ private struct PhotoStep: View {
                     .foregroundColor(.white)
                     .cornerRadius(999)
                 Button("相册") {
+                    albumAuthorized = true
                     hasPhoto = true
                     photoHint = "已选择 1 张（相册）"
                 }
@@ -327,6 +348,9 @@ private struct PhotoStep: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Button(hasPhoto ? "更换照片" : "选择照片") {
+                if !albumAuthorized {
+                    albumAuthorized = true
+                }
                 hasPhoto = true
                 photoHint = "已选择 1 张（占位）"
             }
@@ -374,6 +398,11 @@ private struct PhotoStep: View {
                 .cornerRadius(999)
                 .disabled(!hasPhoto)
                 Text(photoHint)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
+            if !cameraAuthorized || !albumAuthorized {
+                Text("需要相机/相册权限（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
@@ -443,6 +472,7 @@ private struct VoiceStep: View {
     @Binding var hasVoice: Bool
     @State private var recordHint = "未录音"
     @State private var isRecording = false
+    @State private var micAuthorized = false
 
     var body: some View {
         VStack(spacing: 16) {
@@ -476,6 +506,7 @@ private struct VoiceStep: View {
                     hasVoice = true
                     recordHint = "已录 0:08"
                 } else {
+                    micAuthorized = true
                     isRecording = true
                 }
             }
@@ -515,6 +546,11 @@ private struct VoiceStep: View {
             Text(recordHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            if !micAuthorized {
+                Text("需要麦克风权限（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
         }
         .padding(20)
     }
