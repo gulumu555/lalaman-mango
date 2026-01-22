@@ -196,6 +196,17 @@ Notes:
 - 本地 ffmpeg 生成 MP4，输出保存到 /static/renders
 - 会更新 moments.mp4_url / render_status / preview_url
 
+### 2.11.2 Seedream Render（dev only）
+POST /api/dev/render/seedream
+Body: { moment_id: string, prompt?, image_urls? }
+Response: { ok: true, status: "rendering" } | { ok: false, error }
+Errors:
+- 404 Moment not found
+- 400 seedream_payload_missing（prompt 与 image_urls 均为空）
+- seedream_not_configured（返回 ok:false）
+Notes:
+- /api/dev/render/seedream/ready 可将 render_status 置为 ready
+
 ### 2.12 Render 状态流转（说明）
 - pending → rendering → ready
 - pending → failed

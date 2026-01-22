@@ -863,6 +863,17 @@ async def dev_seedream_render(body: SeedreamRenderInput) -> Dict[str, Any]:
     row = DB.execute("SELECT id FROM moments WHERE id = ?", (body.moment_id,)).fetchone()
     if not row:
         raise HTTPException(status_code=404, detail="Moment not found")
+    if not body.prompt and not (body.image_urls or []):
+        DB.execute(
+            """
+            UPDATE moments
+            SET render_status = ?, render_error = ?, updated_at = ?
+            WHERE id = ?
+            """,
+            ("failed", "seedream_payload_missing", now_ms(), body.moment_id),
+        )
+        DB.commit()
+        raise HTTPException(status_code=400, detail="seedream_payload_missing")
     if not seedream_configured():
         DB.execute(
             """
