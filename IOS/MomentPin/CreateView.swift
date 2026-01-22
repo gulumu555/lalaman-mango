@@ -521,15 +521,7 @@ private struct VoiceStep: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            Rectangle()
-                .fill(Color.gray.opacity(0.15))
-                .frame(height: 180)
-                .cornerRadius(16)
-                .overlay(
-                    Text(isRecording ? "声波录制中..." : "声波占位")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                )
+            WaveformPlaceholder(isActive: isRecording || hasVoice)
             GeometryReader { proxy in
                 ZStack(alignment: .leading) {
                     Capsule()
@@ -542,6 +534,9 @@ private struct VoiceStep: View {
                 }
             }
             .frame(height: 6)
+            Text(isRecording ? "声波录制中..." : "声波占位")
+                .font(.caption)
+                .foregroundColor(.secondary)
             Button(isRecording ? "停止录音" : "开始录音") {
                 if isRecording {
                     isRecording = false
@@ -604,6 +599,34 @@ private struct VoiceStep: View {
             }
         }
         .padding(20)
+    }
+}
+
+private struct WaveformPlaceholder: View {
+    var isActive: Bool
+    private let barCount = 12
+
+    var body: some View {
+        TimelineView(.animation) { timeline in
+            let phase = timeline.date.timeIntervalSinceReferenceDate
+            HStack(spacing: 6) {
+                ForEach(0..<barCount, id: \.self) { index in
+                    Capsule()
+                        .fill(Color.black.opacity(0.6))
+                        .frame(width: 6, height: barHeight(index: index, phase: phase))
+                }
+            }
+            .frame(maxWidth: .infinity, minHeight: 120)
+            .padding(.vertical, 16)
+            .background(Color.gray.opacity(0.12))
+            .cornerRadius(16)
+        }
+    }
+
+    private func barHeight(index: Int, phase: TimeInterval) -> CGFloat {
+        guard isActive else { return 12 }
+        let base = sin(phase * 2 + Double(index)) * 0.5 + 0.5
+        return 16 + CGFloat(base) * 48
     }
 }
 
