@@ -492,6 +492,11 @@ private struct PonyStep: View {
     @Binding var ponyPlacement: String
     @Binding var selectedStyle: String
     private let placements = ["左侧合影", "右侧合影", "肩旁合影"]
+    private let ponyAssets = [
+        "pony/\(selectedStyle)/wave_happy.png",
+        "pony/\(selectedStyle)/heart_healing.png",
+        "pony/\(selectedStyle)/sit_cool.png"
+    ]
 
     var body: some View {
         VStack(spacing: 16) {
@@ -535,6 +540,16 @@ private struct PonyStep: View {
                     Text("风格ID：\(selectedStyle)")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("资产命名示例")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                        ForEach(ponyAssets, id: \.self) { asset in
+                            Text(asset)
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
+                    }
                     Button("随机换一组站位") {
                         ponyPlacement = placements.randomElement() ?? ponyPlacement
                     }
