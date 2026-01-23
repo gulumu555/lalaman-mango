@@ -27,7 +27,10 @@ struct MyMomentsView: View {
                             Spacer()
                             Text("未生成")
                                 .font(.caption2)
-                                .foregroundColor(.secondary)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(Color.gray.opacity(0.12))
+                                .cornerRadius(999)
                         }
                         .padding(.vertical, 6)
                     }
@@ -47,7 +50,10 @@ struct MyMomentsView: View {
                             Spacer()
                             Text("已发布")
                                 .font(.caption2)
-                                .foregroundColor(.secondary)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(Color.black.opacity(0.1))
+                                .cornerRadius(999)
                         }
                         .padding(.vertical, 6)
                     }
