@@ -9,6 +9,7 @@ struct BottlesView: View {
         "2024-12-31 · 太古里",
         "2024-08-08 · 九眼桥"
     ]
+    private let pickedItems: [String] = []
 
     var body: some View {
         List {
@@ -55,6 +56,22 @@ struct BottlesView: View {
                                 .cornerRadius(999)
                         }
                         .padding(.vertical, 6)
+                    }
+                }
+            }
+            Section("已捡起") {
+                if pickedItems.isEmpty {
+                    Text("暂无捡起记录")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                        .padding(.vertical, 6)
+                } else {
+                    ForEach(pickedItems, id: \.self) { item in
+                        NavigationLink(destination: DetailView(moment: Moment.sample.first!)) {
+                            Text(item)
+                                .font(.subheadline)
+                                .padding(.vertical, 6)
+                        }
                     }
                 }
             }
