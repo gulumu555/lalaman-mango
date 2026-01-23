@@ -27,6 +27,7 @@ struct CreateView: View {
     @State private var ponyPlacement = "右侧合影"
     @State private var hookText = "今天的我有点___"
     @State private var subtitleText = "（字幕占位）"
+    @State private var recentTaskHint = "最近任务：风格已完成，小马合成中"
 
     var body: some View {
         VStack(spacing: 0) {
@@ -76,6 +77,10 @@ struct CreateView: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
                 .padding(.bottom, 16)
+            Text(recentTaskHint)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.bottom, 12)
         }
         .background(Color.white)
         .sheet(isPresented: $showPublishSheet) {
