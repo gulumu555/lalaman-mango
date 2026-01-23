@@ -535,6 +535,14 @@ private struct PonyStep: View {
                     Text("风格ID：\(selectedStyle)")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    HStack(spacing: 8) {
+                        Text("融合说明")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                        Text("光影/色调/质感/边缘统一")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
                     VStack(alignment: .leading, spacing: 4) {
                         Text("资产命名示例")
                             .font(.caption2)
