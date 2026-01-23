@@ -16,6 +16,9 @@ struct NotificationsView: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                     Spacer()
+                    Button("清空") {}
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                 }
                 .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
             }
