@@ -620,6 +620,16 @@ private struct PonyStep: View {
                     .background(Color.black)
                     .foregroundColor(.white)
                     .cornerRadius(999)
+                    Button("下载合影静帧") {}
+                        .font(.caption2)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                        .background(Color.white)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 999)
+                                .stroke(Color.black.opacity(0.15), lineWidth: 1)
+                        )
+                        .cornerRadius(999)
                 }
             }
         }
@@ -870,6 +880,9 @@ private struct VideoStep: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Text("可选：静音导出（后续）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text("字幕滚动：语义分段 8–16 字/段（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
             HStack(spacing: 12) {
