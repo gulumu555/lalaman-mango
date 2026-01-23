@@ -20,6 +20,7 @@ struct CreateView: View {
     @State private var draftStyle = "治愈A"
     @State private var hasVoice = false
     @State private var hasPhoto = false
+    @State private var autoSaveHint = "已自动保存草稿"
 
     var body: some View {
         VStack(spacing: 0) {
@@ -52,6 +53,10 @@ struct CreateView: View {
             })
                 .padding(.horizontal, 20)
                 .padding(.bottom, 28)
+            Text(autoSaveHint)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.bottom, 16)
         }
         .background(Color.white)
         .sheet(isPresented: $showPublishSheet) {
