@@ -796,6 +796,14 @@ private struct VideoStep: View {
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
+            VStack(alignment: .leading, spacing: 6) {
+                Text("输出文件")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("momentpin.mp4 / cover.jpg")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
         }
         .padding(20)
     }
