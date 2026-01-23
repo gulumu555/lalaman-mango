@@ -27,6 +27,16 @@ struct RootView: View {
                     showCreate = true
                 }
             }
+            .overlay(alignment: .bottom) {
+                Text("首页地图为背景 · 中间 + 开始创作")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(Color.white.opacity(0.9))
+                    .cornerRadius(12)
+                    .padding(.bottom, 110)
+            }
         }
         .ignoresSafeArea(edges: [.bottom])
         .fullScreenCover(isPresented: $showCreate) {
