@@ -558,6 +558,11 @@ private struct VoiceStep: View {
     @State private var recordHint = "未录音"
     @State private var isRecording = false
     @State private var micAuthorized = false
+    private let subtitleSegments = [
+        "今天有点累",
+        "但我想记住这刻",
+        "希望明天会更好"
+    ]
     private let hooks = [
         "今天的我有点___",
         "我想把这一刻留给___",
@@ -609,6 +614,16 @@ private struct VoiceStep: View {
             Text("字幕：\(subtitleText)")
                 .font(.caption)
                 .foregroundColor(.secondary)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("字幕分段预览")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                ForEach(subtitleSegments, id: \.self) { line in
+                    Text(line)
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+            }
             Button(isRecording ? "停止录音" : "开始录音") {
                 if isRecording {
                     isRecording = false
@@ -688,6 +703,8 @@ private struct VideoStep: View {
     @Binding var selectedStyle: String
     @Binding var subtitleText: String
     var onPublish: () -> Void = {}
+    @State private var subtitleStyle = "默认白字"
+    private let subtitleStyles = ["默认白字", "薄雾底条"]
 
     var body: some View {
         VStack(spacing: 16) {
@@ -706,8 +723,26 @@ private struct VideoStep: View {
                         Text("字幕滚动：\(subtitleText)")
                             .font(.caption2)
                             .foregroundColor(.secondary)
+                        Text("字幕样式：\(subtitleStyle)")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
                     }
                 )
+            HStack(spacing: 8) {
+                Text("字幕样式")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                ForEach(subtitleStyles, id: \.self) { style in
+                    Button(style) {
+                        subtitleStyle = style
+                    }
+                    .font(.caption2)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(subtitleStyle == style ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
+                    .cornerRadius(999)
+                }
+            }
             Text("默认交付 MP4（无需手动让它动起来）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
