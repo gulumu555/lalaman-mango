@@ -487,6 +487,9 @@ private struct StyleStep: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
+                Text("提示：风格固定 3-4 个（强治愈）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 12)], spacing: 12) {
                     ForEach(styles, id: \.self) { style in
                         VStack(spacing: 8) {
