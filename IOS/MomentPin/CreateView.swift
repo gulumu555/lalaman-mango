@@ -735,6 +735,8 @@ private struct VideoStep: View {
     var onPublish: () -> Void = {}
     @State private var subtitleStyle = "默认白字"
     private let subtitleStyles = ["默认白字", "薄雾底条"]
+    @State private var renderStatus = "生成中"
+    private let renderStatuses = ["生成中", "已完成", "失败"]
 
     var body: some View {
         VStack(spacing: 16) {
@@ -758,6 +760,26 @@ private struct VideoStep: View {
                             .foregroundColor(.secondary)
                     }
                 )
+            HStack(spacing: 8) {
+                Text("生成状态")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                ForEach(renderStatuses, id: \.self) { status in
+                    Button(status) {
+                        renderStatus = status
+                    }
+                    .font(.caption2)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(renderStatus == status ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
+                    .cornerRadius(999)
+                }
+            }
+            if renderStatus == "失败" {
+                Text("失败兜底：静帧字幕 MP4")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
             HStack(spacing: 8) {
                 Text("字幕样式")
                     .font(.caption2)
