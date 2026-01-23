@@ -710,6 +710,9 @@ private struct VoiceStep: View {
             Text(recordHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("ASR 失败可手动补一句字幕（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             if !micAuthorized {
                 Text("需要麦克风权限（占位）")
                     .font(.caption2)
