@@ -806,6 +806,9 @@ private struct VideoStep: View {
             Text("微动方式：轻推拉 / 轻漂移 / 光感呼吸（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("可选：静音导出（后续）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             HStack(spacing: 12) {
                 Button("下载 MP4") {}
                     .font(.caption)
