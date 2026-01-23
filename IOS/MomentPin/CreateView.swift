@@ -645,6 +645,8 @@ private struct VoiceStep: View {
         "如果这张照片会说话，它会说___",
         "我希望明天会更___"
     ]
+    @State private var asrStatus = "识别中"
+    private let asrStatuses = ["识别中", "已完成", "失败"]
 
     var body: some View {
         VStack(spacing: 16) {
@@ -690,6 +692,21 @@ private struct VoiceStep: View {
             Text("字幕：\(subtitleText)")
                 .font(.caption)
                 .foregroundColor(.secondary)
+            HStack(spacing: 8) {
+                Text("识别状态")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                ForEach(asrStatuses, id: \.self) { status in
+                    Button(status) {
+                        asrStatus = status
+                    }
+                    .font(.caption2)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 6)
+                    .background(asrStatus == status ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
+                    .cornerRadius(999)
+                }
+            }
             VStack(alignment: .leading, spacing: 4) {
                 Text("字幕分段预览")
                     .font(.caption2)
@@ -706,10 +723,12 @@ private struct VoiceStep: View {
                     hasVoice = true
                     recordHint = "已录 0:08"
                     subtitleText = "如果这张照片会说话，它会说今天很安静"
+                    asrStatus = "已完成"
                 } else {
                     micAuthorized = true
                     isRecording = true
                     subtitleText = "（ASR 转写中...）"
+                    asrStatus = "识别中"
                 }
             }
             .font(.headline)
