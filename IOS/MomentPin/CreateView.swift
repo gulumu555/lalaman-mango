@@ -38,6 +38,10 @@ struct CreateView: View {
                 .padding(.top, 16)
             StepDots(step: step)
                 .padding(.top, 8)
+            Text(stepSubtitle)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.top, 4)
 
             TabView(selection: $step) {
                 StyleStep(hasPhoto: $hasPhoto, selectedStyle: $draftStyle)
@@ -196,6 +200,19 @@ struct CreateView: View {
             return hasVoice
         case .video:
             return true
+        }
+    }
+
+    private var stepSubtitle: String {
+        switch step {
+        case .style:
+            return "选择照片 + 3-4 个治愈风格"
+        case .pony:
+            return "小马同框（资产合成 + 融合）"
+        case .voice:
+            return "语音钩子 + 字幕滚动"
+        case .video:
+            return "默认生成微动 MP4"
         }
     }
 }
