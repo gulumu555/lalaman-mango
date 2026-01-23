@@ -458,10 +458,25 @@ private struct MoodBrowseSheet: View {
 private struct MomentsListSheet: View {
     let items: [Moment]
     let onSelect: (Moment) -> Void
+    @State private var filterHint = "全部"
 
     var body: some View {
         NavigationView {
             List {
+                Section {
+                    HStack {
+                        Text("筛选：\(filterHint)")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                        Spacer()
+                        Button("清除筛选") {
+                            filterHint = "全部"
+                        }
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    }
+                    .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
+                }
                 if items.isEmpty {
                     Text("暂无片刻")
                         .font(.caption)
