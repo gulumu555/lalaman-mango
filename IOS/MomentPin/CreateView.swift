@@ -3,13 +3,15 @@ import SwiftUI
 struct CreateView: View {
     var presetZoneName: String? = nil
     var onPublished: () -> Void = {}
+
     enum Step: Int, CaseIterable {
-        case photo = 1
-        case style = 2
+        case style = 1
+        case pony = 2
         case voice = 3
+        case video = 4
     }
 
-    @State private var step: Step = .photo
+    @State private var step: Step = .style
     @State private var isPublic = false
     @State private var includeBottle = false
     @State private var showDetail = false
@@ -17,10 +19,14 @@ struct CreateView: View {
     @State private var showPublished = false
     @State private var showPublishSheet = false
     private let previewMoment = Moment.sample.first!
-    @State private var draftStyle = "治愈A"
+    @State private var draftStyle = "治愈手绘A"
     @State private var hasVoice = false
     @State private var hasPhoto = false
     @State private var autoSaveHint = "已自动保存草稿"
+    @State private var ponyEnabled = false
+    @State private var ponyPlacement = "右侧合影"
+    @State private var hookText = "今天的我有点___"
+    @State private var subtitleText = "（字幕占位）"
 
     var body: some View {
         VStack(spacing: 0) {
@@ -31,12 +37,27 @@ struct CreateView: View {
                 .padding(.top, 8)
 
             TabView(selection: $step) {
-                PhotoStep(hasPhoto: $hasPhoto)
-                    .tag(Step.photo)
-                StyleStep(selectedStyle: $draftStyle)
+                StyleStep(hasPhoto: $hasPhoto, selectedStyle: $draftStyle)
                     .tag(Step.style)
-                VoiceStep(hasVoice: $hasVoice)
-                    .tag(Step.voice)
+                PonyStep(
+                    ponyEnabled: $ponyEnabled,
+                    ponyPlacement: $ponyPlacement,
+                    selectedStyle: $draftStyle
+                )
+                .tag(Step.pony)
+                VoiceStep(
+                    hasVoice: $hasVoice,
+                    hookText: $hookText,
+                    subtitleText: $subtitleText
+                )
+                .tag(Step.voice)
+                VideoStep(
+                    ponyEnabled: $ponyEnabled,
+                    selectedStyle: $draftStyle,
+                    subtitleText: $subtitleText,
+                    onPublish: { showPublishSheet = true }
+                )
+                .tag(Step.video)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
 
@@ -47,12 +68,10 @@ struct CreateView: View {
                 .padding(.bottom, 6)
             StepControls(
                 step: $step,
-                canProceed: canProceed,
-                onPublish: {
-                showPublishSheet = true
-            })
-                .padding(.horizontal, 20)
-                .padding(.bottom, 28)
+                canProceed: canProceed
+            )
+            .padding(.horizontal, 20)
+            .padding(.bottom, 28)
             Text(autoSaveHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
@@ -88,10 +107,10 @@ struct CreateView: View {
                     Text("成功率 95%（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
-                    Text("失败会自动降级为静图+声波")
+                    Text("失败会自动降级为静帧字幕 MP4")
                         .font(.caption2)
                         .foregroundColor(.secondary)
-                    Text("资源说明：照片 + 语音 + 动效模板")
+                    Text("资源说明：照片 + 字幕 + 微动模板")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
@@ -154,12 +173,14 @@ struct CreateView: View {
 
     private var canProceed: Bool {
         switch step {
-        case .photo:
-            return hasPhoto
         case .style:
+            return hasPhoto
+        case .pony:
             return true
         case .voice:
             return hasVoice
+        case .video:
+            return true
         }
     }
 }
@@ -172,7 +193,7 @@ private struct StepHeader: View {
             Text("做一条片刻")
                 .font(.title2)
                 .fontWeight(.semibold)
-            Text("Step \(step.rawValue)/3")
+            Text("Step \(step.rawValue)/4")
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -242,27 +263,27 @@ private struct PublishSheet: View {
                         Button("明年春节") {
                             openDate = Calendar.current.date(byAdding: .day, value: 365, to: Date()) ?? openDate
                         }
-                            .font(.caption2)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 6)
-                            .background(Color.gray.opacity(0.12))
-                            .cornerRadius(999)
+                        .font(.caption2)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 6)
+                        .background(Color.gray.opacity(0.12))
+                        .cornerRadius(999)
                         Button("3个月后") {
                             openDate = Calendar.current.date(byAdding: .month, value: 3, to: Date()) ?? openDate
                         }
-                            .font(.caption2)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 6)
-                            .background(Color.gray.opacity(0.12))
-                            .cornerRadius(999)
+                        .font(.caption2)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 6)
+                        .background(Color.gray.opacity(0.12))
+                        .cornerRadius(999)
                         Button("自定义") {
                             openDate = Calendar.current.date(byAdding: .month, value: 1, to: Date()) ?? openDate
                         }
-                            .font(.caption2)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 6)
-                            .background(Color.gray.opacity(0.12))
-                            .cornerRadius(999)
+                        .font(.caption2)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 6)
+                        .background(Color.gray.opacity(0.12))
+                        .cornerRadius(999)
                     }
                 }
             }
@@ -315,14 +336,19 @@ private struct StepDots: View {
     }
 }
 
-private struct PhotoStep: View {
+private struct StyleStep: View {
     @Binding var hasPhoto: Bool
+    @Binding var selectedStyle: String
     @State private var photoHint = "未选择照片"
     @State private var cameraAuthorized = false
     @State private var albumAuthorized = false
+    private let styles = ["治愈手绘A", "治愈手绘B", "动画电影感", "漫画治愈"]
 
     var body: some View {
         VStack(spacing: 16) {
+            Text("Step 1/4 · 风格转绘")
+                .font(.caption)
+                .foregroundColor(.secondary)
             HStack(spacing: 8) {
                 Text("权限")
                     .font(.caption2)
@@ -346,30 +372,30 @@ private struct PhotoStep: View {
                     hasPhoto = true
                     photoHint = "已选择 1 张（拍照）"
                 }
-                    .font(.caption)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
-                    .background(Color.black)
-                    .foregroundColor(.white)
-                    .cornerRadius(999)
+                .font(.caption)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 10)
+                .background(Color.black)
+                .foregroundColor(.white)
+                .cornerRadius(999)
                 Button("相册") {
                     albumAuthorized = true
                     hasPhoto = true
                     photoHint = "已选择 1 张（相册）"
                 }
-                    .font(.caption)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
-                    .background(Color.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 999)
-                            .stroke(Color.black.opacity(0.15), lineWidth: 1)
-                    )
-                    .cornerRadius(999)
+                .font(.caption)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 10)
+                .background(Color.white)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 999)
+                        .stroke(Color.black.opacity(0.15), lineWidth: 1)
+                )
+                .cornerRadius(999)
             }
             Rectangle()
                 .fill(Color.gray.opacity(0.15))
-                .frame(height: 240)
+                .frame(height: 200)
                 .cornerRadius(16)
                 .overlay(
                     Text(hasPhoto ? "图片预览（已选）" : "图片预览（占位）")
@@ -386,58 +412,12 @@ private struct PhotoStep: View {
                 hasPhoto = true
                 photoHint = "已选择 1 张（占位）"
             }
-                .font(.headline)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .background(Color.black)
-                .foregroundColor(.white)
-                .cornerRadius(999)
-            HStack(spacing: 12) {
-                Button("裁切") {}
-                    .font(.caption)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
-                    .background(Color.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 999)
-                            .stroke(Color.black.opacity(0.15), lineWidth: 1)
-                    )
-                    .cornerRadius(999)
-                Button("旋转") {}
-                    .font(.caption)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
-                    .background(Color.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 999)
-                            .stroke(Color.black.opacity(0.15), lineWidth: 1)
-                    )
-                    .cornerRadius(999)
-            }
-            HStack(spacing: 12) {
-                Button("移除") {
-                    hasPhoto = false
-                    photoHint = "未选择照片"
-                }
-                .font(.caption)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 8)
-                .background(Color.white)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 999)
-                        .stroke(Color.black.opacity(0.15), lineWidth: 1)
-                )
-                .cornerRadius(999)
-                .disabled(!hasPhoto)
-                Text(photoHint)
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-            }
-            if !cameraAuthorized || !albumAuthorized {
-                Text("需要相机/相册权限（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-            }
+            .font(.headline)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
+            .background(Color.black)
+            .foregroundColor(.white)
+            .cornerRadius(999)
             if hasPhoto {
                 HStack(spacing: 12) {
                     Text("画幅")
@@ -461,6 +441,45 @@ private struct PhotoStep: View {
                         .padding(.vertical, 6)
                         .background(Color.gray.opacity(0.12))
                         .cornerRadius(999)
+                    Text(photoHint)
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+            }
+            VStack(alignment: .leading, spacing: 8) {
+                Text("风格候选（3-4张）")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 12)], spacing: 12) {
+                    ForEach(styles, id: \.self) { style in
+                        VStack(spacing: 8) {
+                            Rectangle()
+                                .fill(Color.gray.opacity(0.12))
+                                .frame(height: 120)
+                                .cornerRadius(12)
+                                .overlay(
+                                    Text(style)
+                                        .font(.caption2)
+                                        .foregroundColor(.secondary)
+                                )
+                            HStack(spacing: 8) {
+                                Button("下载") {}
+                                    .font(.caption2)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 6)
+                                    .background(Color.gray.opacity(0.12))
+                                    .cornerRadius(999)
+                                Button(selectedStyle == style ? "已选" : "选中") {
+                                    selectedStyle = style
+                                }
+                                .font(.caption2)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 6)
+                                .background(selectedStyle == style ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
+                                .cornerRadius(999)
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -468,20 +487,15 @@ private struct PhotoStep: View {
     }
 }
 
-private struct StyleStep: View {
-    private let styles = ["治愈A", "治愈B", "治愈C", "治愈D"]
-    private let poses = ["挥手", "眨眼", "小跳", "静坐"]
-    @State private var rotationHint = "模板：T02_Cloud"
+private struct PonyStep: View {
+    @Binding var ponyEnabled: Bool
+    @Binding var ponyPlacement: String
     @Binding var selectedStyle: String
-    @State private var showPartner = true
-    @State private var selectedPose = "挥手"
+    private let placements = ["左侧合影", "右侧合影", "肩旁合影"]
 
     var body: some View {
         VStack(spacing: 16) {
-            Text("选择风格")
-                .font(.headline)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            Text(rotationHint)
+            Text("Step 2/4 · 小马主题")
                 .font(.caption)
                 .foregroundColor(.secondary)
             Rectangle()
@@ -490,65 +504,48 @@ private struct StyleStep: View {
                 .cornerRadius(16)
                 .overlay(
                     VStack(spacing: 8) {
-                        Text("风格预览（占位）")
+                        Text("合影预览（占位）")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        Text(showPartner ? "同框：小马 \(selectedPose)" : "无同框伙伴")
+                        Text(ponyEnabled ? "小马：\(ponyPlacement)" : "未开启小马主题")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }
                 )
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 120), spacing: 12)], spacing: 12) {
-                ForEach(styles, id: \.self) { style in
-                    Button {
-                        selectedStyle = style
-                        rotationHint = "模板：\(style)"
-                    } label: {
-                        Text(style)
-                            .font(.caption)
-                            .frame(maxWidth: .infinity, minHeight: 60)
-                            .background(selectedStyle == style ? Color.black.opacity(0.1) : Color.gray.opacity(0.1))
-                            .cornerRadius(12)
-                    }
-                }
-            }
-            Toggle("马年小马同框", isOn: $showPartner)
+            Toggle("开启小马主题", isOn: $ponyEnabled)
                 .toggleStyle(SwitchToggleStyle(tint: .black))
                 .padding(.top, 8)
-            if showPartner {
-                HStack(spacing: 8) {
-                    Text("姿态")
+            if ponyEnabled {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("站位候选（随机性）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
-                    ForEach(poses, id: \.self) { pose in
-                        Button(pose) {
-                            selectedPose = pose
+                    HStack(spacing: 8) {
+                        ForEach(placements, id: \.self) { placement in
+                            Button(placement) {
+                                ponyPlacement = placement
+                            }
+                            .font(.caption2)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .background(ponyPlacement == placement ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
+                            .cornerRadius(999)
                         }
-                        .font(.caption2)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 6)
-                        .background(selectedPose == pose ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
-                        .cornerRadius(999)
                     }
+                    Text("风格ID：\(selectedStyle)")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Button("随机换一组站位") {
+                        ponyPlacement = placements.randomElement() ?? ponyPlacement
+                    }
+                    .font(.caption2)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(Color.black)
+                    .foregroundColor(.white)
+                    .cornerRadius(999)
                 }
-                Text("已选姿态：\(selectedPose)")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-            } else {
-                Text("同框已关闭，仅风格输出")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
             }
-
-            Button("再来一个") {
-                rotationHint = "模板：T0\(Int.random(in: 1...8))_Random"
-            }
-            .font(.caption)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 8)
-            .background(Color.black)
-            .foregroundColor(.white)
-            .cornerRadius(999)
         }
         .padding(20)
     }
@@ -556,19 +553,41 @@ private struct StyleStep: View {
 
 private struct VoiceStep: View {
     @Binding var hasVoice: Bool
+    @Binding var hookText: String
+    @Binding var subtitleText: String
     @State private var recordHint = "未录音"
     @State private var isRecording = false
     @State private var micAuthorized = false
-    @State private var recordProgress: CGFloat = 0.0
+    private let hooks = [
+        "今天的我有点___",
+        "我想把这一刻留给___",
+        "如果这张照片会说话，它会说___",
+        "我希望明天会更___"
+    ]
 
     var body: some View {
         VStack(spacing: 16) {
-            Text("录一段语音（3-8秒）")
-                .font(.headline)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            Text("建议 3–8 秒，上限 15 秒")
+            Text("Step 3/4 · 语音输入")
                 .font(.caption)
                 .foregroundColor(.secondary)
+            Text("点选钩子再开口")
+                .font(.headline)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Text("建议 6–10 秒，上限 15 秒")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 10)], spacing: 10) {
+                ForEach(hooks, id: \.self) { hook in
+                    Button(hook) {
+                        hookText = hook
+                    }
+                    .font(.caption2)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 8)
+                    .background(hookText == hook ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
+                    .cornerRadius(12)
+                }
+            }
             HStack {
                 Text("当前时长")
                     .font(.caption)
@@ -578,20 +597,16 @@ private struct VoiceStep: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            WaveformPlaceholder(isActive: isRecording || hasVoice)
-            GeometryReader { proxy in
-                ZStack(alignment: .leading) {
-                    Capsule()
-                        .fill(Color.gray.opacity(0.2))
-                        .frame(height: 6)
-                    Capsule()
-                        .fill(Color.black)
-                        .frame(width: proxy.size.width * recordProgress, height: 6)
-                        .animation(.easeInOut(duration: 0.6), value: recordProgress)
-                }
-            }
-            .frame(height: 6)
-            Text(isRecording ? "声波录制中..." : "声波占位")
+            Rectangle()
+                .fill(Color.gray.opacity(0.12))
+                .frame(height: 140)
+                .cornerRadius(16)
+                .overlay(
+                    Text(isRecording ? "录音中..." : "字幕预览占位")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                )
+            Text("字幕：\(subtitleText)")
                 .font(.caption)
                 .foregroundColor(.secondary)
             Button(isRecording ? "停止录音" : "开始录音") {
@@ -599,46 +614,62 @@ private struct VoiceStep: View {
                     isRecording = false
                     hasVoice = true
                     recordHint = "已录 0:08"
-                    recordProgress = 1.0
+                    subtitleText = "如果这张照片会说话，它会说今天很安静"
                 } else {
                     micAuthorized = true
                     isRecording = true
-                    recordProgress = 0.2
+                    subtitleText = "（ASR 转写中...）"
                 }
             }
-                .font(.headline)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .background(Color.black)
-                .foregroundColor(.white)
-                .cornerRadius(999)
+            .font(.headline)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
+            .background(Color.black)
+            .foregroundColor(.white)
+            .cornerRadius(999)
             HStack(spacing: 12) {
-                Button("试听") {}
-                    .font(.caption)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
-                    .background(Color.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 999)
-                            .stroke(Color.black.opacity(0.15), lineWidth: 1)
-                    )
-                    .cornerRadius(999)
-                    .disabled(!hasVoice)
-                Button("重录") {
-                    hasVoice = false
-                    isRecording = false
-                    recordHint = "未录音"
+                Button("原话版") {
+                    subtitleText = "今天的我有点累，但很想记住此刻"
                 }
-                    .font(.caption)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
-                    .background(Color.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 999)
-                            .stroke(Color.black.opacity(0.15), lineWidth: 1)
-                    )
-                    .cornerRadius(999)
+                .font(.caption)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
+                .background(Color.white)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 999)
+                        .stroke(Color.black.opacity(0.15), lineWidth: 1)
+                )
+                .cornerRadius(999)
+                .disabled(!hasVoice)
+                Button("润色版") {
+                    subtitleText = "今天有点累，但这刻很温柔"
+                }
+                .font(.caption)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
+                .background(Color.white)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 999)
+                        .stroke(Color.black.opacity(0.15), lineWidth: 1)
+                )
+                .cornerRadius(999)
+                .disabled(!hasVoice)
             }
+            Button("重录") {
+                hasVoice = false
+                isRecording = false
+                recordHint = "未录音"
+                subtitleText = "（字幕占位）"
+            }
+            .font(.caption)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
+            .background(Color.white)
+            .overlay(
+                RoundedRectangle(cornerRadius: 999)
+                    .stroke(Color.black.opacity(0.15), lineWidth: 1)
+            )
+            .cornerRadius(999)
             Text(recordHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
@@ -648,135 +679,82 @@ private struct VoiceStep: View {
                     .foregroundColor(.secondary)
             }
         }
-        .onChange(of: isRecording) { recording in
-            if recording {
-                recordProgress = 0.6
-            } else if !hasVoice {
-                recordProgress = 0.0
+        .padding(20)
+    }
+}
+
+private struct VideoStep: View {
+    @Binding var ponyEnabled: Bool
+    @Binding var selectedStyle: String
+    @Binding var subtitleText: String
+    var onPublish: () -> Void = {}
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("Step 4/4 · 生成视频 MP4")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Rectangle()
+                .fill(Color.gray.opacity(0.12))
+                .frame(height: 220)
+                .cornerRadius(16)
+                .overlay(
+                    VStack(spacing: 8) {
+                        Text("微动 MP4 预览（占位）")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Text("字幕滚动：\(subtitleText)")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                )
+            Text("默认交付 MP4（无需手动让它动起来）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            HStack(spacing: 12) {
+                Button("下载 MP4") {}
+                    .font(.caption)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                    .background(Color.black)
+                    .foregroundColor(.white)
+                    .cornerRadius(999)
+                Button("下载静帧") {}
+                    .font(.caption)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                    .background(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999)
+                            .stroke(Color.black.opacity(0.15), lineWidth: 1)
+                    )
+                    .cornerRadius(999)
+            }
+            Button("发布") {
+                onPublish()
+            }
+            .font(.headline)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
+            .background(Color.black)
+            .foregroundColor(.white)
+            .cornerRadius(999)
+            VStack(alignment: .leading, spacing: 6) {
+                Text("兜底策略")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("风格失败：回退原图 · 小马失败：仅贴图合成 · 视频失败：静帧字幕 MP4")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
         }
         .padding(20)
     }
 }
 
-private struct WaveformPlaceholder: View {
-    var isActive: Bool
-    private let barCount = 12
-
-    var body: some View {
-        TimelineView(.animation) { timeline in
-            let phase = timeline.date.timeIntervalSinceReferenceDate
-            HStack(spacing: 6) {
-                ForEach(0..<barCount, id: \.self) { index in
-                    Capsule()
-                        .fill(Color.black.opacity(0.6))
-                        .frame(width: 6, height: barHeight(index: index, phase: phase))
-                }
-            }
-            .frame(maxWidth: .infinity, minHeight: 120)
-            .padding(.vertical, 16)
-            .background(Color.gray.opacity(0.12))
-            .cornerRadius(16)
-        }
-    }
-
-    private func barHeight(index: Int, phase: TimeInterval) -> CGFloat {
-        guard isActive else { return 12 }
-        let base = sin(phase * 2 + Double(index)) * 0.5 + 0.5
-        return 16 + CGFloat(base) * 48
-    }
-}
-
-private struct PublishSettings: View {
-    @Binding var isPublic: Bool
-    @Binding var includeBottle: Bool
-    let presetZoneName: String?
-    @State private var showDatePicker = false
-    @State private var openDate = Date().addingTimeInterval(60 * 60 * 24 * 30)
-    @State private var hideLocation = false
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("发布设置")
-                .font(.headline)
-            Text("隐私")
-                .font(.subheadline)
-            Toggle("匿名公开", isOn: $isPublic)
-                .toggleStyle(SwitchToggleStyle(tint: .black))
-            Toggle("隐藏位置", isOn: $hideLocation)
-                .toggleStyle(SwitchToggleStyle(tint: .black))
-            Text(isPublic ? "匿名公开可互动" : "默认仅自己可见（占位）")
-                .font(.caption)
-                .fontWeight(.semibold)
-                .foregroundColor(.secondary)
-            Text("开启隐藏后仅显示商圈/区域级位置")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-
-            Divider().padding(.vertical, 4)
-
-            Text("漂流瓶")
-                .font(.subheadline)
-            Toggle("放进漂流瓶", isOn: $includeBottle)
-                .toggleStyle(SwitchToggleStyle(tint: .black))
-            VStack(alignment: .leading, spacing: 12) {
-                if includeBottle {
-                    Text("靠岸时间到期后会通知你回听")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                if let presetZoneName {
-                    Text("地点：\(presetZoneName)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-            HStack {
-                Text("靠岸时间")
-                Spacer()
-                Button {
-                    showDatePicker.toggle()
-                } label: {
-                    Text(openDate, style: .date)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-            }
-                HStack(spacing: 8) {
-                    Button("明年春节") {
-                        openDate = Calendar.current.date(byAdding: .day, value: 365, to: Date()) ?? openDate
-                    }
-                    Button("3个月后") {
-                        openDate = Calendar.current.date(byAdding: .month, value: 3, to: Date()) ?? openDate
-                    }
-                    Button("自定义") {
-                        showDatePicker.toggle()
-                    }
-                }
-                .font(.caption)
-                .buttonStyle(.bordered)
-                if showDatePicker {
-                    DatePicker(
-                        "选择日期",
-                        selection: $openDate,
-                        displayedComponents: [.date]
-                    )
-                    .datePickerStyle(.graphical)
-                }
-            }
-            .opacity(includeBottle ? 1.0 : 0.4)
-            .animation(.easeInOut(duration: 0.2), value: includeBottle)
-            .allowsHitTesting(includeBottle)
-        }
-        .padding(16)
-        .background(Color.gray.opacity(0.08))
-        .cornerRadius(16)
-    }
-}
-
 private struct StepControls: View {
     @Binding var step: CreateView.Step
     var canProceed: Bool = true
-    var onPublish: () -> Void = {}
 
     var body: some View {
         HStack(spacing: 12) {
@@ -800,12 +778,10 @@ private struct StepControls: View {
                     .stroke(Color.black.opacity(0.2), lineWidth: 1)
             )
             .cornerRadius(999)
-            .disabled(step == .photo)
+            .disabled(step == .style)
 
-            Button(step == .voice ? "发布" : "下一步") {
-                if step == .voice {
-                    onPublish()
-                } else if let next = CreateView.Step(rawValue: step.rawValue + 1) {
+            Button(step == .video ? "完成" : "下一步") {
+                if let next = CreateView.Step(rawValue: step.rawValue + 1) {
                     step = next
                 }
             }
@@ -816,7 +792,7 @@ private struct StepControls: View {
             .foregroundColor(.white)
             .cornerRadius(999)
             .opacity(canProceed ? 1 : 0.4)
-            .disabled(!canProceed)
+            .disabled(!canProceed || step == .video)
         }
     }
 }
