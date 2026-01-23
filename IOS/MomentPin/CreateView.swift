@@ -29,6 +29,7 @@ struct CreateView: View {
     @State private var subtitleText = "（字幕占位）"
     @State private var recentTaskHint = "最近任务：风格已完成，小马合成中"
     @State private var totalDurationHint = "预计 20-30 秒完成（占位）"
+    @State private var publishHint = "生成完成后可下载/发布"
 
     var body: some View {
         VStack(spacing: 0) {
@@ -83,6 +84,10 @@ struct CreateView: View {
                 .foregroundColor(.secondary)
                 .padding(.bottom, 12)
             Text(totalDurationHint)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.bottom, 8)
+            Text(publishHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
                 .padding(.bottom, 8)
