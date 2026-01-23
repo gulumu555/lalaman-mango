@@ -353,6 +353,8 @@ private struct StyleStep: View {
     @State private var cameraAuthorized = false
     @State private var albumAuthorized = false
     private let styles = ["治愈手绘A", "治愈手绘B", "动画电影感", "漫画治愈"]
+    @State private var styleStatus = "生成中"
+    private let styleStatuses = ["生成中", "可选", "失败"]
 
     var body: some View {
         VStack(spacing: 16) {
@@ -460,6 +462,26 @@ private struct StyleStep: View {
                 Text("风格候选（3-4张）")
                     .font(.caption)
                     .foregroundColor(.secondary)
+                HStack(spacing: 8) {
+                    Text("状态：\(styleStatus)")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    ForEach(styleStatuses, id: \.self) { status in
+                        Button(status) {
+                            styleStatus = status
+                        }
+                        .font(.caption2)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 6)
+                        .background(styleStatus == status ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
+                        .cornerRadius(999)
+                    }
+                }
+                if styleStatus == "失败" {
+                    Text("风格失败：回退原图并提示重试")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 12)], spacing: 12) {
                     ForEach(styles, id: \.self) { style in
                         VStack(spacing: 8) {
