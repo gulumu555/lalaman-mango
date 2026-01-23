@@ -524,6 +524,8 @@ private struct PonyStep: View {
     @Binding var ponyPlacement: String
     @Binding var selectedStyle: String
     private let placements = ["左侧合影", "右侧合影", "肩旁合影"]
+    @State private var fusionStatus = "融合中"
+    private let fusionStatuses = ["融合中", "完成", "失败"]
 
     var body: some View {
         VStack(spacing: 16) {
@@ -572,6 +574,26 @@ private struct PonyStep: View {
                             .font(.caption2)
                             .foregroundColor(.secondary)
                         Text("光影/色调/质感/边缘统一")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                    HStack(spacing: 8) {
+                        Text("融合状态")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                        ForEach(fusionStatuses, id: \.self) { status in
+                            Button(status) {
+                                fusionStatus = status
+                            }
+                            .font(.caption2)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 6)
+                            .background(fusionStatus == status ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
+                            .cornerRadius(999)
+                        }
+                    }
+                    if fusionStatus == "失败" {
+                        Text("融合失败：仅贴图合成或关闭小马")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }
