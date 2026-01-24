@@ -1050,6 +1050,7 @@ private struct VideoStep: View {
     @State private var previewHint = "可下载 MP4 与静帧（占位）"
     @State private var exportHint = "MP4 含原声 + 字幕滚动（占位）"
     @State private var shareHint = "发布后可分享链接（占位）"
+    @State private var renderRetryHint = "渲染失败可重试（占位）"
 
     var body: some View {
         VStack(spacing: 16) {
@@ -1121,6 +1122,15 @@ private struct VideoStep: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Text(shareHint)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Button("重试渲染") {}
+                .font(.caption2)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(Color.gray.opacity(0.12))
+                .cornerRadius(999)
+            Text(renderRetryHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
             if renderStatus == "失败" {
