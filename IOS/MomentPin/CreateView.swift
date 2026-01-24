@@ -658,6 +658,7 @@ private struct PonyStep: View {
     private let fusionStatuses = ["融合中", "完成", "失败"]
     @State private var fusionProgress: CGFloat = 0.5
     @State private var fusionHint = "合成+融合 ≤ 10s（占位）"
+    @State private var fusionRetryHint = "融合失败可重试或关闭小马"
 
     var body: some View {
         VStack(spacing: 16) {
@@ -746,6 +747,15 @@ private struct PonyStep: View {
                             .foregroundColor(.secondary)
                     }
                     Text(fusionHint)
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Button("重试融合") {}
+                        .font(.caption2)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(Color.gray.opacity(0.12))
+                        .cornerRadius(999)
+                    Text(fusionRetryHint)
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     GeometryReader { proxy in
