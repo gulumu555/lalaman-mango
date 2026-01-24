@@ -575,6 +575,7 @@ private struct PonyStep: View {
     private let placements = ["左侧合影", "右侧合影", "肩旁合影"]
     @State private var fusionStatus = "融合中"
     private let fusionStatuses = ["融合中", "完成", "失败"]
+    @State private var fusionProgress: CGFloat = 0.5
 
     var body: some View {
         VStack(spacing: 16) {
@@ -645,6 +646,29 @@ private struct PonyStep: View {
                         Text("融合失败：仅贴图合成或关闭小马")
                             .font(.caption2)
                             .foregroundColor(.secondary)
+                    }
+                    GeometryReader { proxy in
+                        ZStack(alignment: .leading) {
+                            Capsule()
+                                .fill(Color.gray.opacity(0.2))
+                                .frame(height: 6)
+                            Capsule()
+                                .fill(Color.black)
+                                .frame(width: proxy.size.width * fusionProgress, height: 6)
+                        }
+                    }
+                    .frame(height: 6)
+                    .onChange(of: fusionStatus) { value in
+                        switch value {
+                        case "融合中":
+                            fusionProgress = 0.5
+                        case "完成":
+                            fusionProgress = 1.0
+                        case "失败":
+                            fusionProgress = 0.2
+                        default:
+                            fusionProgress = 0.5
+                        }
                     }
                     VStack(alignment: .leading, spacing: 4) {
                         Text("资产命名示例")
