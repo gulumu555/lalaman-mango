@@ -912,6 +912,7 @@ private struct VideoStep: View {
     private let subtitleStyles = ["默认白字", "薄雾底条"]
     @State private var renderStatus = "生成中"
     private let renderStatuses = ["生成中", "已完成", "失败"]
+    @State private var renderProgress: CGFloat = 0.5
 
     var body: some View {
         VStack(spacing: 16) {
@@ -948,6 +949,29 @@ private struct VideoStep: View {
                     .padding(.vertical, 6)
                     .background(renderStatus == status ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
                     .cornerRadius(999)
+                }
+            }
+            GeometryReader { proxy in
+                ZStack(alignment: .leading) {
+                    Capsule()
+                        .fill(Color.gray.opacity(0.2))
+                        .frame(height: 6)
+                    Capsule()
+                        .fill(Color.black)
+                        .frame(width: proxy.size.width * renderProgress, height: 6)
+                }
+            }
+            .frame(height: 6)
+            .onChange(of: renderStatus) { value in
+                switch value {
+                case "生成中":
+                    renderProgress = 0.5
+                case "已完成":
+                    renderProgress = 1.0
+                case "失败":
+                    renderProgress = 0.2
+                default:
+                    renderProgress = 0.5
                 }
             }
             if renderStatus == "失败" {
