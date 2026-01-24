@@ -33,6 +33,7 @@ struct CreateView: View {
     @State private var failoverHint = "任何步骤失败都会有兜底（占位）"
     @State private var metricHint = "指标：风格选中率/小马开启率/语音完成率"
     @State private var costHint = "成本可控：风格/融合/视频均可降级"
+    @State private var privacyHint = "默认仅自己可见，可在发布时调整"
 
     var body: some View {
         VStack(spacing: 0) {
@@ -111,6 +112,10 @@ struct CreateView: View {
                 .foregroundColor(.secondary)
                 .padding(.bottom, 8)
             Text(costHint)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.bottom, 8)
+            Text(privacyHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
                 .padding(.bottom, 8)
