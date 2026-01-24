@@ -1158,44 +1158,50 @@ private struct VideoStep: View {
 private struct StepControls: View {
     @Binding var step: CreateView.Step
     var canProceed: Bool = true
+    @State private var stepHint = "完成当前步骤后进入下一步"
 
     var body: some View {
-        HStack(spacing: 12) {
-            if !canProceed {
-                Text("请完成当前步骤")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 6)
-            }
-            Button("上一步") {
-                if let prev = CreateView.Step(rawValue: step.rawValue - 1) {
-                    step = prev
+        VStack(spacing: 8) {
+            HStack(spacing: 12) {
+                if !canProceed {
+                    Text("请完成当前步骤")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                        .padding(.horizontal, 6)
                 }
-            }
-            .font(.headline)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 12)
-            .background(Color.white)
-            .overlay(
-                RoundedRectangle(cornerRadius: 999)
-                    .stroke(Color.black.opacity(0.2), lineWidth: 1)
-            )
-            .cornerRadius(999)
-            .disabled(step == .style)
+                Button("上一步") {
+                    if let prev = CreateView.Step(rawValue: step.rawValue - 1) {
+                        step = prev
+                    }
+                }
+                .font(.headline)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(Color.white)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 999)
+                        .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                )
+                .cornerRadius(999)
+                .disabled(step == .style)
 
-            Button(step == .video ? "完成" : "下一步") {
-                if let next = CreateView.Step(rawValue: step.rawValue + 1) {
-                    step = next
+                Button(step == .video ? "完成" : "下一步") {
+                    if let next = CreateView.Step(rawValue: step.rawValue + 1) {
+                        step = next
+                    }
                 }
+                .font(.headline)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(Color.black)
+                .foregroundColor(.white)
+                .cornerRadius(999)
+                .opacity(canProceed ? 1 : 0.4)
+                .disabled(!canProceed || step == .video)
             }
-            .font(.headline)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 12)
-            .background(Color.black)
-            .foregroundColor(.white)
-            .cornerRadius(999)
-            .opacity(canProceed ? 1 : 0.4)
-            .disabled(!canProceed || step == .video)
+            Text(stepHint)
+                .font(.caption2)
+                .foregroundColor(.secondary)
         }
     }
 }
