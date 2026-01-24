@@ -928,6 +928,7 @@ private struct VideoStep: View {
     @State private var renderStatus = "生成中"
     private let renderStatuses = ["生成中", "已完成", "失败"]
     @State private var renderProgress: CGFloat = 0.5
+    @State private var renderHint = "MP4 ≤ 12s（占位）"
 
     var body: some View {
         VStack(spacing: 16) {
@@ -989,6 +990,9 @@ private struct VideoStep: View {
                     renderProgress = 0.5
                 }
             }
+            Text(renderHint)
+                .font(.caption2)
+                .foregroundColor(.secondary)
             if renderStatus == "失败" {
                 Text("失败兜底：静帧字幕 MP4")
                     .font(.caption2)
