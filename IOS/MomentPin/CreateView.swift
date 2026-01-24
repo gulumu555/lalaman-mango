@@ -957,6 +957,7 @@ private struct VideoStep: View {
     private let renderStatuses = ["生成中", "已完成", "失败"]
     @State private var renderProgress: CGFloat = 0.5
     @State private var renderHint = "MP4 ≤ 12s（占位）"
+    @State private var coverHint = "封面取首帧或合成图（占位）"
 
     var body: some View {
         VStack(spacing: 16) {
@@ -1054,6 +1055,9 @@ private struct VideoStep: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Text("字幕不遮挡主体，必要时启用薄雾底条")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text(coverHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
             HStack(spacing: 12) {
