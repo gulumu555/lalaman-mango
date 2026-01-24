@@ -853,6 +853,14 @@ private struct VoiceStep: View {
                         .foregroundColor(.secondary)
                 }
             }
+            HStack(spacing: 8) {
+                Text("段落长度")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("8–16 字/段")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
             Text("滚动逻辑：按语义分段，不逐字跳")
                 .font(.caption2)
                 .foregroundColor(.secondary)
