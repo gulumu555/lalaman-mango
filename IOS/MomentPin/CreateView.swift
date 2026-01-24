@@ -739,6 +739,7 @@ private struct VoiceStep: View {
     @State private var asrStatus = "识别中"
     private let asrStatuses = ["识别中", "已完成", "失败"]
     @State private var asrProgress: CGFloat = 0.4
+    @State private var asrHint = "ASR ≤ 2s（占位）"
 
     var body: some View {
         VStack(spacing: 16) {
@@ -822,6 +823,9 @@ private struct VoiceStep: View {
                     asrProgress = 0.4
                 }
             }
+            Text(asrHint)
+                .font(.caption2)
+                .foregroundColor(.secondary)
             VStack(alignment: .leading, spacing: 4) {
                 Text("字幕分段预览")
                     .font(.caption2)
