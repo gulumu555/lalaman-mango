@@ -824,6 +824,9 @@ private struct VoiceStep: View {
                         .foregroundColor(.secondary)
                 }
             }
+            Text("滚动逻辑：按语义分段，不逐字跳")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             Button(isRecording ? "停止录音" : "开始录音") {
                 if isRecording {
                     isRecording = false
