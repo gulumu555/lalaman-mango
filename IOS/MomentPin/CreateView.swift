@@ -678,6 +678,19 @@ private struct PonyStep: View {
                         .foregroundColor(.secondary)
                     HStack(spacing: 8) {
                         ForEach(placements, id: \.self) { placement in
+                            VStack(spacing: 4) {
+                                Rectangle()
+                                    .fill(Color.gray.opacity(0.12))
+                                    .frame(width: 90, height: 60)
+                                    .cornerRadius(10)
+                                Text(placement)
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                    }
+                    HStack(spacing: 8) {
+                        ForEach(placements, id: \.self) { placement in
                             Button(placement) {
                                 ponyPlacement = placement
                             }
