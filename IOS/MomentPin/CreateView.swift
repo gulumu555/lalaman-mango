@@ -377,6 +377,7 @@ private struct StyleStep: View {
     private let styles = ["治愈手绘A", "治愈手绘B", "动画电影感", "漫画治愈"]
     @State private var styleStatus = "生成中"
     private let styleStatuses = ["生成中", "可选", "失败"]
+    @State private var styleProgress: CGFloat = 0.4
 
     var body: some View {
         VStack(spacing: 16) {
@@ -503,6 +504,29 @@ private struct StyleStep: View {
                     Text("风格失败：回退原图并提示重试")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                }
+                GeometryReader { proxy in
+                    ZStack(alignment: .leading) {
+                        Capsule()
+                            .fill(Color.gray.opacity(0.2))
+                            .frame(height: 6)
+                        Capsule()
+                            .fill(Color.black)
+                            .frame(width: proxy.size.width * styleProgress, height: 6)
+                    }
+                }
+                .frame(height: 6)
+                .onChange(of: styleStatus) { value in
+                    switch value {
+                    case "生成中":
+                        styleProgress = 0.4
+                    case "可选":
+                        styleProgress = 1.0
+                    case "失败":
+                        styleProgress = 0.2
+                    default:
+                        styleProgress = 0.4
+                    }
                 }
                 Text("提示：风格固定 3-4 个（强治愈）")
                     .font(.caption2)
