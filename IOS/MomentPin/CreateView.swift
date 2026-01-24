@@ -399,6 +399,7 @@ private struct StyleStep: View {
     @State private var styleProgress: CGFloat = 0.4
     @State private var styleHint = "并行生成 3-4 张（≤15s）"
     @State private var selectedStyleId = "style_heal_a"
+    @State private var selectHint = "已选风格将进入下一步"
 
     var body: some View {
         VStack(spacing: 16) {
@@ -561,6 +562,9 @@ private struct StyleStep: View {
                 Text("当前风格ID：\(selectedStyleId)")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text(selectHint)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 12)], spacing: 12) {
                     ForEach(styles, id: \.self) { style in
                         VStack(spacing: 8) {
@@ -591,6 +595,7 @@ private struct StyleStep: View {
                                     } else {
                                         selectedStyleId = "style_comic"
                                     }
+                                    selectHint = "已选：\(style)"
                                 }
                                 .font(.caption2)
                                 .padding(.horizontal, 8)
