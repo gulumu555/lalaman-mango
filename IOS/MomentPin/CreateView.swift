@@ -870,6 +870,9 @@ private struct VoiceStep: View {
                     asrStatus = "识别中"
                 }
             }
+            .onLongPressGesture(minimumDuration: 0.1) {
+                hookText = hooks.randomElement() ?? hookText
+            }
             .font(.headline)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 12)
