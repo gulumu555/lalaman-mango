@@ -658,6 +658,9 @@ private struct PonyStep: View {
             Toggle("开启小马主题", isOn: $ponyEnabled)
                 .toggleStyle(SwitchToggleStyle(tint: .black))
                 .padding(.top, 8)
+            Text("默认关闭，可选开启")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             if ponyEnabled {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("站位候选（随机性）")
