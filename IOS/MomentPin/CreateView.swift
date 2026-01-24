@@ -378,6 +378,7 @@ private struct StyleStep: View {
     @State private var styleStatus = "生成中"
     private let styleStatuses = ["生成中", "可选", "失败"]
     @State private var styleProgress: CGFloat = 0.4
+    @State private var styleHint = "并行生成 3-4 张（≤15s）"
 
     var body: some View {
         VStack(spacing: 16) {
@@ -529,6 +530,9 @@ private struct StyleStep: View {
                     }
                 }
                 Text("提示：风格固定 3-4 个（强治愈）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text(styleHint)
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 12)], spacing: 12) {
