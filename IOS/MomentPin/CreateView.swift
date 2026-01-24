@@ -730,6 +730,7 @@ private struct VoiceStep: View {
     ]
     @State private var asrStatus = "识别中"
     private let asrStatuses = ["识别中", "已完成", "失败"]
+    @State private var asrProgress: CGFloat = 0.4
 
     var body: some View {
         VStack(spacing: 16) {
@@ -788,6 +789,29 @@ private struct VoiceStep: View {
                     .padding(.vertical, 6)
                     .background(asrStatus == status ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
                     .cornerRadius(999)
+                }
+            }
+            GeometryReader { proxy in
+                ZStack(alignment: .leading) {
+                    Capsule()
+                        .fill(Color.gray.opacity(0.2))
+                        .frame(height: 6)
+                    Capsule()
+                        .fill(Color.black)
+                        .frame(width: proxy.size.width * asrProgress, height: 6)
+                }
+            }
+            .frame(height: 6)
+            .onChange(of: asrStatus) { value in
+                switch value {
+                case "识别中":
+                    asrProgress = 0.4
+                case "已完成":
+                    asrProgress = 1.0
+                case "失败":
+                    asrProgress = 0.2
+                default:
+                    asrProgress = 0.4
                 }
             }
             VStack(alignment: .leading, spacing: 4) {
