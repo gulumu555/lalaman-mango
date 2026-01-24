@@ -34,6 +34,7 @@ struct CreateView: View {
     @State private var metricHint = "指标：风格选中率/小马开启率/语音完成率"
     @State private var costHint = "成本可控：风格/融合/视频均可降级"
     @State private var privacyHint = "默认仅自己可见，可在发布时调整"
+    @State private var audioHint = "语音原声默认开启（可选静音导出）"
 
     var body: some View {
         VStack(spacing: 0) {
@@ -116,6 +117,10 @@ struct CreateView: View {
                 .foregroundColor(.secondary)
                 .padding(.bottom, 8)
             Text(privacyHint)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.bottom, 8)
+            Text(audioHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
                 .padding(.bottom, 8)
