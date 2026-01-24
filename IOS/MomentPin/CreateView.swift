@@ -1053,6 +1053,9 @@ private struct VideoStep: View {
                     )
                     .cornerRadius(999)
             }
+            Text("可先下载再发布（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             Button("发布") {
                 onPublish()
             }
