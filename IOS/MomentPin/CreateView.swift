@@ -580,6 +580,7 @@ private struct PonyStep: View {
     @State private var fusionStatus = "融合中"
     private let fusionStatuses = ["融合中", "完成", "失败"]
     @State private var fusionProgress: CGFloat = 0.5
+    @State private var fusionHint = "合成+融合 ≤ 10s（占位）"
 
     var body: some View {
         VStack(spacing: 16) {
@@ -651,6 +652,9 @@ private struct PonyStep: View {
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }
+                    Text(fusionHint)
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     GeometryReader { proxy in
                         ZStack(alignment: .leading) {
                             Capsule()
