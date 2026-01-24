@@ -1007,6 +1007,7 @@ private struct VideoStep: View {
     @State private var renderHint = "MP4 ≤ 12s（占位）"
     @State private var coverHint = "封面取首帧或合成图（占位）"
     @State private var previewHint = "可下载 MP4 与静帧（占位）"
+    @State private var exportHint = "MP4 含原声 + 字幕滚动（占位）"
 
     var body: some View {
         VStack(spacing: 16) {
@@ -1072,6 +1073,9 @@ private struct VideoStep: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Text(previewHint)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text(exportHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
             if renderStatus == "失败" {
