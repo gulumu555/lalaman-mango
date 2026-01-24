@@ -991,6 +991,7 @@ private struct VideoStep: View {
     @State private var renderProgress: CGFloat = 0.5
     @State private var renderHint = "MP4 ≤ 12s（占位）"
     @State private var coverHint = "封面取首帧或合成图（占位）"
+    @State private var previewHint = "可下载 MP4 与静帧（占位）"
 
     var body: some View {
         VStack(spacing: 16) {
@@ -1053,6 +1054,9 @@ private struct VideoStep: View {
                 }
             }
             Text(renderHint)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text(previewHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
             if renderStatus == "失败" {
