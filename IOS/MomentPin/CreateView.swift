@@ -496,6 +496,9 @@ private struct StyleStep: View {
                         .foregroundColor(.secondary)
                 }
             }
+            Text("失败兜底：原图直出")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             VStack(alignment: .leading, spacing: 8) {
                 Text("风格候选（3-4张）")
                     .font(.caption)
