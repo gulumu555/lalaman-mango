@@ -30,6 +30,7 @@ struct CreateView: View {
     @State private var recentTaskHint = "最近任务：风格已完成，小马合成中"
     @State private var totalDurationHint = "预计 20-30 秒完成（占位）"
     @State private var publishHint = "生成完成后可下载/发布"
+    @State private var failoverHint = "任何步骤失败都会有兜底（占位）"
 
     var body: some View {
         VStack(spacing: 0) {
@@ -92,6 +93,10 @@ struct CreateView: View {
                 .foregroundColor(.secondary)
                 .padding(.bottom, 8)
             Text(publishHint)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.bottom, 8)
+            Text(failoverHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
                 .padding(.bottom, 8)
