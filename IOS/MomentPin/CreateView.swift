@@ -43,6 +43,10 @@ struct CreateView: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
                 .padding(.top, 4)
+            Text("默认输出 MP4 · 字幕保留 · 小马可选")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.top, 2)
 
             TabView(selection: $step) {
                 StyleStep(hasPhoto: $hasPhoto, selectedStyle: $draftStyle)
