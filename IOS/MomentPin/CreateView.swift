@@ -1039,6 +1039,9 @@ private struct VideoStep: View {
             Text("字幕滚动：语义分段 8–16 字/段（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("字幕不遮挡主体，必要时启用薄雾底条")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             HStack(spacing: 12) {
                 Button("下载 MP4") {}
                     .font(.caption)
