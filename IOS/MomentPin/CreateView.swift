@@ -421,6 +421,7 @@ private struct StyleStep: View {
     @State private var selectedStyleId = "style_heal_a"
     @State private var selectHint = "已选风格将进入下一步"
     @State private var styleGuideHint = "风格一致：线条/色彩/质感保持稳定"
+    @State private var retryHint = "风格失败可点此重试"
 
     var body: some View {
         VStack(spacing: 16) {
@@ -590,6 +591,15 @@ private struct StyleStep: View {
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 Text(styleGuideHint)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Button("重试生成") {}
+                    .font(.caption2)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(Color.gray.opacity(0.12))
+                    .cornerRadius(999)
+                Text(retryHint)
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 12)], spacing: 12) {
