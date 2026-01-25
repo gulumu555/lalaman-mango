@@ -146,6 +146,8 @@ private struct AngelCardDetailView: View {
     let title: String
     @State private var actionHint = ""
     private let apiClient = APIClient()
+    @State private var showCreate = false
+    @State private var showDetail = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -171,6 +173,7 @@ private struct AngelCardDetailView: View {
                         switch result {
                         case .success:
                             actionHint = "回声已收下（占位）"
+                            showDetail = true
                         case .failure:
                             actionHint = "回声保存失败（占位）"
                         }
@@ -189,19 +192,22 @@ private struct AngelCardDetailView: View {
                 Text("附近微展：可浏览片刻列表（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
-                Button("去看看微展") {}
-                    .font(.caption)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .background(Color.black)
-                    .foregroundColor(.white)
-                    .cornerRadius(999)
+                Button("去看看微展") {
+                    showDetail = true
+                }
+                .font(.caption)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(Color.black)
+                .foregroundColor(.white)
+                .cornerRadius(999)
             } else {
                 Text("时间胶囊：回访提醒（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 Button("打开回看") {
                     actionHint = "已打开回看（占位）"
+                    showDetail = true
                 }
                 .font(.caption)
                 .padding(.horizontal, 12)
@@ -222,11 +228,24 @@ private struct AngelCardDetailView: View {
                 }
                 .font(.caption2)
                 .foregroundColor(.secondary)
+                Button("我也想再做一条") {
+                    showCreate = true
+                }
+                .font(.caption2)
+                .foregroundColor(.secondary)
             }
             Spacer()
         }
         .padding(20)
         .navigationTitle("天使卡片")
         .navigationBarTitleDisplayMode(.inline)
+        .fullScreenCover(isPresented: $showCreate) {
+            CreateView()
+        }
+        .sheet(isPresented: $showDetail) {
+            NavigationView {
+                DetailView(moment: Moment.sample.first!)
+            }
+        }
     }
 }
