@@ -93,6 +93,8 @@ private struct AngelSettingsView: View {
     @State private var allowTimecapsule = true
     @State private var horseTrailEnabled = false
     @State private var horseWitnessEnabled = false
+    @State private var saveHint = ""
+    private let apiClient = APIClient()
 
     var body: some View {
         NavigationView {
@@ -123,6 +125,38 @@ private struct AngelSettingsView: View {
                 Text("设置保存为占位，后续接入 API")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                if !saveHint.isEmpty {
+                    Text(saveHint)
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+
+                Button("保存设置") {
+                    saveHint = "正在保存..."
+                    apiClient.saveUserSettings(
+                        payload: UserSettingsPayload(
+                            allowMicrocuration: allowMicrocuration,
+                            allowEcho: allowEcho,
+                            allowTimecapsule: allowTimecapsule,
+                            allowAngel: allowAngel,
+                            horseTrailEnabled: horseTrailEnabled,
+                            horseWitnessEnabled: horseWitnessEnabled
+                        )
+                    ) { result in
+                        switch result {
+                        case .success:
+                            saveHint = "已保存（占位）"
+                        case .failure:
+                            saveHint = "保存失败（占位）"
+                        }
+                    }
+                }
+                .font(.caption)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(Color.black)
+                .foregroundColor(.white)
+                .cornerRadius(999)
 
                 Spacer()
             }

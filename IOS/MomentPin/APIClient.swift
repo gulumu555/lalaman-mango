@@ -15,6 +15,15 @@ struct PublishPayload {
     let settings: PublishSettings
 }
 
+struct UserSettingsPayload {
+    let allowMicrocuration: Bool
+    let allowEcho: Bool
+    let allowTimecapsule: Bool
+    let allowAngel: Bool
+    let horseTrailEnabled: Bool
+    let horseWitnessEnabled: Bool
+}
+
 enum APIClientError: Error {
     case simulatedFailure
 }
@@ -26,6 +35,20 @@ struct APIClient {
         completion: @escaping (Result<Void, Error>) -> Void
     ) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            if simulateFailure {
+                completion(.failure(APIClientError.simulatedFailure))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+
+    func saveUserSettings(
+        payload: UserSettingsPayload,
+        simulateFailure: Bool = false,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             if simulateFailure {
                 completion(.failure(APIClientError.simulatedFailure))
             } else {
