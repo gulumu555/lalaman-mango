@@ -118,3 +118,14 @@ CREATE TABLE IF NOT EXISTS moderation_events (
   note TEXT,
   created_at INTEGER NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS user_settings (
+  user_id TEXT PRIMARY KEY,
+  allow_microcuration INTEGER NOT NULL DEFAULT 0,
+  allow_echo INTEGER NOT NULL DEFAULT 0,
+  allow_timecapsule INTEGER NOT NULL DEFAULT 1,
+  allow_angel INTEGER NOT NULL DEFAULT 0,
+  horse_trail_enabled INTEGER NOT NULL DEFAULT 0,
+  horse_witness_enabled INTEGER NOT NULL DEFAULT 0,
+  updated_at INTEGER NOT NULL
+);

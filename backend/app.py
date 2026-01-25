@@ -151,6 +151,15 @@ class AngelMomentEventInput(BaseModel):
     payload: Optional[Dict[str, Any]] = None
 
 
+class UserSettingsInput(BaseModel):
+    allow_microcuration: Optional[bool] = None
+    allow_echo: Optional[bool] = None
+    allow_timecapsule: Optional[bool] = None
+    allow_angel: Optional[bool] = None
+    horse_trail_enabled: Optional[bool] = None
+    horse_witness_enabled: Optional[bool] = None
+
+
 class VisibilityUpdateInput(BaseModel):
     visibility: str = Field(pattern="^(public_anonymous|private)$")
 
@@ -298,6 +307,20 @@ def _moment_allows_angel_event(row: Dict[str, Any], event_type: str) -> Tuple[bo
     if event_type == "echo" and not row.get("allow_echo"):
         return False, "echo_disabled"
     return True, ""
+
+
+def _get_user_settings(user_id: str) -> Dict[str, Any]:
+    row = DB.execute("SELECT * FROM user_settings WHERE user_id = ?", (user_id,)).fetchone()
+    if not row:
+        return {
+            "allow_microcuration": 0,
+            "allow_echo": 0,
+            "allow_timecapsule": 1,
+            "allow_angel": 0,
+            "horse_trail_enabled": 0,
+            "horse_witness_enabled": 0,
+        }
+    return row_to_dict(row)
 
 
 def _angel_event_rate_limited(user_id: str) -> bool:
@@ -856,6 +879,82 @@ async def open_bottle(bottle_id: str) -> Dict[str, bool]:
     return {"ok": True}
 
 
+@app.get("/api/me/settings")
+async def get_user_settings(user_id: Optional[str] = None) -> Dict[str, Any]:
+    if not user_id:
+        return {}
+    row = DB.execute("SELECT * FROM user_settings WHERE user_id = ?", (user_id,)).fetchone()
+    if not row:
+        return {
+            "user_id": user_id,
+            "allow_microcuration": False,
+            "allow_echo": False,
+            "allow_timecapsule": True,
+            "allow_angel": False,
+            "horse_trail_enabled": False,
+            "horse_witness_enabled": False,
+        }
+    item = row_to_dict(row)
+    return {
+        "user_id": item["user_id"],
+        "allow_microcuration": bool(item["allow_microcuration"]),
+        "allow_echo": bool(item["allow_echo"]),
+        "allow_timecapsule": bool(item["allow_timecapsule"]),
+        "allow_angel": bool(item["allow_angel"]),
+        "horse_trail_enabled": bool(item["horse_trail_enabled"]),
+        "horse_witness_enabled": bool(item["horse_witness_enabled"]),
+    }
+
+
+@app.post("/api/me/settings")
+async def update_user_settings(user_id: str, payload: UserSettingsInput) -> Dict[str, Any]:
+    now = now_ms()
+    existing = DB.execute("SELECT user_id FROM user_settings WHERE user_id = ?", (user_id,)).fetchone()
+    fields = _get_user_settings(user_id)
+    for key, value in payload.dict(exclude_unset=True).items():
+        fields[key] = 1 if value else 0
+    if existing:
+        DB.execute(
+            """
+            UPDATE user_settings
+            SET allow_microcuration = ?, allow_echo = ?, allow_timecapsule = ?, allow_angel = ?,
+                horse_trail_enabled = ?, horse_witness_enabled = ?, updated_at = ?
+            WHERE user_id = ?
+            """,
+            (
+                fields["allow_microcuration"],
+                fields["allow_echo"],
+                fields["allow_timecapsule"],
+                fields["allow_angel"],
+                fields["horse_trail_enabled"],
+                fields["horse_witness_enabled"],
+                now,
+                user_id,
+            ),
+        )
+    else:
+        DB.execute(
+            """
+            INSERT INTO user_settings
+            (user_id, allow_microcuration, allow_echo, allow_timecapsule, allow_angel,
+             horse_trail_enabled, horse_witness_enabled, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                user_id,
+                fields["allow_microcuration"],
+                fields["allow_echo"],
+                fields["allow_timecapsule"],
+                fields["allow_angel"],
+                fields["horse_trail_enabled"],
+                fields["horse_witness_enabled"],
+                now,
+            ),
+        )
+    DB.commit()
+    return {"ok": True}
+
+
 @app.get("/api/me/notifications")
 async def list_notifications(user_id: Optional[str] = None) -> List[Dict[str, Any]]:
     """List notifications."""
@@ -932,6 +1031,9 @@ async def create_angel_event_from_moment(
     user_id = moment.get("user_id") or payload.user_id
     if not user_id:
         raise HTTPException(status_code=400, detail="missing_user_id")
+    settings = _get_user_settings(user_id)
+    if not settings.get("allow_angel"):
+        raise HTTPException(status_code=403, detail="angel_user_disabled")
     if _angel_event_rate_limited(user_id):
         raise HTTPException(status_code=429, detail="angel_rate_limited")
     event_id = f"angel_{uuid4().hex}"

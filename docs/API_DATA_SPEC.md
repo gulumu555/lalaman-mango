@@ -99,7 +99,16 @@
 - payload: object | null
 - created_at: number (ms)
 
-### 1.7 MoodWeather（情绪天气）
+### 1.7 UserSettings（用户级开关）
+- user_id: string
+- allow_microcuration: boolean
+- allow_echo: boolean
+- allow_timecapsule: boolean
+- allow_angel: boolean
+- horse_trail_enabled: boolean
+- horse_witness_enabled: boolean
+
+### 1.8 MoodWeather（情绪天气）
 - center_lat: number
 - center_lng: number
 - radius_m: number
@@ -207,7 +216,15 @@ Response:
 POST /api/bottles/:id/open (dev only optional)
 Response: { ok: true }
 
-### 2.8 Angel Events（天使卡片）
+### 2.8 User Settings（用户开关）
+GET /api/me/settings
+Response: UserSettings
+
+POST /api/me/settings
+Body: { allow_microcuration?, allow_echo?, allow_timecapsule?, allow_angel?, horse_trail_enabled?, horse_witness_enabled? }
+Response: { ok: true }
+
+### 2.9 Angel Events（天使卡片）
 GET /api/me/angel-events
 Response: AngelEvent[]
 
@@ -229,15 +246,16 @@ Errors:
 - 403 angel_disabled | not_public | microcuration_disabled | map_display_disabled | echo_disabled | timecapsule_disabled
 - 400 missing_user_id
 - 429 angel_rate_limited
+- 403 angel_user_disabled
 
-### 2.9 Notifications
+### 2.10 Notifications
 GET /api/me/notifications
 Response: Notification[]
 
 POST /api/me/notifications/:id/read
 Response: { ok: true }
 
-### 2.10 Moderation（stub）
+### 2.11 Moderation（stub）
 POST /api/moderation/report
 Body: { user_id?, target_type: "moment" | "user", target_id, reason?, note? }
 Response: { ok: true, id }
@@ -246,16 +264,16 @@ POST /api/moderation/block
 Body: { user_id, target_user_id, note? }
 Response: { ok: true, id }
 
-### 2.11 Seed（dev only）
+### 2.12 Seed（dev only）
 POST /api/dev/seed/chengdu
 Response: { ok: true, count: number }
 
-### 2.12 Render Status（dev only）
+### 2.13 Render Status（dev only）
 POST /api/dev/moments/:id/render
 Body: { status: "pending" | "rendering" | "ready" | "failed", preview_url?, error? }
 Response: { ok: true }
 
-### 2.12.1 Local Render（dev only）
+### 2.13.1 Local Render（dev only）
 POST /api/dev/render/local
 Body: { moment_id: string, duration_s? }
 Response: { ok: true, mp4_url } | { ok: false, error }
@@ -263,7 +281,7 @@ Notes:
 - 本地 ffmpeg 生成 MP4，输出保存到 /static/renders
 - 会更新 moments.mp4_url / render_status / preview_url
 
-### 2.12.2 Seedream Render（dev only）
+### 2.13.2 Seedream Render（dev only）
 POST /api/dev/render/seedream
 Body: { moment_id: string, prompt?, image_urls? }
 Response: { ok: true, status: "rendering" } | { ok: false, error }
@@ -274,7 +292,7 @@ Errors:
 Notes:
 - /api/dev/render/seedream/ready 可将 render_status 置为 ready
 
-### 2.13 Render 状态流转（说明）
+### 2.14 Render 状态流转（说明）
 - pending → rendering → ready
 - pending → failed
 - rendering → failed
@@ -282,7 +300,7 @@ Notes:
 - preview_url 仅在 ready 时返回/保存
 - failed 需附带 error 用于前端降级提示
 
-### 2.14 External Render (reserved)
+### 2.15 External Render (reserved)
 - 预留给外部渲染/生成服务（不在仓库内记录接口细节）
 
 ## 3) 页面 × 接口映射

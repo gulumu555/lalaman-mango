@@ -19,6 +19,7 @@ def init_db(conn: sqlite3.Connection) -> None:
     schema = SCHEMA_PATH.read_text(encoding="utf-8")
     conn.executescript(schema)
     ensure_moments_columns(conn)
+    ensure_user_settings_columns(conn)
     conn.commit()
 
 
@@ -56,6 +57,22 @@ def ensure_moments_columns(conn: sqlite3.Connection) -> None:
     for name, definition in columns.items():
         if name not in existing:
             conn.execute(f"ALTER TABLE moments ADD COLUMN {name} {definition}")
+
+
+def ensure_user_settings_columns(conn: sqlite3.Connection) -> None:
+    rows = conn.execute("PRAGMA table_info(user_settings)").fetchall()
+    existing = {row[1] for row in rows}
+    columns = {
+        "allow_microcuration": "INTEGER NOT NULL DEFAULT 0",
+        "allow_echo": "INTEGER NOT NULL DEFAULT 0",
+        "allow_timecapsule": "INTEGER NOT NULL DEFAULT 1",
+        "allow_angel": "INTEGER NOT NULL DEFAULT 0",
+        "horse_trail_enabled": "INTEGER NOT NULL DEFAULT 0",
+        "horse_witness_enabled": "INTEGER NOT NULL DEFAULT 0",
+    }
+    for name, definition in columns.items():
+        if name not in existing:
+            conn.execute(f"ALTER TABLE user_settings ADD COLUMN {name} {definition}")
 
 
 def row_to_dict(row: sqlite3.Row) -> Dict[str, Any]:
