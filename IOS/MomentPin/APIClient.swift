@@ -104,4 +104,10 @@ struct APIClient {
             completion(.success(()))
         }
     }
+
+    func dismissEchoCard(completion: @escaping (Result<Void, Error>) -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            completion(.success(()))
+        }
+    }
 }

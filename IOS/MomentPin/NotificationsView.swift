@@ -188,6 +188,17 @@ private struct AngelCardDetailView: View {
                 Button("不需要/别再推类似回声") {}
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                    .onTapGesture {
+                        actionHint = "正在降低推荐..."
+                        apiClient.dismissEchoCard { result in
+                            switch result {
+                            case .success:
+                                actionHint = "已降低类似回声推荐（占位）"
+                            case .failure:
+                                actionHint = "操作失败（占位）"
+                            }
+                        }
+                    }
             } else if title.contains("小展") {
                 Text("附近微展：可浏览片刻列表（占位）")
                     .font(.caption2)
