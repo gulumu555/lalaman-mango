@@ -135,6 +135,13 @@ Note:
 - 若 geo.hidden=true，仅返回 zone_name 或置空（前端不展示精确坐标）
 - horse_only=true 时，仅返回马年足迹标记内容
 
+### 2.1.1 Nearby Exhibits（微展，占位）
+GET /api/moments/exhibits?lat=&lng=&radius_m=1000&window_hours=24
+Response:
+- exhibits: Array<{ id, title, mood_code, items: Moment[] }>
+Notes:
+- 仅返回 allow_microcuration=1 且 allow_map_display=1 的公开内容
+
 ### 2.2 Moment详情
 GET /api/moments/:id
 Response: Moment + reactions + template_replies_preview(optional)

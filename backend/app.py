@@ -495,6 +495,45 @@ async def list_moments_nearby(
     }
 
 
+@app.get("/api/moments/exhibits")
+async def list_micro_exhibits(
+    lat: float,
+    lng: float,
+    radius_m: int = 1000,
+    window_hours: int = 24,
+) -> Dict[str, Any]:
+    """Return nearby micro exhibits (stub)."""
+    min_lat, max_lat, min_lng, max_lng = bounding_box(lat, lng, radius_m)
+    window_start = now_ms() - max(1, window_hours) * 3_600_000
+    rows = DB.execute(
+        """
+        SELECT * FROM moments
+        WHERE lat BETWEEN ? AND ?
+          AND lng BETWEEN ? AND ?
+          AND visibility = 'public_anonymous'
+          AND allow_microcuration = 1
+          AND allow_map_display = 1
+          AND created_at >= ?
+        ORDER BY created_at DESC
+        """,
+        (min_lat, max_lat, min_lng, max_lng, window_start),
+    ).fetchall()
+    items = [moment_row_to_payload(row_to_dict(row)) for row in rows]
+    exhibits: Dict[str, Dict[str, Any]] = {}
+    for item in items:
+        code = item["mood_code"]
+        if code not in exhibits:
+            exhibits[code] = {
+                "id": f"exhibit_{code}",
+                "title": f"{item['mood_emoji']} {code}",
+                "mood_code": code,
+                "items": [],
+            }
+        if len(exhibits[code]["items"]) < 12:
+            exhibits[code]["items"].append(item)
+    return {"exhibits": list(exhibits.values())}
+
+
 @app.get("/api/moments/{moment_id}")
 async def get_moment(moment_id: str) -> Dict[str, Any]:
     """Fetch moment detail."""
