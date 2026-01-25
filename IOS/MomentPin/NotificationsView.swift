@@ -90,7 +90,7 @@ struct NotificationsView: View {
             }
             if showAngelCards {
                 ForEach(Array(angelCards.enumerated()), id: \.offset) { index, item in
-                    NavigationLink(destination: DetailView(moment: Moment.sample.first!)) {
+                    NavigationLink(destination: AngelCardDetailView(title: item)) {
                         HStack(spacing: 12) {
                             Circle()
                                 .fill(angelReadStates[index] == true ? Color.clear : Color.blue)
@@ -139,5 +139,62 @@ struct NotificationsView: View {
 
     private var unreadCount: Int {
         notifications.indices.filter { readStates[$0] != true }.count
+    }
+}
+
+private struct AngelCardDetailView: View {
+    let title: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(title)
+                .font(.title3)
+                .fontWeight(.semibold)
+            Text("这是一个天使卡片占位页")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Divider()
+            if title.contains("回声卡") {
+                Text("回声：你的片刻与 TA 的片刻共鸣（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Button("收下这份回声") {}
+                    .font(.caption)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Color.black)
+                    .foregroundColor(.white)
+                    .cornerRadius(999)
+                Button("不需要/别再推类似回声") {}
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            } else if title.contains("小展") {
+                Text("附近微展：可浏览片刻列表（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Button("去看看微展") {}
+                    .font(.caption)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Color.black)
+                    .foregroundColor(.white)
+                    .cornerRadius(999)
+            } else {
+                Text("时间胶囊：回访提醒（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Button("打开回看") {}
+                    .font(.caption)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Color.black)
+                    .foregroundColor(.white)
+                    .cornerRadius(999)
+            }
+            Spacer()
+        }
+        .padding(20)
+        .navigationTitle("天使卡片")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
