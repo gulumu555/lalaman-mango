@@ -37,6 +37,12 @@ struct CreateView: View {
     @State private var audioHint = "语音原声默认开启（可选静音导出）"
     @State private var moodHint = "情绪标签：默认轻松/治愈（占位）"
     @State private var recoveryHint = "中断后可在我的片刻继续（占位）"
+    @State private var angelEnabled = false
+    @State private var allowMicrocuration = false
+    @State private var allowEcho = false
+    @State private var allowTimecapsule = true
+    @State private var horseTrailEnabled = false
+    @State private var horseWitnessEnabled = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -140,6 +146,12 @@ struct CreateView: View {
             PublishSheet(
                 isPublic: $isPublic,
                 includeBottle: $includeBottle,
+                angelEnabled: $angelEnabled,
+                allowMicrocuration: $allowMicrocuration,
+                allowEcho: $allowEcho,
+                allowTimecapsule: $allowTimecapsule,
+                horseTrailEnabled: $horseTrailEnabled,
+                horseWitnessEnabled: $horseWitnessEnabled,
                 presetZoneName: presetZoneName,
                 onCancel: {
                     showPublishSheet = false
@@ -275,6 +287,12 @@ private struct StepHeader: View {
 private struct PublishSheet: View {
     @Binding var isPublic: Bool
     @Binding var includeBottle: Bool
+    @Binding var angelEnabled: Bool
+    @Binding var allowMicrocuration: Bool
+    @Binding var allowEcho: Bool
+    @Binding var allowTimecapsule: Bool
+    @Binding var horseTrailEnabled: Bool
+    @Binding var horseWitnessEnabled: Bool
     var presetZoneName: String? = nil
     var onCancel: () -> Void = {}
     var onConfirm: () -> Void = {}
@@ -308,6 +326,12 @@ private struct PublishSheet: View {
                     CapsuleLabel(text: hideLocation ? "隐藏位置" : "显示位置", isPrimary: false)
                     if includeBottle {
                         CapsuleLabel(text: "漂流瓶", isPrimary: false)
+                    }
+                    if angelEnabled {
+                        CapsuleLabel(text: "天使已开启", isPrimary: false)
+                    }
+                    if horseTrailEnabled {
+                        CapsuleLabel(text: "马年足迹", isPrimary: false)
                     }
                 }
             }
@@ -357,6 +381,37 @@ private struct PublishSheet: View {
                         .cornerRadius(999)
                     }
                 }
+            }
+            .padding(12)
+            .background(Color.gray.opacity(0.08))
+            .cornerRadius(16)
+
+            VStack(spacing: 12) {
+                Toggle("让天使偶尔路过（默认关）", isOn: $angelEnabled)
+                    .toggleStyle(SwitchToggleStyle(tint: .black))
+                Toggle("允许微展收录", isOn: $allowMicrocuration)
+                    .toggleStyle(SwitchToggleStyle(tint: .black))
+                    .disabled(!angelEnabled || !isPublic)
+                Toggle("允许回声共鸣", isOn: $allowEcho)
+                    .toggleStyle(SwitchToggleStyle(tint: .black))
+                    .disabled(!angelEnabled || !isPublic)
+                Toggle("允许时间胶囊回访", isOn: $allowTimecapsule)
+                    .toggleStyle(SwitchToggleStyle(tint: .black))
+                    .disabled(!angelEnabled)
+                Text(isPublic ? "公开内容才可进入微展/回声" : "私密内容不进入微展/回声")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(12)
+            .background(Color.gray.opacity(0.08))
+            .cornerRadius(16)
+
+            VStack(spacing: 12) {
+                Toggle("加入马年足迹（默认关）", isOn: $horseTrailEnabled)
+                    .toggleStyle(SwitchToggleStyle(tint: .black))
+                Toggle("马年见证（默认关）", isOn: $horseWitnessEnabled)
+                    .toggleStyle(SwitchToggleStyle(tint: .black))
             }
             .padding(12)
             .background(Color.gray.opacity(0.08))
