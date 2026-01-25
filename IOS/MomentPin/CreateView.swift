@@ -320,6 +320,16 @@ struct CreateView: View {
                     }
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .userSettingsUpdated)) { _ in
+            apiClient.fetchUserSettings { payload in
+                angelEnabled = payload.allowAngel
+                allowMicrocuration = payload.allowMicrocuration
+                allowEcho = payload.allowEcho
+                allowTimecapsule = payload.allowTimecapsule
+                horseTrailEnabled = payload.horseTrailEnabled
+                horseWitnessEnabled = payload.horseWitnessEnabled
+            }
+        }
         .onAppear {
             guard !settingsLoaded else { return }
             settingsLoaded = true

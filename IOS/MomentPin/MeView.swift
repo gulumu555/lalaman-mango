@@ -147,6 +147,7 @@ private struct AngelSettingsView: View {
                         switch result {
                         case .success:
                             saveHint = "已保存（占位）"
+                            NotificationCenter.default.post(name: .userSettingsUpdated, object: nil)
                         case .failure:
                             saveHint = "保存失败（占位）"
                         }

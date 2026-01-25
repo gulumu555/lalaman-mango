@@ -1,5 +1,9 @@
 import Foundation
 
+extension Notification.Name {
+    static let userSettingsUpdated = Notification.Name("UserSettingsUpdated")
+}
+
 struct PublishSettings {
     let allowMicrocuration: Bool
     let allowEcho: Bool
