@@ -247,6 +247,12 @@ POST /api/me/angel-events
 Body: { user_id, moment_id?, type, state, scheduled_time?, payload? }
 Response: { id }
 
+POST /api/me/echo-cards
+Body: { user_id, moment_id, peer_moment_id, bridge_text?, payload? }
+Response: { id }
+Notes:
+- 作为 echo 类型的天使卡片占位
+
 POST /api/me/angel-events/:id/state
 Body: { state }
 Response: { ok: true }

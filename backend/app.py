@@ -151,6 +151,14 @@ class AngelMomentEventInput(BaseModel):
     payload: Optional[Dict[str, Any]] = None
 
 
+class EchoCardInput(BaseModel):
+    user_id: str
+    moment_id: str
+    peer_moment_id: str
+    bridge_text: Optional[str] = None
+    payload: Optional[Dict[str, Any]] = None
+
+
 class UserSettingsInput(BaseModel):
     allow_microcuration: Optional[bool] = None
     allow_echo: Optional[bool] = None
@@ -1083,6 +1091,35 @@ async def create_angel_event(payload: AngelEventCreateInput) -> Dict[str, Any]:
             payload.state,
             payload.scheduled_time,
             json.dumps(payload.payload) if payload.payload else None,
+            now_ms(),
+        ),
+    )
+    DB.commit()
+    return {"id": event_id}
+
+
+@app.post("/api/me/echo-cards")
+async def create_echo_card(payload: EchoCardInput) -> Dict[str, Any]:
+    """Create an echo card as an angel event (stub)."""
+    event_id = f"angel_{uuid4().hex}"
+    card_payload = {
+        "moment_id": payload.moment_id,
+        "peer_moment_id": payload.peer_moment_id,
+        "bridge_text": payload.bridge_text,
+    }
+    if payload.payload:
+        card_payload.update(payload.payload)
+    DB.execute(
+        """
+        INSERT INTO angel_events
+        (id, user_id, moment_id, type, state, scheduled_time, delivered_channel, cooldown_until, payload, created_at)
+        VALUES (?, ?, ?, 'echo', 'pending', NULL, 'in_app', NULL, ?, ?)
+        """,
+        (
+            event_id,
+            payload.user_id,
+            payload.moment_id,
+            json.dumps(card_payload),
             now_ms(),
         ),
     )
