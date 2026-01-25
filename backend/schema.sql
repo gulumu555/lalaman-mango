@@ -95,6 +95,19 @@ CREATE TABLE IF NOT EXISTS notifications (
   created_at INTEGER NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS angel_events (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  moment_id TEXT,
+  type TEXT NOT NULL CHECK (type IN ('microcuration', 'echo', 'timecapsule')),
+  state TEXT NOT NULL CHECK (state IN ('pending', 'triggered', 'dismissed', 'completed')),
+  scheduled_time INTEGER,
+  delivered_channel TEXT NOT NULL DEFAULT 'in_app',
+  cooldown_until INTEGER,
+  payload TEXT,
+  created_at INTEGER NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS moderation_events (
   id TEXT PRIMARY KEY,
   type TEXT NOT NULL CHECK (type IN ('report', 'block')),

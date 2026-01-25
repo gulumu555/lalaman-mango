@@ -87,7 +87,19 @@
 - read: boolean
 - created_at: number (ms)
 
-### 1.6 MoodWeather（情绪天气）
+### 1.6 AngelEvent（天使事件）
+- id: string
+- user_id: string
+- moment_id: string | null
+- type: "microcuration" | "echo" | "timecapsule"
+- state: "pending" | "triggered" | "dismissed" | "completed"
+- scheduled_time: number (ms) | null
+- delivered_channel: "in_app"
+- cooldown_until: number (ms) | null
+- payload: object | null
+- created_at: number (ms)
+
+### 1.7 MoodWeather（情绪天气）
 - center_lat: number
 - center_lng: number
 - radius_m: number

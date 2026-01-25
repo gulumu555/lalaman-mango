@@ -135,6 +135,15 @@ class ModerationEventInput(BaseModel):
     note: Optional[str] = None
 
 
+class AngelEventCreateInput(BaseModel):
+    user_id: str
+    moment_id: Optional[str] = None
+    type: str = Field(pattern="^(microcuration|echo|timecapsule)$")
+    state: str = Field(pattern="^(pending|triggered|dismissed|completed)$")
+    scheduled_time: Optional[int] = None
+    payload: Optional[Dict[str, Any]] = None
+
+
 class VisibilityUpdateInput(BaseModel):
     visibility: str = Field(pattern="^(public_anonymous|private)$")
 
@@ -790,6 +799,65 @@ async def list_notifications(user_id: Optional[str] = None) -> List[Dict[str, An
         item["read"] = bool(item["read"])
         notices.append(item)
     return notices
+
+
+@app.get("/api/me/angel-events")
+async def list_angel_events(user_id: Optional[str] = None) -> List[Dict[str, Any]]:
+    """List angel events (in-app cards)."""
+    if not user_id:
+        return []
+    rows = DB.execute(
+        "SELECT * FROM angel_events WHERE user_id = ? ORDER BY created_at DESC",
+        (user_id,),
+    ).fetchall()
+    events = []
+    for row in rows:
+        item = row_to_dict(row)
+        item["payload"] = json.loads(item["payload"]) if item.get("payload") else None
+        events.append(item)
+    return events
+
+
+@app.post("/api/me/angel-events")
+async def create_angel_event(payload: AngelEventCreateInput) -> Dict[str, Any]:
+    """Create an angel event (dev stub)."""
+    event_id = f"angel_{uuid4().hex}"
+    DB.execute(
+        """
+        INSERT INTO angel_events
+        (id, user_id, moment_id, type, state, scheduled_time, delivered_channel, cooldown_until, payload, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, 'in_app', NULL, ?, ?)
+        """,
+        (
+            event_id,
+            payload.user_id,
+            payload.moment_id,
+            payload.type,
+            payload.state,
+            payload.scheduled_time,
+            json.dumps(payload.payload) if payload.payload else None,
+            now_ms(),
+        ),
+    )
+    DB.commit()
+    return {"id": event_id}
+
+
+@app.post("/api/me/angel-events/{event_id}/state")
+async def update_angel_event_state(event_id: str, body: Dict[str, str]) -> Dict[str, Any]:
+    """Update angel event state (stub)."""
+    state = body.get("state")
+    if state not in {"pending", "triggered", "dismissed", "completed"}:
+        raise HTTPException(status_code=400, detail="Invalid state")
+    row = DB.execute("SELECT id FROM angel_events WHERE id = ?", (event_id,)).fetchone()
+    if not row:
+        raise HTTPException(status_code=404, detail="Angel event not found")
+    DB.execute(
+        "UPDATE angel_events SET state = ? WHERE id = ?",
+        (state, event_id),
+    )
+    DB.commit()
+    return {"ok": True}
 
 
 @app.post("/api/me/notifications/{notification_id}/read")
