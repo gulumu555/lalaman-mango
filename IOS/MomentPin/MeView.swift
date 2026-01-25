@@ -95,6 +95,7 @@ private struct AngelSettingsView: View {
     @State private var horseWitnessEnabled = false
     @State private var saveHint = ""
     private let apiClient = APIClient()
+    @State private var settingsLoaded = false
 
     var body: some View {
         NavigationView {
@@ -167,6 +168,18 @@ private struct AngelSettingsView: View {
                 ToolbarItem(placement: .topBarLeading) {
                     Button("关闭") { dismiss() }
                         .font(.caption)
+                }
+            }
+            .onAppear {
+                guard !settingsLoaded else { return }
+                settingsLoaded = true
+                apiClient.fetchUserSettings { payload in
+                    allowAngel = payload.allowAngel
+                    allowMicrocuration = payload.allowMicrocuration
+                    allowEcho = payload.allowEcho
+                    allowTimecapsule = payload.allowTimecapsule
+                    horseTrailEnabled = payload.horseTrailEnabled
+                    horseWitnessEnabled = payload.horseWitnessEnabled
                 }
             }
         }
