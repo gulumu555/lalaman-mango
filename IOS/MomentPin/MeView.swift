@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct MeView: View {
+    @State private var showAngelSettings = false
+
     var body: some View {
         NavigationView {
             ScrollView {
@@ -27,6 +29,16 @@ struct MeView: View {
                         "隐私与安全",
                         "举报记录"
                     ])
+                    Button {
+                        showAngelSettings = true
+                    } label: {
+                        SectionCard(title: "天使 / 马年设置", items: [
+                            "天使模式：默认关闭",
+                            "回声 / 微展 / 时间胶囊",
+                            "马年足迹 / 见证"
+                        ])
+                    }
+                    .buttonStyle(.plain)
                     NavigationLink(destination: NotificationsView()) {
                         SectionCard(title: "通知中心", items: [
                             "漂流瓶到期提醒 1",
@@ -41,6 +53,9 @@ struct MeView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
         .background(Color.white)
+        .sheet(isPresented: $showAngelSettings) {
+            AngelSettingsView()
+        }
     }
 }
 
@@ -67,5 +82,59 @@ private struct SectionCard: View {
         .padding(16)
         .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
+    }
+}
+
+private struct AngelSettingsView: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var allowAngel = false
+    @State private var allowMicrocuration = false
+    @State private var allowEcho = false
+    @State private var allowTimecapsule = true
+    @State private var horseTrailEnabled = false
+    @State private var horseWitnessEnabled = false
+
+    var body: some View {
+        NavigationView {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("天使系统")
+                    .font(.headline)
+                Toggle("让天使偶尔路过", isOn: $allowAngel)
+                    .toggleStyle(SwitchToggleStyle(tint: .black))
+                Toggle("允许微展收录", isOn: $allowMicrocuration)
+                    .toggleStyle(SwitchToggleStyle(tint: .black))
+                    .disabled(!allowAngel)
+                Toggle("允许回声共鸣", isOn: $allowEcho)
+                    .toggleStyle(SwitchToggleStyle(tint: .black))
+                    .disabled(!allowAngel)
+                Toggle("允许时间胶囊回访", isOn: $allowTimecapsule)
+                    .toggleStyle(SwitchToggleStyle(tint: .black))
+                    .disabled(!allowAngel)
+
+                Divider()
+
+                Text("马年活动")
+                    .font(.headline)
+                Toggle("加入马年足迹", isOn: $horseTrailEnabled)
+                    .toggleStyle(SwitchToggleStyle(tint: .black))
+                Toggle("马年见证", isOn: $horseWitnessEnabled)
+                    .toggleStyle(SwitchToggleStyle(tint: .black))
+
+                Text("设置保存为占位，后续接入 API")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+
+                Spacer()
+            }
+            .padding(20)
+            .navigationTitle("天使与马年")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("关闭") { dismiss() }
+                        .font(.caption)
+                }
+            }
+        }
     }
 }
