@@ -6,7 +6,14 @@ struct NotificationsView: View {
         "你在「太古里附近」留下的那段声音，可以打开回听了",
         "系统通知：新版本上线（占位）"
     ]
+    private let angelCards = [
+        "附近有一个小展：雨天慢下来",
+        "回声卡：有人也在「下班路上」说了一句",
+        "时间胶囊：三天前的你想对现在说"
+    ]
     @State private var readStates: [Int: Bool] = [:]
+    @State private var angelReadStates: [Int: Bool] = [:]
+    @State private var showAngelCards = true
 
     var body: some View {
         List {
@@ -64,6 +71,54 @@ struct NotificationsView: View {
                     }
                     .onTapGesture {
                         readStates[index] = true
+                    }
+                }
+            }
+            Section {
+                HStack {
+                    Text("天使卡片")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                    Button(showAngelCards ? "收起" : "展开") {
+                        showAngelCards.toggle()
+                    }
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                }
+                .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
+            }
+            if showAngelCards {
+                ForEach(Array(angelCards.enumerated()), id: \.offset) { index, item in
+                    NavigationLink(destination: DetailView(moment: Moment.sample.first!)) {
+                        HStack(spacing: 12) {
+                            Circle()
+                                .fill(angelReadStates[index] == true ? Color.clear : Color.blue)
+                                .frame(width: 8, height: 8)
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text(item)
+                                    .font(.subheadline)
+                                Text(angelReadStates[index] == true ? "已读 · 占位" : "未读 · 占位")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                                Text("查看详情")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                            Text("10:10")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.vertical, 6)
+                    }
+                    .onAppear {
+                        if angelReadStates[index] == nil {
+                            angelReadStates[index] = false
+                        }
+                    }
+                    .onTapGesture {
+                        angelReadStates[index] = true
                     }
                 }
             }
