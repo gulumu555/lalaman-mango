@@ -75,4 +75,14 @@ struct APIClient {
             )
         }
     }
+
+    func fetchExhibits(completion: @escaping ([String]) -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            completion([
+                "雨天慢下来",
+                "下班的轻呼吸",
+                "马年祝福墙"
+            ])
+        }
+    }
 }

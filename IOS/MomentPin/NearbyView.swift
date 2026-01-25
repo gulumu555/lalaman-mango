@@ -21,6 +21,9 @@ struct NearbyView: View {
     @State private var locationHintText = "已定位"
     @State private var locationStatus = "定位中..."
     @State private var showAngelSheet = false
+    @State private var showExhibitSheet = false
+    @State private var exhibitTitles: [String] = []
+    private let apiClient = APIClient()
 
     private let moments: [Moment] = Moment.sample
     private var filteredMoments: [Moment] {
@@ -198,18 +201,35 @@ struct NearbyView: View {
                         }
                         .buttonStyle(.plain)
                     }
-                    Button("天使卡片") {
-                        showAngelSheet = true
+                    HStack(spacing: 12) {
+                        Button("天使卡片") {
+                            showAngelSheet = true
+                        }
+                        .font(.footnote)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                        .background(Color.white.opacity(0.95))
+                        .cornerRadius(999)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 999)
+                                .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                        )
+                        Button("附近微展") {
+                            apiClient.fetchExhibits { titles in
+                                exhibitTitles = titles
+                                showExhibitSheet = true
+                            }
+                        }
+                        .font(.footnote)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                        .background(Color.white.opacity(0.95))
+                        .cornerRadius(999)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 999)
+                                .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                        )
                     }
-                    .font(.footnote)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
-                    .background(Color.white.opacity(0.95))
-                    .cornerRadius(999)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 999)
-                            .stroke(Color.black.opacity(0.08), lineWidth: 1)
-                    )
                     Text("入口：点位气泡 / 列表 / 随机听听")
                         .font(.caption2)
                         .foregroundColor(.secondary)
@@ -230,6 +250,13 @@ struct NearbyView: View {
                     NavigationView {
                         NotificationsView()
                             .navigationTitle("天使卡片")
+                            .navigationBarTitleDisplayMode(.inline)
+                    }
+                }
+                .sheet(isPresented: $showExhibitSheet) {
+                    NavigationView {
+                        ExhibitListView(exhibitTitles: exhibitTitles)
+                            .navigationTitle("附近微展")
                             .navigationBarTitleDisplayMode(.inline)
                     }
                 }
@@ -744,5 +771,38 @@ private struct PlaceSheet: View {
             }
         }
         .padding(20)
+    }
+}
+
+private struct ExhibitListView: View {
+    let exhibitTitles: [String]
+
+    var body: some View {
+        List {
+            if exhibitTitles.isEmpty {
+                VStack(spacing: 8) {
+                    Text("暂无微展")
+                        .font(.subheadline)
+                    Text("公开且允许收录的内容会出现在这里")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 24)
+                .listRowSeparator(.hidden)
+            } else {
+                ForEach(exhibitTitles, id: \.self) { title in
+                    HStack {
+                        Text(title)
+                            .font(.subheadline)
+                        Spacer()
+                        Text("查看")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.vertical, 6)
+                }
+            }
+        }
     }
 }
