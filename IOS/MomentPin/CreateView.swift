@@ -44,6 +44,7 @@ struct CreateView: View {
     @State private var horseTrailEnabled = false
     @State private var horseWitnessEnabled = false
     @State private var publishSummary = ""
+    @State private var publishStatusHint = ""
 
     var body: some View {
         VStack(spacing: 0) {
@@ -160,11 +161,16 @@ struct CreateView: View {
                 onConfirm: {
                     showPublishSheet = false
                     showGenerating = true
+                    publishStatusHint = "正在保存发布设置..."
                     publishSummary = buildPublishSummary()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                         showGenerating = false
                         showPublished = true
                         showDetail = true
+                        publishStatusHint = "发布设置已保存（占位）"
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                            publishStatusHint = ""
+                        }
                     }
                 }
             )
@@ -176,6 +182,11 @@ struct CreateView: View {
                     Text("生成中...")
                         .font(.caption)
                         .foregroundColor(.secondary)
+                    if !publishStatusHint.isEmpty {
+                        Text(publishStatusHint)
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
                     Text("成功率 95%（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
