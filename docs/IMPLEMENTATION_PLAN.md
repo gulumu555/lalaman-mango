@@ -3,6 +3,7 @@
 ## Goals
 - Deliver a minimal backend that supports the MVP flows: create → publish → nearby list → play detail → reactions/template replies → bottles → notifications.
 - Provide a lightweight schema aligned with the MVP API spec for future integration with storage and seed data.
+- Track post-publish “Angel system” capabilities (micro-curation, echo cards, time capsule) behind explicit user opt-in.
 
 ## Phase 0: Scaffolding (this PR)
 - Add API skeleton endpoints mapped to the MVP spec.
@@ -30,6 +31,15 @@
 ## Phase 5: Observability + QA
 - Add structured logging around create, publish, play, and notifications.
 - Add smoke tests for create → play → map list.
+
+## Phase 6: Angel system (MVP doc-to-stub)
+- Add minimal schema fields for angel permissions and modes on Moment.
+- Add an AngelEvent table to record in-app cards (microcuration / echo / timecapsule).
+- Implement in-app card stubs with strict opt-in and rate limits (no push).
+
+## Phase 7: Year of the Horse (MVP doc-to-stub)
+- Add activity flags for “horse trail” and “angel witness” on Moment.
+- Add basic milestone card stubs (no social features).
 
 ## Local run (planned)
 - `pip install -r backend/requirements.txt`
