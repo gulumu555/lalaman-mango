@@ -144,6 +144,8 @@ struct NotificationsView: View {
 
 private struct AngelCardDetailView: View {
     let title: String
+    @State private var actionHint = ""
+    private let apiClient = APIClient()
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -153,18 +155,33 @@ private struct AngelCardDetailView: View {
             Text("这是一个天使卡片占位页")
                 .font(.caption)
                 .foregroundColor(.secondary)
+            if !actionHint.isEmpty {
+                Text(actionHint)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
             Divider()
             if title.contains("回声卡") {
                 Text("回声：你的片刻与 TA 的片刻共鸣（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
-                Button("收下这份回声") {}
-                    .font(.caption)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .background(Color.black)
-                    .foregroundColor(.white)
-                    .cornerRadius(999)
+                Button("收下这份回声") {
+                    actionHint = "正在收下回声..."
+                    apiClient.createEchoCard { result in
+                        switch result {
+                        case .success:
+                            actionHint = "回声已收下（占位）"
+                        case .failure:
+                            actionHint = "回声保存失败（占位）"
+                        }
+                    }
+                }
+                .font(.caption)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(Color.black)
+                .foregroundColor(.white)
+                .cornerRadius(999)
                 Button("不需要/别再推类似回声") {}
                     .font(.caption2)
                     .foregroundColor(.secondary)
