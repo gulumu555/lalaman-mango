@@ -816,6 +816,8 @@ private struct ExhibitListView: View {
 
 private struct ExhibitDetailView: View {
     let exhibit: ExhibitSummary
+    @State private var showCreate = false
+    var onCreate: (() -> Void)? = nil
     @State private var actionHint = ""
 
     var body: some View {
@@ -850,6 +852,8 @@ private struct ExhibitDetailView: View {
             }
             Button("我也想生成一个同主题片刻") {
                 actionHint = "已创建同主题入口（占位）"
+                showCreate = true
+                onCreate?()
             }
             .font(.caption)
             .padding(.horizontal, 12)
@@ -859,5 +863,8 @@ private struct ExhibitDetailView: View {
             .cornerRadius(999)
         }
         .padding(20)
+        .fullScreenCover(isPresented: $showCreate) {
+            CreateView()
+        }
     }
 }
