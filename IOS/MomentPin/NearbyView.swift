@@ -816,6 +816,7 @@ private struct ExhibitListView: View {
 
 private struct ExhibitDetailView: View {
     let exhibit: ExhibitSummary
+    @State private var actionHint = ""
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -828,6 +829,11 @@ private struct ExhibitDetailView: View {
             Text("条目数：\(exhibit.count)（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            if !actionHint.isEmpty {
+                Text(actionHint)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
             Divider()
             List {
                 ForEach(0..<min(6, exhibit.count), id: \.self) { index in
@@ -842,6 +848,15 @@ private struct ExhibitDetailView: View {
                     .padding(.vertical, 4)
                 }
             }
+            Button("我也想生成一个同主题片刻") {
+                actionHint = "已创建同主题入口（占位）"
+            }
+            .font(.caption)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(Color.black)
+            .foregroundColor(.white)
+            .cornerRadius(999)
         }
         .padding(20)
     }
