@@ -218,6 +218,8 @@ Response: { id }
 POST /api/me/angel-events/:id/state
 Body: { state }
 Response: { ok: true }
+Notes:
+- state=dismissed 时会设置冷却期（MVP默认30天）
 
 POST /api/moments/:id/angel-events
 Body: { user_id?, type, scheduled_time?, payload? }

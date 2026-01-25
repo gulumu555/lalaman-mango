@@ -301,7 +301,18 @@ def _moment_allows_angel_event(row: Dict[str, Any], event_type: str) -> Tuple[bo
 
 
 def _angel_event_rate_limited(user_id: str) -> bool:
-    window_start = now_ms() - 86_400_000
+    now = now_ms()
+    cooldown_row = DB.execute(
+        """
+        SELECT 1 FROM angel_events
+        WHERE user_id = ? AND cooldown_until IS NOT NULL AND cooldown_until > ?
+        LIMIT 1
+        """,
+        (user_id, now),
+    ).fetchone()
+    if cooldown_row:
+        return True
+    window_start = now - 86_400_000
     row = DB.execute(
         """
         SELECT 1 FROM angel_events
@@ -954,9 +965,12 @@ async def update_angel_event_state(event_id: str, body: Dict[str, str]) -> Dict[
     row = DB.execute("SELECT id FROM angel_events WHERE id = ?", (event_id,)).fetchone()
     if not row:
         raise HTTPException(status_code=404, detail="Angel event not found")
+    cooldown_until = None
+    if state == "dismissed":
+        cooldown_until = now_ms() + 30 * 86_400_000
     DB.execute(
-        "UPDATE angel_events SET state = ? WHERE id = ?",
-        (state, event_id),
+        "UPDATE angel_events SET state = ?, cooldown_until = ? WHERE id = ?",
+        (state, cooldown_until, event_id),
     )
     DB.commit()
     return {"ok": True}
