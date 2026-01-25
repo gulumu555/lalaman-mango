@@ -1109,8 +1109,9 @@ async def seed_chengdu() -> Dict[str, Any]:
                 id, user_id, title, mood_code, mood_emoji, mood_bucket, visibility,
                 lat, lng, geohash, zone_name, radius_m, geo_hidden,
                 photo_url, audio_url, mp4_url, thumb_url, duration_s,
-                motion_template_id, pony, allow_replies, created_at, updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                motion_template_id, pony, allow_replies, horse_trail_enabled, horse_witness_enabled,
+                created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 moment_id,
@@ -1134,6 +1135,8 @@ async def seed_chengdu() -> Dict[str, Any]:
                 payload["motion_template_id"],
                 1 if payload["pony"] else 0,
                 1,
+                1 if payload.get("horse_trail_enabled") else 0,
+                1 if payload.get("horse_witness_enabled") else 0,
                 created_at,
                 created_at,
             ),

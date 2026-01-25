@@ -40,6 +40,8 @@ SEED_MOMENTS: List[Dict[str, object]] = [
         "lng": 104.0800,
         "motion_template_id": "T07_Sparkle",
         "pony": True,
+        "horse_trail_enabled": True,
+        "horse_witness_enabled": False,
     },
     {
         "title": "不想解释",
@@ -58,6 +60,8 @@ SEED_MOMENTS: List[Dict[str, object]] = [
         "lng": 104.0800,
         "motion_template_id": "T02_Cloud",
         "pony": True,
+        "horse_trail_enabled": True,
+        "horse_witness_enabled": False,
     },
     # Point B（九眼桥附近）30.6395, 104.0920
     {
@@ -95,6 +99,8 @@ SEED_MOMENTS: List[Dict[str, object]] = [
         "lng": 104.0920,
         "motion_template_id": "T07_Sparkle",
         "pony": True,
+        "horse_trail_enabled": True,
+        "horse_witness_enabled": True,
     },
     # Point C（人民公园）30.6602, 104.0659
     {
@@ -132,6 +138,8 @@ SEED_MOMENTS: List[Dict[str, object]] = [
         "lng": 104.0659,
         "motion_template_id": "T02_Cloud",
         "pony": True,
+        "horse_trail_enabled": True,
+        "horse_witness_enabled": False,
     },
     # Point D（宽窄巷子）30.6708, 104.0517
     {
@@ -169,6 +177,8 @@ SEED_MOMENTS: List[Dict[str, object]] = [
         "lng": 104.0517,
         "motion_template_id": "T07_Sparkle",
         "pony": True,
+        "horse_trail_enabled": True,
+        "horse_witness_enabled": True,
     },
     # Point E（东郊记忆）30.6679, 104.1227
     {
@@ -206,6 +216,8 @@ SEED_MOMENTS: List[Dict[str, object]] = [
         "lng": 104.1227,
         "motion_template_id": "T07_Sparkle",
         "pony": True,
+        "horse_trail_enabled": True,
+        "horse_witness_enabled": True,
     },
     # Point F（天府广场）30.6574, 104.0665
     {
@@ -243,6 +255,8 @@ SEED_MOMENTS: List[Dict[str, object]] = [
         "lng": 104.0665,
         "motion_template_id": "T07_Sparkle",
         "pony": True,
+        "horse_trail_enabled": True,
+        "horse_witness_enabled": False,
     },
     # Point G（科华北路）30.6310, 104.0720
     {
@@ -281,6 +295,8 @@ SEED_MOMENTS: List[Dict[str, object]] = [
         "lng": 104.0971,
         "motion_template_id": "T07_Sparkle",
         "pony": True,
+        "horse_trail_enabled": True,
+        "horse_witness_enabled": True,
     },
 ]
 
@@ -299,6 +315,8 @@ def build_seed_payloads() -> List[Dict[str, object]]:
             "visibility": "public_anonymous",
             "zone_name": "成都",
             "radius_m": 3000,
+            "horse_trail_enabled": moment.get("horse_trail_enabled", False),
+            "horse_witness_enabled": moment.get("horse_witness_enabled", False),
         }
         for index, moment in enumerate(SEED_MOMENTS)
     ]
