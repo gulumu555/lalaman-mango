@@ -421,6 +421,7 @@ async def list_moments_nearby(
     radius_m: int = 3000,
     visibility: str = "public_anonymous",
     mood_code: Optional[str] = None,
+    horse_only: bool = False,
 ) -> Dict[str, Any]:
     """Return clusters + items + mood_weather."""
     min_lat, max_lat, min_lng, max_lng = bounding_box(lat, lng, radius_m)
@@ -429,6 +430,9 @@ async def list_moments_nearby(
     if mood_code:
         mood_clause = " AND mood_code = ?"
         params.append(mood_code)
+    horse_clause = ""
+    if horse_only:
+        horse_clause = " AND horse_trail_enabled = 1"
     rows = DB.execute(
         """
         SELECT * FROM moments
@@ -437,6 +441,7 @@ async def list_moments_nearby(
           AND visibility = ?
         """
         + mood_clause
+        + horse_clause
         + " ORDER BY created_at DESC",
         params,
     ).fetchall()

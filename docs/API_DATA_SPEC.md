@@ -125,7 +125,7 @@
 - 默认值：visibility=private，mood_bucket=A，allow_replies=true
 
 ### 2.1 Nearby Moments（地图/列表）
-GET /api/moments/nearby?lat=&lng=&radius_m=3000&visibility=public_anonymous
+GET /api/moments/nearby?lat=&lng=&radius_m=3000&visibility=public_anonymous&horse_only=false
 Response:
 - clusters: [{ id, lat, lng, count }]
 - items: Moment[] (可分页)
@@ -133,6 +133,7 @@ Response:
 Note:
 - MVP 使用 bounding box 做附近过滤（lat/lng + radius_m），先不做复杂地理索引
 - 若 geo.hidden=true，仅返回 zone_name 或置空（前端不展示精确坐标）
+- horse_only=true 时，仅返回马年足迹标记内容
 
 ### 2.2 Moment详情
 GET /api/moments/:id
