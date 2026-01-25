@@ -226,6 +226,7 @@ Errors:
 - 404 Moment not found
 - 403 angel_disabled | not_public | microcuration_disabled | map_display_disabled | echo_disabled | timecapsule_disabled
 - 400 missing_user_id
+- 429 angel_rate_limited
 
 ### 2.9 Notifications
 GET /api/me/notifications

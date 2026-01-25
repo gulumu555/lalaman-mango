@@ -300,6 +300,19 @@ def _moment_allows_angel_event(row: Dict[str, Any], event_type: str) -> Tuple[bo
     return True, ""
 
 
+def _angel_event_rate_limited(user_id: str) -> bool:
+    window_start = now_ms() - 86_400_000
+    row = DB.execute(
+        """
+        SELECT 1 FROM angel_events
+        WHERE user_id = ? AND created_at >= ?
+        LIMIT 1
+        """,
+        (user_id, window_start),
+    ).fetchone()
+    return row is not None
+
+
 def seedream_configured() -> bool:
     return bool(os.getenv("ARK_API_KEY"))
 
@@ -908,6 +921,8 @@ async def create_angel_event_from_moment(
     user_id = moment.get("user_id") or payload.user_id
     if not user_id:
         raise HTTPException(status_code=400, detail="missing_user_id")
+    if _angel_event_rate_limited(user_id):
+        raise HTTPException(status_code=429, detail="angel_rate_limited")
     event_id = f"angel_{uuid4().hex}"
     DB.execute(
         """
