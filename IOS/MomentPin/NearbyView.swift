@@ -792,22 +792,57 @@ private struct ExhibitListView: View {
                 .listRowSeparator(.hidden)
             } else {
                 ForEach(exhibits, id: \.id) { exhibit in
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(exhibit.title)
-                                .font(.subheadline)
-                            Text("情绪：\(exhibit.moodCode)")
+                    NavigationLink(destination: ExhibitDetailView(exhibit: exhibit)) {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(exhibit.title)
+                                    .font(.subheadline)
+                                Text("情绪：\(exhibit.moodCode)")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                            Text("\(exhibit.count)")
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
                         }
-                        Spacer()
-                        Text("\(exhibit.count)")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
+                        .padding(.vertical, 6)
                     }
-                    .padding(.vertical, 6)
                 }
             }
         }
+    }
+}
+
+private struct ExhibitDetailView: View {
+    let exhibit: ExhibitSummary
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(exhibit.title)
+                .font(.title2)
+                .fontWeight(.semibold)
+            Text("情绪：\(exhibit.moodCode)")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Text("条目数：\(exhibit.count)（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Divider()
+            List {
+                ForEach(0..<min(6, exhibit.count), id: \.self) { index in
+                    HStack {
+                        Text("片刻 \(index + 1)")
+                            .font(.subheadline)
+                        Spacer()
+                        Text("查看")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.vertical, 4)
+                }
+            }
+        }
+        .padding(20)
     }
 }
