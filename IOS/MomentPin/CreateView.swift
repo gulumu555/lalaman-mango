@@ -47,6 +47,7 @@ struct CreateView: View {
     @State private var publishStatusHint = ""
     @State private var publishFailed = false
     private let apiClient = APIClient()
+    @State private var settingsLoaded = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -317,6 +318,18 @@ struct CreateView: View {
                             }
                         }
                     }
+            }
+        }
+        .onAppear {
+            guard !settingsLoaded else { return }
+            settingsLoaded = true
+            apiClient.fetchUserSettings { payload in
+                angelEnabled = payload.allowAngel
+                allowMicrocuration = payload.allowMicrocuration
+                allowEcho = payload.allowEcho
+                allowTimecapsule = payload.allowTimecapsule
+                horseTrailEnabled = payload.horseTrailEnabled
+                horseWitnessEnabled = payload.horseWitnessEnabled
             }
         }
     }

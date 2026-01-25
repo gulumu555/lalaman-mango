@@ -56,4 +56,19 @@ struct APIClient {
             }
         }
     }
+
+    func fetchUserSettings(completion: @escaping (UserSettingsPayload) -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            completion(
+                UserSettingsPayload(
+                    allowMicrocuration: false,
+                    allowEcho: false,
+                    allowTimecapsule: true,
+                    allowAngel: false,
+                    horseTrailEnabled: false,
+                    horseWitnessEnabled: false
+                )
+            )
+        }
+    }
 }
