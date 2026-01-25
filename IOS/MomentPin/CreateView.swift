@@ -238,6 +238,37 @@ struct CreateView: View {
                         Text("发布设置保存失败，可重试（占位）")
                             .font(.caption2)
                             .foregroundColor(.red)
+                        Button("重试保存") {
+                            publishStatusHint = "正在重试保存..."
+                            apiClient.publish(
+                                payload: PublishPayload(
+                                    isPublic: isPublic,
+                                    includeBottle: includeBottle,
+                                    settings: PublishSettings(
+                                        allowMicrocuration: allowMicrocuration,
+                                        allowEcho: allowEcho,
+                                        allowTimecapsule: allowTimecapsule,
+                                        angelEnabled: angelEnabled,
+                                        horseTrailEnabled: horseTrailEnabled,
+                                        horseWitnessEnabled: horseWitnessEnabled
+                                    )
+                                )
+                            ) { result in
+                                switch result {
+                                case .success:
+                                    publishFailed = false
+                                    publishStatusHint = "发布设置已保存（占位）"
+                                case .failure:
+                                    publishStatusHint = "发布设置保存失败（占位）"
+                                }
+                            }
+                        }
+                        .font(.caption2)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color.black)
+                        .foregroundColor(.white)
+                        .cornerRadius(999)
                     }
                     Text("天使/马年设置已同步（占位）")
                         .font(.caption2)
