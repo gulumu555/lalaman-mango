@@ -20,6 +20,7 @@ struct NearbyView: View {
     @State private var showLocationHint = false
     @State private var locationHintText = "已定位"
     @State private var locationStatus = "定位中..."
+    @State private var showAngelSheet = false
 
     private let moments: [Moment] = Moment.sample
     private var filteredMoments: [Moment] {
@@ -197,6 +198,18 @@ struct NearbyView: View {
                         }
                         .buttonStyle(.plain)
                     }
+                    Button("天使卡片") {
+                        showAngelSheet = true
+                    }
+                    .font(.footnote)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(Color.white.opacity(0.95))
+                    .cornerRadius(999)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999)
+                            .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                    )
                     Text("入口：点位气泡 / 列表 / 随机听听")
                         .font(.caption2)
                         .foregroundColor(.secondary)
@@ -213,6 +226,13 @@ struct NearbyView: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 90)
+                .sheet(isPresented: $showAngelSheet) {
+                    NavigationView {
+                        NotificationsView()
+                            .navigationTitle("天使卡片")
+                            .navigationBarTitleDisplayMode(.inline)
+                    }
+                }
                 .sheet(isPresented: $showPlaceSheet) {
                     PlaceSheet(
                         title: selectedZoneName ?? "附近片刻",
