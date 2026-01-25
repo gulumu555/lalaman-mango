@@ -27,6 +27,16 @@
 - motion_template_id: string    // e.g. "T02_Cloud"
 - pony: boolean                 // 是否马年小马主题
 - allow_replies: boolean        // 是否允许模板回复
+- allow_map_display: boolean    // 是否允许地图展示
+- angel:
+  - enabled: boolean            // 是否开启天使模式
+  - mode: string | null         // low | med | high（MVP只做low）
+  - allow_microcuration: boolean
+  - allow_echo: boolean
+  - allow_timecapsule: boolean
+- horse:
+  - trail_enabled: boolean      // 是否加入马年足迹
+  - witness_enabled: boolean    // 是否允许马年见证
 - model:
   - type: string | null         // "image_to_image" | "image_to_video"
   - id: string | null           // 后台可选模型ID
@@ -126,6 +136,14 @@ Body:
 - motion_template_id
 - pony
 - allow_replies?
+- allow_map_display?
+- angel_enabled?
+- angel_mode?
+- allow_microcuration?
+- allow_echo?
+- allow_timecapsule?
+- horse_trail_enabled?
+- horse_witness_enabled?
 - model_type?                 // image_to_image | image_to_video
 - model_id?
 - style_key?

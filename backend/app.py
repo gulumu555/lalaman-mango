@@ -92,6 +92,14 @@ class MomentCreateInput(BaseModel):
     motion_template_id: str
     pony: bool = False
     allow_replies: Optional[bool] = None
+    allow_map_display: Optional[bool] = None
+    angel_enabled: Optional[bool] = None
+    angel_mode: Optional[str] = None
+    allow_microcuration: Optional[bool] = None
+    allow_echo: Optional[bool] = None
+    allow_timecapsule: Optional[bool] = None
+    horse_trail_enabled: Optional[bool] = None
+    horse_witness_enabled: Optional[bool] = None
     model_type: Optional[str] = None
     model_id: Optional[str] = None
     style_key: Optional[str] = None
@@ -216,6 +224,18 @@ def moment_row_to_payload(row: Dict[str, Any]) -> Dict[str, Any]:
         "motion_template_id": row["motion_template_id"],
         "pony": bool(row["pony"]),
         "allow_replies": bool(row["allow_replies"]),
+        "allow_map_display": bool(row.get("allow_map_display", 1)),
+        "angel": {
+            "enabled": bool(row.get("angel_enabled", 0)),
+            "mode": row.get("angel_mode"),
+            "allow_microcuration": bool(row.get("allow_microcuration", 0)),
+            "allow_echo": bool(row.get("allow_echo", 0)),
+            "allow_timecapsule": bool(row.get("allow_timecapsule", 1)),
+        },
+        "horse": {
+            "trail_enabled": bool(row.get("horse_trail_enabled", 0)),
+            "witness_enabled": bool(row.get("horse_witness_enabled", 0)),
+        },
         "model": {
             "type": row.get("model_type"),
             "id": row.get("model_id"),
@@ -414,6 +434,25 @@ async def create_moment(payload: MomentCreateInput) -> Dict[str, str]:
     mood_bucket = payload.mood_bucket or bucket_from_code(mood_code)
     created_at = now_ms()
     allow_replies = payload.allow_replies if payload.allow_replies is not None else True
+    allow_map_display = (
+        payload.allow_map_display
+        if payload.allow_map_display is not None
+        else payload.visibility == "public_anonymous"
+    )
+    angel_enabled = payload.angel_enabled if payload.angel_enabled is not None else False
+    allow_microcuration = (
+        payload.allow_microcuration if payload.allow_microcuration is not None else False
+    )
+    allow_echo = payload.allow_echo if payload.allow_echo is not None else False
+    allow_timecapsule = (
+        payload.allow_timecapsule if payload.allow_timecapsule is not None else True
+    )
+    horse_trail_enabled = (
+        payload.horse_trail_enabled if payload.horse_trail_enabled is not None else False
+    )
+    horse_witness_enabled = (
+        payload.horse_witness_enabled if payload.horse_witness_enabled is not None else False
+    )
     if payload.render_status and payload.render_status not in {
         "pending",
         "rendering",
@@ -433,12 +472,14 @@ async def create_moment(payload: MomentCreateInput) -> Dict[str, str]:
             id, user_id, title, mood_code, mood_emoji, mood_bucket, visibility,
             lat, lng, geohash, zone_name, radius_m, geo_hidden,
             photo_url, audio_url, mp4_url, thumb_url, duration_s,
-            motion_template_id, pony, allow_replies,
+            motion_template_id, pony, allow_replies, allow_map_display,
+            angel_enabled, angel_mode, allow_microcuration, allow_echo, allow_timecapsule,
+            horse_trail_enabled, horse_witness_enabled,
             model_type, model_id, style_key, ref_image_urls, ip_character_id, ip_pose,
             render_status, render_error, preview_url,
             transcript_text, caption_segments, task_step, task_status, task_updated_at,
             created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         (
             moment_id,
@@ -462,6 +503,14 @@ async def create_moment(payload: MomentCreateInput) -> Dict[str, str]:
             payload.motion_template_id,
             1 if payload.pony else 0,
             1 if allow_replies else 0,
+            1 if allow_map_display else 0,
+            1 if angel_enabled else 0,
+            payload.angel_mode,
+            1 if allow_microcuration else 0,
+            1 if allow_echo else 0,
+            1 if allow_timecapsule else 0,
+            1 if horse_trail_enabled else 0,
+            1 if horse_witness_enabled else 0,
             payload.model_type,
             payload.model_id,
             payload.style_key,
