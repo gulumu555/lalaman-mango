@@ -45,6 +45,7 @@ struct CreateView: View {
     @State private var horseWitnessEnabled = false
     @State private var publishSummary = ""
     @State private var publishStatusHint = ""
+    @State private var publishFailed = false
     private let apiClient = APIClient()
 
     var body: some View {
@@ -176,8 +177,15 @@ struct CreateView: View {
                             horseWitnessEnabled: horseWitnessEnabled
                         )
                     )
-                    apiClient.publish(payload: payload) { _ in
-                        publishStatusHint = "发布设置已保存（占位）"
+                    apiClient.publish(payload: payload) { result in
+                        switch result {
+                        case .success:
+                            publishStatusHint = "发布设置已保存（占位）"
+                            publishFailed = false
+                        case .failure:
+                            publishStatusHint = "发布设置保存失败（占位）"
+                            publishFailed = true
+                        }
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                         showGenerating = false
@@ -225,6 +233,11 @@ struct CreateView: View {
                         Text(publishSummary)
                             .font(.caption2)
                             .foregroundColor(.secondary)
+                    }
+                    if publishFailed {
+                        Text("发布设置保存失败，可重试（占位）")
+                            .font(.caption2)
+                            .foregroundColor(.red)
                     }
                     Text("天使/马年设置已同步（占位）")
                         .font(.caption2)

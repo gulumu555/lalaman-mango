@@ -15,10 +15,22 @@ struct PublishPayload {
     let settings: PublishSettings
 }
 
+enum APIClientError: Error {
+    case simulatedFailure
+}
+
 struct APIClient {
-    func publish(payload: PublishPayload, completion: @escaping (Result<Void, Error>) -> Void) {
+    func publish(
+        payload: PublishPayload,
+        simulateFailure: Bool = false,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-            completion(.success(()))
+            if simulateFailure {
+                completion(.failure(APIClientError.simulatedFailure))
+            } else {
+                completion(.success(()))
+            }
         }
     }
 }
