@@ -147,6 +147,10 @@ POST /api/moments/:id/timecapsule
 Body: { allow_timecapsule: boolean }
 Response: { ok: true }
 
+POST /api/moments/:id/horse
+Body: { horse_trail_enabled: boolean, horse_witness_enabled: boolean }
+Response: { ok: true }
+
 DELETE /api/moments/:id
 Response: { ok: true }
 
@@ -223,6 +227,9 @@ Response: UserSettings
 POST /api/me/settings
 Body: { allow_microcuration?, allow_echo?, allow_timecapsule?, allow_angel?, horse_trail_enabled?, horse_witness_enabled? }
 Response: { ok: true }
+Notes:
+- horse_trail_enabled: 地图马年足迹总开关
+- horse_witness_enabled: 马年见证开关
 
 ### 2.9 Angel Events（天使卡片）
 GET /api/me/angel-events

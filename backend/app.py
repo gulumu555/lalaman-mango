@@ -168,6 +168,11 @@ class MomentTimecapsuleUpdateInput(BaseModel):
     allow_timecapsule: bool
 
 
+class MomentHorseUpdateInput(BaseModel):
+    horse_trail_enabled: bool
+    horse_witness_enabled: bool
+
+
 MOOD_EMOJI_BY_CODE = {
     "light": "🙂",
     "happy": "😄",
@@ -718,6 +723,32 @@ async def update_moment_timecapsule(
         WHERE id = ?
         """,
         (1 if payload.allow_timecapsule else 0, now_ms(), moment_id),
+    )
+    DB.commit()
+    return {"ok": True}
+
+
+@app.post("/api/moments/{moment_id}/horse")
+async def update_moment_horse_flags(
+    moment_id: str,
+    payload: MomentHorseUpdateInput,
+) -> Dict[str, Any]:
+    """Enable/disable horse activity flags on a moment."""
+    row = DB.execute("SELECT id FROM moments WHERE id = ?", (moment_id,)).fetchone()
+    if not row:
+        raise HTTPException(status_code=404, detail="Moment not found")
+    DB.execute(
+        """
+        UPDATE moments
+        SET horse_trail_enabled = ?, horse_witness_enabled = ?, updated_at = ?
+        WHERE id = ?
+        """,
+        (
+            1 if payload.horse_trail_enabled else 0,
+            1 if payload.horse_witness_enabled else 0,
+            now_ms(),
+            moment_id,
+        ),
     )
     DB.commit()
     return {"ok": True}
