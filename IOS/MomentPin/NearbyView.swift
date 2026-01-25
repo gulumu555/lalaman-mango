@@ -22,7 +22,7 @@ struct NearbyView: View {
     @State private var locationStatus = "定位中..."
     @State private var showAngelSheet = false
     @State private var showExhibitSheet = false
-    @State private var exhibitTitles: [String] = []
+    @State private var exhibits: [ExhibitSummary] = []
     private let apiClient = APIClient()
 
     private let moments: [Moment] = Moment.sample
@@ -216,7 +216,7 @@ struct NearbyView: View {
                         )
                         Button("附近微展") {
                             apiClient.fetchExhibits { titles in
-                                exhibitTitles = titles
+                                exhibits = titles
                                 showExhibitSheet = true
                             }
                         }
@@ -255,7 +255,7 @@ struct NearbyView: View {
                 }
                 .sheet(isPresented: $showExhibitSheet) {
                     NavigationView {
-                        ExhibitListView(exhibitTitles: exhibitTitles)
+                        ExhibitListView(exhibits: exhibits)
                             .navigationTitle("附近微展")
                             .navigationBarTitleDisplayMode(.inline)
                     }
@@ -775,11 +775,11 @@ private struct PlaceSheet: View {
 }
 
 private struct ExhibitListView: View {
-    let exhibitTitles: [String]
+    let exhibits: [ExhibitSummary]
 
     var body: some View {
         List {
-            if exhibitTitles.isEmpty {
+            if exhibits.isEmpty {
                 VStack(spacing: 8) {
                     Text("暂无微展")
                         .font(.subheadline)
@@ -791,12 +791,17 @@ private struct ExhibitListView: View {
                 .padding(.vertical, 24)
                 .listRowSeparator(.hidden)
             } else {
-                ForEach(exhibitTitles, id: \.self) { title in
+                ForEach(exhibits, id: \.id) { exhibit in
                     HStack {
-                        Text(title)
-                            .font(.subheadline)
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(exhibit.title)
+                                .font(.subheadline)
+                            Text("情绪：\(exhibit.moodCode)")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
                         Spacer()
-                        Text("查看")
+                        Text("\(exhibit.count)")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }

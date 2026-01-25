@@ -28,6 +28,13 @@ struct UserSettingsPayload {
     let horseWitnessEnabled: Bool
 }
 
+struct ExhibitSummary {
+    let id: String
+    let title: String
+    let moodCode: String
+    let count: Int
+}
+
 enum APIClientError: Error {
     case simulatedFailure
 }
@@ -76,12 +83,12 @@ struct APIClient {
         }
     }
 
-    func fetchExhibits(completion: @escaping ([String]) -> Void) {
+    func fetchExhibits(completion: @escaping ([ExhibitSummary]) -> Void) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             completion([
-                "雨天慢下来",
-                "下班的轻呼吸",
-                "马年祝福墙"
+                ExhibitSummary(id: "exhibit_healing", title: "雨天慢下来", moodCode: "healing", count: 8),
+                ExhibitSummary(id: "exhibit_light", title: "下班的轻呼吸", moodCode: "light", count: 6),
+                ExhibitSummary(id: "exhibit_horse", title: "马年祝福墙", moodCode: "luck", count: 4)
             ])
         }
     }
