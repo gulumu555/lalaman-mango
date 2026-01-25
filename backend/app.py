@@ -144,6 +144,13 @@ class AngelEventCreateInput(BaseModel):
     payload: Optional[Dict[str, Any]] = None
 
 
+class AngelMomentEventInput(BaseModel):
+    user_id: Optional[str] = None
+    type: str = Field(pattern="^(microcuration|echo|timecapsule)$")
+    scheduled_time: Optional[int] = None
+    payload: Optional[Dict[str, Any]] = None
+
+
 class VisibilityUpdateInput(BaseModel):
     visibility: str = Field(pattern="^(public_anonymous|private)$")
 
@@ -270,6 +277,23 @@ def moment_row_to_payload(row: Dict[str, Any]) -> Dict[str, Any]:
         "created_at": row["created_at"],
         "updated_at": row["updated_at"],
     }
+
+
+def _moment_allows_angel_event(row: Dict[str, Any], event_type: str) -> Tuple[bool, str]:
+    if not row.get("angel_enabled"):
+        return False, "angel_disabled"
+    if event_type == "timecapsule":
+        return (bool(row.get("allow_timecapsule")), "timecapsule_disabled")
+    if row.get("visibility") != "public_anonymous":
+        return False, "not_public"
+    if event_type == "microcuration":
+        if not row.get("allow_microcuration"):
+            return False, "microcuration_disabled"
+        if not row.get("allow_map_display"):
+            return False, "map_display_disabled"
+    if event_type == "echo" and not row.get("allow_echo"):
+        return False, "echo_disabled"
+    return True, ""
 
 
 def seedream_configured() -> bool:
@@ -834,6 +858,44 @@ async def create_angel_event(payload: AngelEventCreateInput) -> Dict[str, Any]:
             payload.moment_id,
             payload.type,
             payload.state,
+            payload.scheduled_time,
+            json.dumps(payload.payload) if payload.payload else None,
+            now_ms(),
+        ),
+    )
+    DB.commit()
+    return {"id": event_id}
+
+
+@app.post("/api/moments/{moment_id}/angel-events")
+async def create_angel_event_from_moment(
+    moment_id: str,
+    payload: AngelMomentEventInput,
+) -> Dict[str, Any]:
+    """Create an angel event from a moment (guarded by flags)."""
+    row = DB.execute("SELECT * FROM moments WHERE id = ?", (moment_id,)).fetchone()
+    if not row:
+        raise HTTPException(status_code=404, detail="Moment not found")
+    moment = row_to_dict(row)
+    allowed, reason = _moment_allows_angel_event(moment, payload.type)
+    if not allowed:
+        raise HTTPException(status_code=403, detail=reason)
+    user_id = moment.get("user_id") or payload.user_id
+    if not user_id:
+        raise HTTPException(status_code=400, detail="missing_user_id")
+    event_id = f"angel_{uuid4().hex}"
+    DB.execute(
+        """
+        INSERT INTO angel_events
+        (id, user_id, moment_id, type, state, scheduled_time, delivered_channel, cooldown_until, payload, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, 'in_app', NULL, ?, ?)
+        """,
+        (
+            event_id,
+            user_id,
+            moment_id,
+            payload.type,
+            "pending",
             payload.scheduled_time,
             json.dumps(payload.payload) if payload.payload else None,
             now_ms(),
