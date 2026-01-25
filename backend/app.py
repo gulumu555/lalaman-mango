@@ -1101,6 +1101,18 @@ async def create_angel_event(payload: AngelEventCreateInput) -> Dict[str, Any]:
 @app.post("/api/me/echo-cards")
 async def create_echo_card(payload: EchoCardInput) -> Dict[str, Any]:
     """Create an echo card as an angel event (stub)."""
+    row = DB.execute("SELECT * FROM moments WHERE id = ?", (payload.moment_id,)).fetchone()
+    if not row:
+        raise HTTPException(status_code=404, detail="Moment not found")
+    moment = row_to_dict(row)
+    allowed, reason = _moment_allows_angel_event(moment, "echo")
+    if not allowed:
+        raise HTTPException(status_code=403, detail=reason)
+    settings = _get_user_settings(payload.user_id)
+    if not settings.get("allow_angel"):
+        raise HTTPException(status_code=403, detail="angel_user_disabled")
+    if not settings.get("allow_echo"):
+        raise HTTPException(status_code=403, detail="echo_user_disabled")
     event_id = f"angel_{uuid4().hex}"
     card_payload = {
         "moment_id": payload.moment_id,

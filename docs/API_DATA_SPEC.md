@@ -252,6 +252,9 @@ Body: { user_id, moment_id, peer_moment_id, bridge_text?, payload? }
 Response: { id }
 Notes:
 - 作为 echo 类型的天使卡片占位
+Errors:
+- 404 Moment not found
+- 403 angel_disabled | not_public | echo_disabled | angel_user_disabled | echo_user_disabled
 
 POST /api/me/angel-events/:id/state
 Body: { state }
