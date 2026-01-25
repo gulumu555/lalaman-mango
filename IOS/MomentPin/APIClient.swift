@@ -98,4 +98,10 @@ struct APIClient {
             completion(.success(()))
         }
     }
+
+    func updateTimecapsule(enabled: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            completion(.success(()))
+        }
+    }
 }

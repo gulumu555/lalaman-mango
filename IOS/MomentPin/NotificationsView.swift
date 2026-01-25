@@ -200,13 +200,28 @@ private struct AngelCardDetailView: View {
                 Text("时间胶囊：回访提醒（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
-                Button("打开回看") {}
-                    .font(.caption)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .background(Color.black)
-                    .foregroundColor(.white)
-                    .cornerRadius(999)
+                Button("打开回看") {
+                    actionHint = "已打开回看（占位）"
+                }
+                .font(.caption)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(Color.black)
+                .foregroundColor(.white)
+                .cornerRadius(999)
+                Button("今天不看/别再提醒这条") {
+                    actionHint = "正在关闭提醒..."
+                    apiClient.updateTimecapsule(enabled: false) { result in
+                        switch result {
+                        case .success:
+                            actionHint = "已关闭该条提醒（占位）"
+                        case .failure:
+                            actionHint = "关闭失败（占位）"
+                        }
+                    }
+                }
+                .font(.caption2)
+                .foregroundColor(.secondary)
             }
             Spacer()
         }
