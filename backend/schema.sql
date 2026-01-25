@@ -31,6 +31,11 @@ CREATE TABLE IF NOT EXISTS moments (
   render_status TEXT,
   render_error TEXT,
   preview_url TEXT,
+  transcript_text TEXT,
+  caption_segments TEXT,
+  task_step TEXT,
+  task_status TEXT,
+  task_updated_at INTEGER,
   created_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL
 );

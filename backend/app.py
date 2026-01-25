@@ -101,6 +101,10 @@ class MomentCreateInput(BaseModel):
     render_status: Optional[str] = None
     render_error: Optional[str] = None
     preview_url: Optional[str] = None
+    transcript_text: Optional[str] = None
+    caption_segments: Optional[List[str]] = None
+    task_step: Optional[str] = None
+    task_status: Optional[str] = None
     assets: AssetsInput
 
 
@@ -180,6 +184,12 @@ def moment_row_to_payload(row: Dict[str, Any]) -> Dict[str, Any]:
             ref_images = json.loads(row["ref_image_urls"])
         except json.JSONDecodeError:
             ref_images = []
+    caption_segments = []
+    if row.get("caption_segments"):
+        try:
+            caption_segments = json.loads(row["caption_segments"])
+        except json.JSONDecodeError:
+            caption_segments = []
     return {
         "id": row["id"],
         "user_id": row["user_id"],
@@ -220,6 +230,13 @@ def moment_row_to_payload(row: Dict[str, Any]) -> Dict[str, Any]:
             "status": row.get("render_status") or "pending",
             "error": row.get("render_error"),
             "preview_url": row.get("preview_url"),
+        },
+        "transcript_text": row.get("transcript_text"),
+        "caption_segments": caption_segments,
+        "task": {
+            "step": row.get("task_step"),
+            "status": row.get("task_status"),
+            "updated_at": row.get("task_updated_at"),
         },
         "created_at": row["created_at"],
         "updated_at": row["updated_at"],
@@ -407,6 +424,8 @@ async def create_moment(payload: MomentCreateInput) -> Dict[str, str]:
     render_status = payload.render_status or ("ready" if payload.preview_url else "pending")
     render_error = payload.render_error or ("render_failed" if render_status == "failed" else None)
     ref_image_urls = json.dumps(payload.ref_image_urls) if payload.ref_image_urls else None
+    caption_segments = json.dumps(payload.caption_segments) if payload.caption_segments else None
+    task_updated_at = created_at if payload.task_status else None
     geo_hidden = 1 if payload.geo.hidden else 0
     DB.execute(
         """
@@ -417,8 +436,9 @@ async def create_moment(payload: MomentCreateInput) -> Dict[str, str]:
             motion_template_id, pony, allow_replies,
             model_type, model_id, style_key, ref_image_urls, ip_character_id, ip_pose,
             render_status, render_error, preview_url,
+            transcript_text, caption_segments, task_step, task_status, task_updated_at,
             created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         (
             moment_id,
@@ -451,6 +471,11 @@ async def create_moment(payload: MomentCreateInput) -> Dict[str, str]:
             render_status,
             render_error,
             payload.preview_url,
+            payload.transcript_text,
+            caption_segments,
+            payload.task_step,
+            payload.task_status,
+            task_updated_at,
             created_at,
             created_at,
         ),

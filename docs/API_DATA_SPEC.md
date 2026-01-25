@@ -39,6 +39,12 @@
   - status: string | null    // pending | rendering | ready | failed
   - error: string | null
   - preview_url: string | null
+- transcript_text: string | null
+- caption_segments: string[] | null
+- task:
+  - step: string | null      // style | pony | voice | video
+  - status: string | null    // pending | running | done | failed
+  - updated_at: number (ms) | null
 - created_at: number (ms)
 - updated_at: number (ms)
 
@@ -129,6 +135,10 @@ Body:
 - render_status?
 - render_error?
 - preview_url?
+- transcript_text?
+- caption_segments?          // string[]
+- task_step?                 // style | pony | voice | video
+- task_status?               // pending | running | done | failed
 - assets {photo_url,audio_url,mp4_url,thumb_url?,duration_s}
 Response: { id }
 Notes:

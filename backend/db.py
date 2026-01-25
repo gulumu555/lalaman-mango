@@ -39,6 +39,11 @@ def ensure_moments_columns(conn: sqlite3.Connection) -> None:
         "render_status": "TEXT",
         "render_error": "TEXT",
         "preview_url": "TEXT",
+        "transcript_text": "TEXT",
+        "caption_segments": "TEXT",
+        "task_step": "TEXT",
+        "task_status": "TEXT",
+        "task_updated_at": "INTEGER",
     }
     for name, definition in columns.items():
         if name not in existing:
