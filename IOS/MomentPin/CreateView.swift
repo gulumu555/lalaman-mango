@@ -43,6 +43,7 @@ struct CreateView: View {
     @State private var allowTimecapsule = true
     @State private var horseTrailEnabled = false
     @State private var horseWitnessEnabled = false
+    @State private var publishSummary = ""
 
     var body: some View {
         VStack(spacing: 0) {
@@ -159,6 +160,7 @@ struct CreateView: View {
                 onConfirm: {
                     showPublishSheet = false
                     showGenerating = true
+                    publishSummary = buildPublishSummary()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                         showGenerating = false
                         showPublished = true
@@ -193,6 +195,11 @@ struct CreateView: View {
                     Text("片刻已发布，可在附近查看")
                         .font(.caption)
                         .foregroundColor(.secondary)
+                    if !publishSummary.isEmpty {
+                        Text(publishSummary)
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
                     Button("去附近看看") {
                         showPublished = false
                         onPublished()
@@ -265,6 +272,33 @@ struct CreateView: View {
         case .video:
             return "默认生成微动 MP4"
         }
+    }
+
+    private func buildPublishSummary() -> String {
+        var items: [String] = []
+        items.append(isPublic ? "匿名公开" : "仅自己可见")
+        if includeBottle {
+            items.append("漂流瓶")
+        }
+        if angelEnabled {
+            items.append("天使开启")
+        }
+        if allowMicrocuration {
+            items.append("微展")
+        }
+        if allowEcho {
+            items.append("回声")
+        }
+        if allowTimecapsule {
+            items.append("时间胶囊")
+        }
+        if horseTrailEnabled {
+            items.append("马年足迹")
+        }
+        if horseWitnessEnabled {
+            items.append("马年见证")
+        }
+        return items.isEmpty ? "" : "发布设置：" + items.joined(separator: " · ")
     }
 }
 
