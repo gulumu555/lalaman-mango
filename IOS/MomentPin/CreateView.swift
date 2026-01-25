@@ -45,6 +45,7 @@ struct CreateView: View {
     @State private var horseWitnessEnabled = false
     @State private var publishSummary = ""
     @State private var publishStatusHint = ""
+    private let apiClient = APIClient()
 
     var body: some View {
         VStack(spacing: 0) {
@@ -163,11 +164,25 @@ struct CreateView: View {
                     showGenerating = true
                     publishStatusHint = "正在保存发布设置..."
                     publishSummary = buildPublishSummary()
+                    let payload = PublishPayload(
+                        isPublic: isPublic,
+                        includeBottle: includeBottle,
+                        settings: PublishSettings(
+                            allowMicrocuration: allowMicrocuration,
+                            allowEcho: allowEcho,
+                            allowTimecapsule: allowTimecapsule,
+                            angelEnabled: angelEnabled,
+                            horseTrailEnabled: horseTrailEnabled,
+                            horseWitnessEnabled: horseWitnessEnabled
+                        )
+                    )
+                    apiClient.publish(payload: payload) { _ in
+                        publishStatusHint = "发布设置已保存（占位）"
+                    }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                         showGenerating = false
                         showPublished = true
                         showDetail = true
-                        publishStatusHint = "发布设置已保存（占位）"
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                             publishStatusHint = ""
                         }
