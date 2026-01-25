@@ -211,6 +211,9 @@ struct CreateView: View {
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }
+                    Text("天使/马年设置已同步（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     Button("去附近看看") {
                         showPublished = false
                         onPublished()
