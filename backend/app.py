@@ -155,6 +155,10 @@ class VisibilityUpdateInput(BaseModel):
     visibility: str = Field(pattern="^(public_anonymous|private)$")
 
 
+class MomentTimecapsuleUpdateInput(BaseModel):
+    allow_timecapsule: bool
+
+
 MOOD_EMOJI_BY_CODE = {
     "light": "🙂",
     "happy": "😄",
@@ -646,6 +650,27 @@ async def update_moment_visibility(
         WHERE id = ?
         """,
         (payload.visibility, now_ms(), moment_id),
+    )
+    DB.commit()
+    return {"ok": True}
+
+
+@app.post("/api/moments/{moment_id}/timecapsule")
+async def update_moment_timecapsule(
+    moment_id: str,
+    payload: MomentTimecapsuleUpdateInput,
+) -> Dict[str, Any]:
+    """Enable/disable timecapsule on a moment."""
+    row = DB.execute("SELECT id FROM moments WHERE id = ?", (moment_id,)).fetchone()
+    if not row:
+        raise HTTPException(status_code=404, detail="Moment not found")
+    DB.execute(
+        """
+        UPDATE moments
+        SET allow_timecapsule = ?, updated_at = ?
+        WHERE id = ?
+        """,
+        (1 if payload.allow_timecapsule else 0, now_ms(), moment_id),
     )
     DB.commit()
     return {"ok": True}

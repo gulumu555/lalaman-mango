@@ -134,6 +134,10 @@ POST /api/moments/:id/visibility
 Body: { visibility: "public_anonymous" | "private" }
 Response: { ok: true }
 
+POST /api/moments/:id/timecapsule
+Body: { allow_timecapsule: boolean }
+Response: { ok: true }
+
 DELETE /api/moments/:id
 Response: { ok: true }
 
