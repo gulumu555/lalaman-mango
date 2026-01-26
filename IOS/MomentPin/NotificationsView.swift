@@ -33,6 +33,14 @@ struct NotificationsView: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     Spacer()
+                    if filterBottleOnly || filterSystemOnly {
+                        Button("清除筛选") {
+                            filterBottleOnly = false
+                            filterSystemOnly = false
+                        }
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    }
                     Button("刷新") {
                         notificationLoading = true
                         notificationStatusHint = "刷新中..."
