@@ -41,6 +41,13 @@ struct AngelCardSummary {
     let type: String
 }
 
+struct NotificationSummary {
+    let id: String
+    let title: String
+    let type: String
+    let timeText: String
+}
+
 enum APIClientError: Error {
     case simulatedFailure
 }
@@ -105,6 +112,16 @@ struct APIClient {
                 AngelCardSummary(id: "angel_exhibit_1", title: "附近有一个小展：雨天慢下来", type: "microcuration"),
                 AngelCardSummary(id: "angel_echo_1", title: "回声卡：有人也在「下班路上」说了一句", type: "echo"),
                 AngelCardSummary(id: "angel_capsule_1", title: "时间胶囊：三天前的你想对现在说", type: "timecapsule")
+            ])
+        }
+    }
+
+    func fetchNotifications(completion: @escaping ([NotificationSummary]) -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            completion([
+                NotificationSummary(id: "notice_bottle_1", title: "你有一个漂流瓶靠岸了 🎁", type: "bottle", timeText: "09:30"),
+                NotificationSummary(id: "notice_bottle_2", title: "你在「太古里附近」留下的那段声音，可以打开回听了", type: "bottle", timeText: "09:10"),
+                NotificationSummary(id: "notice_system_1", title: "系统通知：新版本上线（占位）", type: "system", timeText: "08:30")
             ])
         }
     }

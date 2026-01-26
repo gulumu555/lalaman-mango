@@ -1,13 +1,9 @@
 import SwiftUI
 
 struct NotificationsView: View {
-    private let notifications = [
-        "你有一个漂流瓶靠岸了 🎁",
-        "你在「太古里附近」留下的那段声音，可以打开回听了",
-        "系统通知：新版本上线（占位）"
-    ]
+    @State private var notifications: [NotificationSummary] = []
     @State private var angelCards: [AngelCardSummary] = []
-    @State private var readStates: [Int: Bool] = [:]
+    @State private var readStates: [String: Bool] = [:]
     @State private var angelReadStates: [String: Bool] = [:]
     @State private var showAngelCards = true
     @State private var showClearAngelConfirm = false
@@ -47,12 +43,12 @@ struct NotificationsView: View {
                     NavigationLink(destination: DetailView(moment: Moment.sample.first!)) {
                         HStack(spacing: 12) {
                             Circle()
-                                .fill(readStates[index] == true ? Color.clear : Color.red)
+                                .fill(readStates[item.id] == true ? Color.clear : Color.red)
                                 .frame(width: 8, height: 8)
                             VStack(alignment: .leading, spacing: 6) {
-                                Text(item)
+                                Text(item.title)
                                     .font(.subheadline)
-                                Text(readStates[index] == true ? "已读 · 占位" : "未读 · 占位")
+                                Text(readStates[item.id] == true ? "已读 · 占位" : "未读 · 占位")
                                     .font(.caption2)
                                     .foregroundColor(.secondary)
                                 Text("打开回听")
@@ -60,19 +56,19 @@ struct NotificationsView: View {
                                     .foregroundColor(.secondary)
                             }
                             Spacer()
-                            Text("09:30")
+                            Text(item.timeText)
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
                         }
                         .padding(.vertical, 6)
                     }
                     .onAppear {
-                        if readStates[index] == nil {
-                            readStates[index] = false
+                        if readStates[item.id] == nil {
+                            readStates[item.id] = false
                         }
                     }
                     .onTapGesture {
-                        readStates[index] = true
+                        readStates[item.id] = true
                     }
                 }
             }
@@ -204,8 +200,8 @@ struct NotificationsView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("全部已读") {
-                    for index in notifications.indices {
-                        readStates[index] = true
+                    for item in notifications {
+                        readStates[item.id] = true
                     }
                     for card in angelCards {
                         angelReadStates[card.id] = true
@@ -215,6 +211,12 @@ struct NotificationsView: View {
             }
         }
         .onAppear {
+            apiClient.fetchNotifications { items in
+                notifications = items
+                for item in items where readStates[item.id] == nil {
+                    readStates[item.id] = false
+                }
+            }
             angelLoading = true
             apiClient.fetchAngelCards { cards in
                 angelCards = cards
@@ -228,7 +230,7 @@ struct NotificationsView: View {
     }
 
     private var unreadCount: Int {
-        notifications.indices.filter { readStates[$0] != true }.count
+        notifications.filter { readStates[$0.id] != true }.count
     }
 
     private var angelUnreadCount: Int {
