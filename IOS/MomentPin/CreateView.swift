@@ -688,6 +688,10 @@ private struct PublishSheet: View {
                         .cornerRadius(999)
                     }
                 }
+                .disabled(hideMood)
+                Text(hideMood ? "已隐藏情绪，发布页不展示" : "可在此调整情绪")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 Text("默认继承创作情绪（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
