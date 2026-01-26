@@ -80,6 +80,11 @@ struct NotificationsView: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     Spacer()
+                    Button("清空") {
+                        angelCards.removeAll()
+                    }
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                     Button(showAngelCards ? "收起" : "展开") {
                         showAngelCards.toggle()
                     }
