@@ -149,6 +149,11 @@ struct NotificationsView: View {
                             angelLoading = false
                             angelLastUpdated = currentTimeString()
                             angelStatusHint = "已刷新（占位）"
+                            NotificationCenter.default.post(
+                                name: .angelCardsUpdated,
+                                object: nil,
+                                userInfo: ["count": cards.count]
+                            )
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                                 angelStatusHint = ""
                             }
@@ -279,6 +284,11 @@ struct NotificationsView: View {
                 angelCards = cards
                 angelLoading = false
                 angelLastUpdated = currentTimeString()
+                NotificationCenter.default.post(
+                    name: .angelCardsUpdated,
+                    object: nil,
+                    userInfo: ["count": cards.count]
+                )
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                     angelStatusHint = ""
                 }

@@ -363,6 +363,11 @@ struct NearbyView: View {
                     angelCardCount = cards.count
                 }
             }
+            .onReceive(NotificationCenter.default.publisher(for: .angelCardsUpdated)) { notification in
+                if let count = notification.userInfo?["count"] as? Int {
+                    angelCardCount = count
+                }
+            }
         }
     }
 }

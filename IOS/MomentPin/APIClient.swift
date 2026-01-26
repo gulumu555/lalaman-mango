@@ -2,6 +2,7 @@ import Foundation
 
 extension Notification.Name {
     static let userSettingsUpdated = Notification.Name("UserSettingsUpdated")
+    static let angelCardsUpdated = Notification.Name("AngelCardsUpdated")
 }
 
 struct PublishSettings {
