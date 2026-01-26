@@ -797,6 +797,9 @@ private struct StyleStep: View {
             Text("首屏示例将引导去听听（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("生成超时可重试（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             VStack(alignment: .leading, spacing: 8) {
             Text("风格候选（3-4张）")
                 .font(.caption)
