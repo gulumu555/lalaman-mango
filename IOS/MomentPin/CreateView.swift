@@ -1535,6 +1535,9 @@ private struct VideoStep: View {
             Text("公开/漂流瓶/仅自己 · 按旧规则")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("发布成功后可生成分享链接（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             VStack(alignment: .leading, spacing: 6) {
                 Text("兜底策略")
                     .font(.caption2)
