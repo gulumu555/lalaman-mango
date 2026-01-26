@@ -816,6 +816,18 @@ private struct ShareRetrySection: View {
                 Text(canShare ? "可用" : "不可用")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Button("分享到朋友圈") {
+                    showShareHint = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        showShareHint = false
+                    }
+                }
+                .font(.caption)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(Color.black.opacity(0.1))
+                .foregroundColor(.black)
+                .cornerRadius(999)
                 Button("再试一次") {}
                     .font(.caption)
                     .padding(.horizontal, 12)
