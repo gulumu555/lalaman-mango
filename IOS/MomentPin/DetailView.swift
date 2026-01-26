@@ -116,6 +116,18 @@ struct DetailView: View {
                             .padding(.vertical, 4)
                             .background(Color.gray.opacity(0.15))
                             .cornerRadius(8)
+                        Text("天使开启")
+                            .font(.caption2)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.gray.opacity(0.15))
+                            .cornerRadius(8)
+                        Text("马年足迹")
+                            .font(.caption2)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.gray.opacity(0.15))
+                            .cornerRadius(8)
                     }
                     .onChange(of: isPublic) { value in
                         visibilityHint = value ? "匿名公开可互动" : "仅自己，互动关闭"
