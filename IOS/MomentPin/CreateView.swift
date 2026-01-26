@@ -256,14 +256,17 @@ struct CreateView: View {
                 .background(Color.black.opacity(0.2))
             } else if showPublished {
                 VStack(spacing: 8) {
-                    Text("已发布")
-                        .font(.headline)
-                    Text("片刻已发布，可在附近查看")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    if !publishSummary.isEmpty {
-                        Text(publishSummary)
-                            .font(.caption2)
+            Text("已发布")
+                .font(.headline)
+            Text("片刻已发布，可在附近查看")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Text("天使系统已记录偏好（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            if !publishSummary.isEmpty {
+                Text(publishSummary)
+                    .font(.caption2)
                             .foregroundColor(.secondary)
                     }
                     if publishFailed {
