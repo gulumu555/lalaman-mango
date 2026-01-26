@@ -208,6 +208,9 @@ struct NearbyView: View {
                         Button("天使卡片 \(angelCardCount)") {
                             showAngelSheet = true
                             angelHint = "已打开天使卡片（占位）"
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                                angelHint = ""
+                            }
                         }
                         .font(.footnote)
                         .frame(maxWidth: .infinity)
@@ -222,6 +225,9 @@ struct NearbyView: View {
                             apiClient.fetchExhibits { titles in
                                 exhibits = titles
                                 exhibitHint = "已加载微展（占位）"
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                                    exhibitHint = ""
+                                }
                                 showExhibitSheet = true
                             }
                         }
