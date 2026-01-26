@@ -516,9 +516,10 @@ struct CreateView: View {
 
     private var previewMoment: Moment {
         let base = Moment.sample.first!
+        let emoji = hideMood ? "—" : moodEmoji
         return Moment(
             title: base.title,
-            moodEmoji: moodEmoji,
+            moodEmoji: emoji,
             zoneName: base.zoneName,
             coordinate: base.coordinate,
             count: base.count
