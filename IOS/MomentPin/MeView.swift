@@ -7,6 +7,7 @@ struct MeView: View {
     @State private var angelStatusLabel = "天使模式：关闭"
     @State private var horseStatusLabel = "马年足迹：关闭"
     @State private var notificationUpdatedLabel = "通知更新时间：—"
+    @State private var angelUpdatedLabel = "天使更新时间：—"
     private let apiClient = APIClient()
 
     var body: some View {
@@ -49,7 +50,8 @@ struct MeView: View {
                         SectionCard(title: "通知中心", items: [
                             "通知 \(notificationCount)",
                             "天使卡片 \(angelCardCount)",
-                            notificationUpdatedLabel
+                            notificationUpdatedLabel,
+                            angelUpdatedLabel
                         ])
                     }
                     .buttonStyle(.plain)
@@ -79,6 +81,7 @@ struct MeView: View {
             if let count = notification.userInfo?["count"] as? Int {
                 angelCardCount = count
             }
+            angelUpdatedLabel = "天使更新时间：\(currentTimeString())"
         }
         .onAppear {
             apiClient.fetchNotifications { items in
@@ -87,6 +90,7 @@ struct MeView: View {
             }
             apiClient.fetchAngelCards { cards in
                 angelCardCount = cards.count
+                angelUpdatedLabel = "天使更新时间：\(currentTimeString())"
             }
             apiClient.fetchUserSettings { payload in
                 angelStatusLabel = payload.allowAngel ? "天使模式：开启" : "天使模式：关闭"
