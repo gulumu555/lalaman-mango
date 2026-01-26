@@ -144,6 +144,9 @@ struct DetailView: View {
                         Label("今日 09:12", systemImage: "clock")
                             .font(.caption)
                             .foregroundColor(.secondary)
+                        Label("位置已模糊", systemImage: "shield")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
                     HStack(spacing: 8) {
                         Text("情绪")
