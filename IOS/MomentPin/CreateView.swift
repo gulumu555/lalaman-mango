@@ -79,6 +79,10 @@ struct CreateView: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
                 .padding(.top, 2)
+            Text("默认情绪：轻松（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.top, 2)
 
             TabView(selection: $step) {
                 StyleStep(hasPhoto: $hasPhoto, selectedStyle: $draftStyle)
