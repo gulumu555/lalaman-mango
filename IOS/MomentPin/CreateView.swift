@@ -1617,6 +1617,9 @@ private struct VideoStep: View {
             Text("失败重试：仅重新渲染，不重复创建")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("渲染完成可直接分享（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             HStack(spacing: 12) {
                 Button("下载 MP4") {}
                     .font(.caption)
