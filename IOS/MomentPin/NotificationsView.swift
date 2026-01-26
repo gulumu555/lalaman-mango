@@ -29,6 +29,9 @@ struct NotificationsView: View {
                     Text("总未读：\(totalUnreadCount)")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("漂流瓶 \(bottleCount) · 系统 \(systemCount)")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     Text("更新：\(notificationLastUpdated)")
                         .font(.caption2)
                         .foregroundColor(.secondary)
@@ -451,6 +454,14 @@ struct NotificationsView: View {
             return notifications.filter { $0.type == "bottle" }
         }
         return notifications
+    }
+
+    private var bottleCount: Int {
+        notifications.filter { $0.type == "bottle" }.count
+    }
+
+    private var systemCount: Int {
+        notifications.filter { $0.type == "system" }.count
     }
 
     private func typeLabel(for type: String) -> String {
