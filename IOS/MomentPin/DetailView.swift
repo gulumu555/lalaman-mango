@@ -62,7 +62,7 @@ struct DetailView: View {
                             .foregroundColor(.secondary)
                     }
                     HStack {
-                        Text("声波 · 占位")
+                        Text("字幕跟随语音 · 占位")
                             .font(.caption)
                             .foregroundColor(.secondary)
                         Spacer()
