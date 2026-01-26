@@ -12,6 +12,7 @@ struct NotificationsView: View {
     @State private var showAngelCards = true
     @State private var showClearAngelConfirm = false
     @State private var angelStatusHint = ""
+    @State private var angelLoading = false
     private let apiClient = APIClient()
 
     var body: some View {
@@ -83,9 +84,11 @@ struct NotificationsView: View {
                         .foregroundColor(.secondary)
                     Spacer()
                     Button("刷新") {
+                        angelLoading = true
                         angelStatusHint = "刷新中..."
                         apiClient.fetchAngelCards { cards in
                             angelCards = cards
+                            angelLoading = false
                             angelStatusHint = "已刷新（占位）"
                         }
                     }
@@ -105,6 +108,14 @@ struct NotificationsView: View {
                 .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
             }
             if showAngelCards {
+                if angelLoading {
+                    HStack(spacing: 8) {
+                        ProgressView()
+                        Text("加载中...")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                }
                 if !angelStatusHint.isEmpty {
                     Text(angelStatusHint)
                         .font(.caption2)
@@ -168,8 +179,10 @@ struct NotificationsView: View {
             }
         }
         .onAppear {
+            angelLoading = true
             apiClient.fetchAngelCards { cards in
                 angelCards = cards
+                angelLoading = false
             }
         }
     }
