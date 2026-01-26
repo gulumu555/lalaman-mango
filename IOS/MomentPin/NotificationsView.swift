@@ -203,6 +203,13 @@ struct NotificationsView: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     Spacer()
+                    if filterEchoOnly {
+                        Button("清除筛选") {
+                            filterEchoOnly = false
+                        }
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    }
                     Button(filterEchoOnly ? "显示全部" : "只看回声") {
                         filterEchoOnly.toggle()
                     }
