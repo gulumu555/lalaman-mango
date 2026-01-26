@@ -16,6 +16,7 @@ struct NotificationsView: View {
     @State private var notificationLastUpdated = "—"
     @State private var filterEchoOnly = false
     @State private var filterBottleOnly = false
+    @State private var filterSystemOnly = false
     private let apiClient = APIClient()
 
     var body: some View {
@@ -168,6 +169,17 @@ struct NotificationsView: View {
                     .foregroundColor(.secondary)
                     Button(filterBottleOnly ? "显示全部" : "只看漂流瓶") {
                         filterBottleOnly.toggle()
+                        if filterBottleOnly {
+                            filterSystemOnly = false
+                        }
+                    }
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    Button(filterSystemOnly ? "显示全部" : "只看系统") {
+                        filterSystemOnly.toggle()
+                        if filterSystemOnly {
+                            filterBottleOnly = false
+                        }
                     }
                     .font(.caption2)
                     .foregroundColor(.secondary)
@@ -388,6 +400,9 @@ struct NotificationsView: View {
     }
 
     private var displayedNotifications: [NotificationSummary] {
+        if filterSystemOnly {
+            return notifications.filter { $0.type == "system" }
+        }
         if filterBottleOnly {
             return notifications.filter { $0.type == "bottle" }
         }
