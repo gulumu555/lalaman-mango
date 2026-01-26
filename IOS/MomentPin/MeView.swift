@@ -61,6 +61,12 @@ struct MeView: View {
         .sheet(isPresented: $showAngelSettings) {
             AngelSettingsView()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .userSettingsUpdated)) { _ in
+            apiClient.fetchUserSettings { payload in
+                angelStatusLabel = payload.allowAngel ? "天使模式：开启" : "天使模式：关闭"
+                horseStatusLabel = payload.horseTrailEnabled ? "马年足迹：开启" : "马年足迹：关闭"
+            }
+        }
         .onAppear {
             apiClient.fetchNotifications { items in
                 notificationCount = items.count
