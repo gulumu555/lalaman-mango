@@ -533,6 +533,7 @@ private struct PublishSheet: View {
     var onConfirm: () -> Void = {}
     @State private var hideLocation = false
     @State private var openDate = Date().addingTimeInterval(60 * 60 * 24 * 90)
+    private let moodOptions = ["轻松", "治愈", "emo"]
 
     var body: some View {
         VStack(spacing: 16) {
@@ -577,16 +578,28 @@ private struct PublishSheet: View {
                         CapsuleLabel(text: "情绪·\(selectedMood)", isPrimary: false)
                     }
                 }
-            Text("情绪标签用于微展/回声（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("情绪可用于情绪天气统计（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("情绪可用于微展标题（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-        }
+                Text("情绪标签用于微展/回声（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("情绪可用于情绪天气统计（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("情绪可用于微展标题（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                HStack(spacing: 8) {
+                    ForEach(moodOptions, id: \.self) { mood in
+                        Button(mood) {
+                            selectedMood = mood
+                        }
+                        .font(.caption2)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 6)
+                        .background(selectedMood == mood ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
+                        .cornerRadius(999)
+                    }
+                }
+            }
             .frame(maxWidth: .infinity, alignment: .leading)
 
             VStack(spacing: 12) {
