@@ -118,6 +118,11 @@ struct CreateView: View {
                 .foregroundColor(.secondary)
                 .padding(.horizontal, 20)
                 .padding(.bottom, 6)
+            Text("发布后可生成回声卡（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 6)
             StepControls(
                 step: $step,
                 canProceed: canProceed
