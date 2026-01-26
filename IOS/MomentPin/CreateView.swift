@@ -508,6 +508,9 @@ private struct PublishSheet: View {
                     .toggleStyle(SwitchToggleStyle(tint: .black))
                 Toggle("同步到朋友圈（占位）", isOn: $shareToMoments)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
+                Text("发布权限可随时调整（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 if includeBottle {
                     HStack {
                         Text("靠岸时间")
