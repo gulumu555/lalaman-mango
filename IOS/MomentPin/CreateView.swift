@@ -702,6 +702,9 @@ private struct PublishSheet: View {
                 Text("马年足迹仅公开展示（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("退出活动后对外隐藏足迹（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             .padding(12)
             .background(Color.gray.opacity(0.08))
