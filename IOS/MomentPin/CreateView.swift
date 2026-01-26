@@ -845,6 +845,9 @@ private struct StyleStep: View {
             Text("失败也能继续后续步骤（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("风格生成支持并行（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             VStack(alignment: .leading, spacing: 8) {
             Text("风格候选（3-4张）")
                 .font(.caption)
