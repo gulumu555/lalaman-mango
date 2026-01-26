@@ -205,7 +205,7 @@ struct NearbyView: View {
                         .buttonStyle(.plain)
                     }
                     HStack(spacing: 12) {
-                        Button("天使卡片 \(angelCardCount)") {
+                        Button(angelButtonLabel) {
                             showAngelSheet = true
                             angelHint = "已打开天使卡片（占位）"
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
@@ -369,6 +369,10 @@ struct NearbyView: View {
                 }
             }
         }
+    }
+
+    private var angelButtonLabel: String {
+        angelCardCount > 0 ? "天使卡片 \(angelCardCount)" : "天使卡片"
     }
 }
 
