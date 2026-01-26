@@ -1280,6 +1280,7 @@ private struct VoiceStep: View {
         "如果这张照片会说话，它会说___",
         "我希望明天会更___"
     ]
+    private let moodOptions = ["轻松", "治愈", "emo"]
     @State private var asrStatus = "识别中"
     private let asrStatuses = ["识别中", "已完成", "失败"]
     @State private var asrProgress: CGFloat = 0.4
@@ -1299,6 +1300,23 @@ private struct VoiceStep: View {
             Text("钩子帮助降低开口门槛（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            VStack(alignment: .leading, spacing: 8) {
+                Text("情绪标签（可选）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                HStack(spacing: 8) {
+                    ForEach(moodOptions, id: \.self) { mood in
+                        Button(mood) {
+                            selectedMood = mood
+                        }
+                        .font(.caption2)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(selectedMood == mood ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
+                        .cornerRadius(999)
+                    }
+                }
+            }
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 10)], spacing: 10) {
                 ForEach(hooks, id: \.self) { hook in
                     Button(hook) {
