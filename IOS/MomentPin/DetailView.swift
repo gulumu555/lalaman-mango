@@ -516,6 +516,9 @@ private struct RenderStatusCard: View {
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
+            Text("失败兜底：静帧 + 字幕 MP4")
+                .font(.caption2)
+                .foregroundColor(.secondary)
         }
         .padding(16)
         .background(Color.gray.opacity(0.08))
