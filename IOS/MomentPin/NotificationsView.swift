@@ -24,6 +24,9 @@ struct NotificationsView: View {
                     Text("未读：\(unreadCount)")
                         .font(.caption)
                         .foregroundColor(.secondary)
+                    Text("总未读：\(totalUnreadCount)")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     Text("更新：\(notificationLastUpdated)")
                         .font(.caption2)
                         .foregroundColor(.secondary)
@@ -348,6 +351,10 @@ struct NotificationsView: View {
 
     private var angelUnreadCount: Int {
         angelCards.filter { angelReadStates[$0.id] != true }.count
+    }
+
+    private var totalUnreadCount: Int {
+        unreadCount + angelUnreadCount
     }
 
     private func notificationTypeLabel(for type: String) -> String {
