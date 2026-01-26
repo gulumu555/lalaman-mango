@@ -779,10 +779,13 @@ private struct StyleStep: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
             VStack(alignment: .leading, spacing: 8) {
-                Text("风格候选（3-4张）")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                HStack(spacing: 8) {
+            Text("风格候选（3-4张）")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Text("同构图输出，主体不跑（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            HStack(spacing: 8) {
                     Text("状态：\(styleStatus)")
                         .font(.caption2)
                         .foregroundColor(.secondary)
