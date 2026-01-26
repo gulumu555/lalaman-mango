@@ -1357,6 +1357,9 @@ private struct VoiceStep: View {
                 Text("未选则默认轻松（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("情绪与语音文案一起展示（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 10)], spacing: 10) {
                 ForEach(hooks, id: \.self) { hook in
