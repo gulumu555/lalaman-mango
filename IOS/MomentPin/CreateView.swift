@@ -1109,6 +1109,9 @@ private struct VoiceStep: View {
                     .cornerRadius(12)
                 }
             }
+            Text("也可随机一个钩子（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             HStack {
                 Text("当前时长")
                     .font(.caption)
