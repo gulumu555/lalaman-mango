@@ -25,6 +25,7 @@ struct NearbyView: View {
     @State private var exhibits: [ExhibitSummary] = []
     private let apiClient = APIClient()
     @State private var exhibitHint = ""
+    @State private var angelHint = ""
 
     private let moments: [Moment] = Moment.sample
     private var filteredMoments: [Moment] {
@@ -205,6 +206,7 @@ struct NearbyView: View {
                     HStack(spacing: 12) {
                         Button("天使卡片") {
                             showAngelSheet = true
+                            angelHint = "已打开天使卡片（占位）"
                         }
                         .font(.footnote)
                         .frame(maxWidth: .infinity)
@@ -237,6 +239,11 @@ struct NearbyView: View {
                         .foregroundColor(.secondary)
                     if !exhibitHint.isEmpty {
                         Text(exhibitHint)
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                    if !angelHint.isEmpty {
+                        Text(angelHint)
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }
