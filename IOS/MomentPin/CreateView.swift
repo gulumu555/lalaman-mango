@@ -259,6 +259,7 @@ struct CreateView: View {
                 horseWitnessEnabled: $horseWitnessEnabled,
                 shareToMoments: $shareToMoments,
                 selectedMood: $selectedMood,
+                hideMood: $hideMood,
                 presetZoneName: presetZoneName,
                 onCancel: {
                     showPublishSheet = false
@@ -563,6 +564,7 @@ private struct PublishSheet: View {
     @Binding var horseWitnessEnabled: Bool
     @Binding var shareToMoments: Bool
     @Binding var selectedMood: String
+    @Binding var hideMood: Bool
     var presetZoneName: String? = nil
     var onCancel: () -> Void = {}
     var onConfirm: () -> Void = {}
@@ -672,6 +674,8 @@ private struct PublishSheet: View {
                 Text("私密内容不展示情绪（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Toggle("隐藏情绪", isOn: $hideMood)
+                    .toggleStyle(SwitchToggleStyle(tint: .black))
                 Toggle("放进漂流瓶", isOn: $includeBottle)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
                 Text("漂流瓶默认不在地图展示（占位）")
