@@ -51,6 +51,13 @@ struct NotificationsView: View {
                     }
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                    Button("全读通知") {
+                        for item in notifications {
+                            readStates[item.id] = true
+                        }
+                    }
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                     Button("清空") {
                         showClearNotificationsConfirm = true
                     }
