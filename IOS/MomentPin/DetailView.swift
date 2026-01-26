@@ -89,6 +89,10 @@ struct DetailView: View {
                     isPlaying: $isPlaying
                 )
                 MotionEffectCard(motionLevel: $motionLevel)
+                Text("动效模板：T02_Cloud（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
                 VStack(alignment: .leading, spacing: 10) {
                     Text("\(moment.moodEmoji) \(moment.title)")
