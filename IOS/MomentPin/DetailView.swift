@@ -24,6 +24,7 @@ struct DetailView: View {
     @State private var renderStatus = "ready"
     @State private var renderHint = "已生成"
     @State private var motionLevel = "轻"
+    @State private var usePolishedCaption = false
 
     var body: some View {
         ScrollView {
@@ -83,6 +84,8 @@ struct DetailView: View {
                         Text("字幕必保留（无声波）")
                             .font(.caption2)
                             .foregroundColor(.secondary)
+                        Toggle("润色字幕（占位）", isOn: $usePolishedCaption)
+                            .toggleStyle(SwitchToggleStyle(tint: .black))
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
