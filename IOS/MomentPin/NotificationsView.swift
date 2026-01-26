@@ -199,6 +199,9 @@ struct NotificationsView: View {
                     Text("更新：\(angelLastUpdated)")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("回声 \(echoCount) · 微展 \(exhibitCount) · 胶囊 \(capsuleCount)")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     Spacer()
                     Button(filterEchoOnly ? "显示全部" : "只看回声") {
                         filterEchoOnly.toggle()
@@ -462,6 +465,18 @@ struct NotificationsView: View {
 
     private var systemCount: Int {
         notifications.filter { $0.type == "system" }.count
+    }
+
+    private var echoCount: Int {
+        angelCards.filter { $0.type == "echo" }.count
+    }
+
+    private var exhibitCount: Int {
+        angelCards.filter { $0.type == "microcuration" }.count
+    }
+
+    private var capsuleCount: Int {
+        angelCards.filter { $0.type == "timecapsule" }.count
     }
 
     private func typeLabel(for type: String) -> String {
