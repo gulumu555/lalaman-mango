@@ -35,6 +35,12 @@ struct ExhibitSummary {
     let count: Int
 }
 
+struct AngelCardSummary {
+    let id: String
+    let title: String
+    let type: String
+}
+
 enum APIClientError: Error {
     case simulatedFailure
 }
@@ -93,12 +99,12 @@ struct APIClient {
         }
     }
 
-    func fetchAngelCards(completion: @escaping ([String]) -> Void) {
+    func fetchAngelCards(completion: @escaping ([AngelCardSummary]) -> Void) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             completion([
-                "附近有一个小展：雨天慢下来",
-                "回声卡：有人也在「下班路上」说了一句",
-                "时间胶囊：三天前的你想对现在说"
+                AngelCardSummary(id: "angel_exhibit_1", title: "附近有一个小展：雨天慢下来", type: "microcuration"),
+                AngelCardSummary(id: "angel_echo_1", title: "回声卡：有人也在「下班路上」说了一句", type: "echo"),
+                AngelCardSummary(id: "angel_capsule_1", title: "时间胶囊：三天前的你想对现在说", type: "timecapsule")
             ])
         }
     }

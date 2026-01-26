@@ -6,7 +6,7 @@ struct NotificationsView: View {
         "你在「太古里附近」留下的那段声音，可以打开回听了",
         "系统通知：新版本上线（占位）"
     ]
-    @State private var angelCards: [String] = []
+    @State private var angelCards: [AngelCardSummary] = []
     @State private var readStates: [Int: Bool] = [:]
     @State private var angelReadStates: [String: Bool] = [:]
     @State private var showAngelCards = true
@@ -87,15 +87,15 @@ struct NotificationsView: View {
             }
             if showAngelCards {
                 ForEach(Array(angelCards.enumerated()), id: \.offset) { index, item in
-                    NavigationLink(destination: AngelCardDetailView(title: item)) {
+                    NavigationLink(destination: AngelCardDetailView(title: item.title, type: item.type)) {
                         HStack(spacing: 12) {
                             Circle()
-                                .fill(angelReadStates[item] == true ? Color.clear : Color.blue)
+                                .fill(angelReadStates[item.id] == true ? Color.clear : Color.blue)
                                 .frame(width: 8, height: 8)
                             VStack(alignment: .leading, spacing: 6) {
-                                Text(item)
+                                Text(item.title)
                                     .font(.subheadline)
-                                Text(angelReadStates[item] == true ? "已读 · 占位" : "未读 · 占位")
+                                Text(angelReadStates[item.id] == true ? "已读 · 占位" : "未读 · 占位")
                                     .font(.caption2)
                                     .foregroundColor(.secondary)
                                 Text("查看详情")
@@ -110,12 +110,12 @@ struct NotificationsView: View {
                         .padding(.vertical, 6)
                     }
                     .onAppear {
-                        if angelReadStates[item] == nil {
-                            angelReadStates[item] = false
+                        if angelReadStates[item.id] == nil {
+                            angelReadStates[item.id] = false
                         }
                     }
                     .onTapGesture {
-                        angelReadStates[item] = true
+                        angelReadStates[item.id] = true
                     }
                 }
             }
@@ -146,6 +146,7 @@ struct NotificationsView: View {
 
 private struct AngelCardDetailView: View {
     let title: String
+    let type: String
     @State private var actionHint = ""
     private let apiClient = APIClient()
     @State private var showCreate = false
@@ -165,7 +166,7 @@ private struct AngelCardDetailView: View {
                     .foregroundColor(.secondary)
             }
             Divider()
-            if title.contains("回声卡") {
+            if type == "echo" {
                 Text("回声：你的片刻与 TA 的片刻共鸣（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
@@ -201,7 +202,7 @@ private struct AngelCardDetailView: View {
                             }
                         }
                     }
-            } else if title.contains("小展") {
+            } else if type == "microcuration" {
                 Text("附近微展：可浏览片刻列表（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
