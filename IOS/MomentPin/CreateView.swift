@@ -1338,6 +1338,14 @@ private struct VoiceStep: View {
                         .cornerRadius(999)
                     }
                 }
+                Button("清除情绪") {
+                    selectedMood = "轻松"
+                }
+                .font(.caption2)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(Color.gray.opacity(0.12))
+                .cornerRadius(999)
                 Text("未选则默认轻松（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
