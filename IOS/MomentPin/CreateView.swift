@@ -1409,6 +1409,9 @@ private struct VoiceStep: View {
                 Text("点按即可切换情绪（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("不选也可继续发布（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 10)], spacing: 10) {
                 ForEach(hooks, id: \.self) { hook in
