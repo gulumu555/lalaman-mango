@@ -616,6 +616,7 @@ private struct StyleStep: View {
     @State private var selectedStyleId = "style_heal_a"
     @State private var selectHint = "已选风格将进入下一步"
     @State private var styleGuideHint = "风格一致：线条/色彩/质感保持稳定"
+    @State private var downloadHint = "可下载也可单选继续"
     @State private var retryHint = "风格失败可点此重试"
 
     var body: some View {
@@ -783,6 +784,9 @@ private struct StyleStep: View {
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 Text(selectHint)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text(downloadHint)
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 Text(styleGuideHint)
