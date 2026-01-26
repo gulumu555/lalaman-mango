@@ -2,6 +2,9 @@ import SwiftUI
 
 struct MeView: View {
     @State private var showAngelSettings = false
+    @State private var notificationCount = 0
+    @State private var angelCardCount = 0
+    private let apiClient = APIClient()
 
     var body: some View {
         NavigationView {
@@ -41,8 +44,8 @@ struct MeView: View {
                     .buttonStyle(.plain)
                     NavigationLink(destination: NotificationsView()) {
                         SectionCard(title: "通知中心", items: [
-                            "漂流瓶到期提醒 1",
-                            "系统通知 1"
+                            "通知 \(notificationCount)",
+                            "天使卡片 \(angelCardCount)"
                         ])
                     }
                     .buttonStyle(.plain)
@@ -55,6 +58,14 @@ struct MeView: View {
         .background(Color.white)
         .sheet(isPresented: $showAngelSettings) {
             AngelSettingsView()
+        }
+        .onAppear {
+            apiClient.fetchNotifications { items in
+                notificationCount = items.count
+            }
+            apiClient.fetchAngelCards { cards in
+                angelCardCount = cards.count
+            }
         }
     }
 }
