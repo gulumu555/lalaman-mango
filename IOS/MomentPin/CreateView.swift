@@ -1613,12 +1613,15 @@ private struct VideoStep: View {
                     .foregroundColor(.secondary)
             }
             VStack(alignment: .leading, spacing: 6) {
-                Text("输出文件")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("momentpin.mp4 / cover.jpg")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
+            Text("输出文件")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text("momentpin.mp4 / cover.jpg")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text("渲染完成自动保存到“我的片刻”（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             }
         }
         .padding(20)
