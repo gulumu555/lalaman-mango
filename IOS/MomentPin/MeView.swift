@@ -6,6 +6,7 @@ struct MeView: View {
     @State private var angelCardCount = 0
     @State private var angelStatusLabel = "天使模式：关闭"
     @State private var horseStatusLabel = "马年足迹：关闭"
+    @State private var notificationUpdatedLabel = "通知更新时间：—"
     private let apiClient = APIClient()
 
     var body: some View {
@@ -47,7 +48,8 @@ struct MeView: View {
                     NavigationLink(destination: NotificationsView()) {
                         SectionCard(title: "通知中心", items: [
                             "通知 \(notificationCount)",
-                            "天使卡片 \(angelCardCount)"
+                            "天使卡片 \(angelCardCount)",
+                            notificationUpdatedLabel
                         ])
                     }
                     .buttonStyle(.plain)
@@ -71,6 +73,7 @@ struct MeView: View {
             if let count = notification.userInfo?["count"] as? Int {
                 notificationCount = count
             }
+            notificationUpdatedLabel = "通知更新时间：\(currentTimeString())"
         }
         .onReceive(NotificationCenter.default.publisher(for: .angelCardsUpdated)) { notification in
             if let count = notification.userInfo?["count"] as? Int {
@@ -80,6 +83,7 @@ struct MeView: View {
         .onAppear {
             apiClient.fetchNotifications { items in
                 notificationCount = items.count
+                notificationUpdatedLabel = "通知更新时间：\(currentTimeString())"
             }
             apiClient.fetchAngelCards { cards in
                 angelCardCount = cards.count
@@ -89,6 +93,12 @@ struct MeView: View {
                 horseStatusLabel = payload.horseTrailEnabled ? "马年足迹：开启" : "马年足迹：关闭"
             }
         }
+    }
+
+    private func currentTimeString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: Date())
     }
 }
 
