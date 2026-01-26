@@ -121,6 +121,18 @@ struct NotificationsView: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
+                if angelCards.isEmpty && !angelLoading {
+                    VStack(spacing: 6) {
+                        Text("暂无天使卡片")
+                            .font(.subheadline)
+                        Text("开启天使模式后，回声/微展会出现在这里")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .listRowSeparator(.hidden)
+                }
                 ForEach(Array(angelCards.enumerated()), id: \.offset) { index, item in
                     NavigationLink(destination: AngelCardDetailView(title: item.title, type: item.type)) {
                         HStack(spacing: 12) {
