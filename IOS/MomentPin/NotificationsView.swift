@@ -14,6 +14,7 @@ struct NotificationsView: View {
     @State private var angelStatusHint = ""
     @State private var angelLoading = false
     @State private var angelLastUpdated = "—"
+    @State private var filterEchoOnly = false
     private let apiClient = APIClient()
 
     var body: some View {
@@ -87,6 +88,11 @@ struct NotificationsView: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     Spacer()
+                    Button(filterEchoOnly ? "显示全部" : "只看回声") {
+                        filterEchoOnly.toggle()
+                    }
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                     Button("全读") {
                         for card in angelCards {
                             angelReadStates[card.id] = true
@@ -136,7 +142,7 @@ struct NotificationsView: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
-                if angelCards.isEmpty && !angelLoading {
+                if displayedAngelCards.isEmpty && !angelLoading {
                     VStack(spacing: 6) {
                         Text("暂无天使卡片")
                             .font(.subheadline)
@@ -148,7 +154,7 @@ struct NotificationsView: View {
                     .padding(.vertical, 12)
                     .listRowSeparator(.hidden)
                 }
-                ForEach(Array(angelCards.enumerated()), id: \.offset) { index, item in
+                ForEach(Array(displayedAngelCards.enumerated()), id: \.offset) { index, item in
                     NavigationLink(destination: AngelCardDetailView(title: item.title, type: item.type)) {
                         HStack(spacing: 12) {
                             Circle()
@@ -227,6 +233,13 @@ struct NotificationsView: View {
 
     private var angelUnreadCount: Int {
         angelCards.filter { angelReadStates[$0.id] != true }.count
+    }
+
+    private var displayedAngelCards: [AngelCardSummary] {
+        if filterEchoOnly {
+            return angelCards.filter { $0.type == "echo" }
+        }
+        return angelCards
     }
 
     private func typeLabel(for type: String) -> String {
