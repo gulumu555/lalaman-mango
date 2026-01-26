@@ -6,14 +6,11 @@ struct NotificationsView: View {
         "你在「太古里附近」留下的那段声音，可以打开回听了",
         "系统通知：新版本上线（占位）"
     ]
-    private let angelCards = [
-        "附近有一个小展：雨天慢下来",
-        "回声卡：有人也在「下班路上」说了一句",
-        "时间胶囊：三天前的你想对现在说"
-    ]
+    @State private var angelCards: [String] = []
     @State private var readStates: [Int: Bool] = [:]
     @State private var angelReadStates: [Int: Bool] = [:]
     @State private var showAngelCards = true
+    private let apiClient = APIClient()
 
     var body: some View {
         List {
@@ -133,6 +130,11 @@ struct NotificationsView: View {
                     }
                 }
                 .font(.caption)
+            }
+        }
+        .onAppear {
+            apiClient.fetchAngelCards { cards in
+                angelCards = cards
             }
         }
     }

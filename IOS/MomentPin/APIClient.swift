@@ -93,6 +93,16 @@ struct APIClient {
         }
     }
 
+    func fetchAngelCards(completion: @escaping ([String]) -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            completion([
+                "附近有一个小展：雨天慢下来",
+                "回声卡：有人也在「下班路上」说了一句",
+                "时间胶囊：三天前的你想对现在说"
+            ])
+        }
+    }
+
     func createEchoCard(completion: @escaping (Result<Void, Error>) -> Void) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             completion(.success(()))
