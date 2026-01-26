@@ -10,6 +10,9 @@ struct NotificationsView: View {
     @State private var angelStatusHint = ""
     @State private var angelLoading = false
     @State private var angelLastUpdated = "—"
+    @State private var notificationStatusHint = ""
+    @State private var notificationLoading = false
+    @State private var notificationLastUpdated = "—"
     @State private var filterEchoOnly = false
     private let apiClient = APIClient()
 
@@ -20,12 +23,48 @@ struct NotificationsView: View {
                     Text("未读：\(unreadCount)")
                         .font(.caption)
                         .foregroundColor(.secondary)
+                    Text("更新：\(notificationLastUpdated)")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     Spacer()
+                    Button("刷新") {
+                        notificationLoading = true
+                        notificationStatusHint = "刷新中..."
+                        apiClient.fetchNotifications { items in
+                            notifications = items
+                            for item in items where readStates[item.id] == nil {
+                                readStates[item.id] = false
+                            }
+                            notificationLoading = false
+                            notificationLastUpdated = currentTimeString()
+                            notificationStatusHint = "已刷新（占位）"
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                                notificationStatusHint = ""
+                            }
+                        }
+                    }
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                     Button("清空") {}
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
                 .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
+            }
+            if notificationLoading {
+                HStack(spacing: 8) {
+                    ProgressView()
+                    Text("通知加载中...")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+                .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
+            }
+            if !notificationStatusHint.isEmpty {
+                Text(notificationStatusHint)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
             }
             if notifications.isEmpty {
                 VStack(spacing: 8) {
@@ -211,11 +250,14 @@ struct NotificationsView: View {
             }
         }
         .onAppear {
+            notificationLoading = true
             apiClient.fetchNotifications { items in
                 notifications = items
                 for item in items where readStates[item.id] == nil {
                     readStates[item.id] = false
                 }
+                notificationLoading = false
+                notificationLastUpdated = currentTimeString()
             }
             angelLoading = true
             apiClient.fetchAngelCards { cards in
