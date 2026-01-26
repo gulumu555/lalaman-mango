@@ -11,6 +11,7 @@ struct NotificationsView: View {
     @State private var angelReadStates: [String: Bool] = [:]
     @State private var showAngelCards = true
     @State private var showClearAngelConfirm = false
+    @State private var angelStatusHint = ""
     private let apiClient = APIClient()
 
     var body: some View {
@@ -81,6 +82,15 @@ struct NotificationsView: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     Spacer()
+                    Button("刷新") {
+                        angelStatusHint = "刷新中..."
+                        apiClient.fetchAngelCards { cards in
+                            angelCards = cards
+                            angelStatusHint = "已刷新（占位）"
+                        }
+                    }
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                     Button("清空") {
                         showClearAngelConfirm = true
                     }
@@ -95,6 +105,11 @@ struct NotificationsView: View {
                 .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
             }
             if showAngelCards {
+                if !angelStatusHint.isEmpty {
+                    Text(angelStatusHint)
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
                 ForEach(Array(angelCards.enumerated()), id: \.offset) { index, item in
                     NavigationLink(destination: AngelCardDetailView(title: item.title, type: item.type)) {
                         HStack(spacing: 12) {
