@@ -527,6 +527,9 @@ private struct PublishSheet: View {
             .cornerRadius(16)
 
             VStack(spacing: 12) {
+                Text("发布后 AI 桥梁（天使系统）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 Toggle("让天使偶尔路过（默认关）", isOn: $angelEnabled)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
                 Text("强度：低（MVP）")
