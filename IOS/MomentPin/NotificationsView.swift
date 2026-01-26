@@ -131,6 +131,9 @@ struct NotificationsView: View {
                     for index in notifications.indices {
                         readStates[index] = true
                     }
+                    for card in angelCards {
+                        angelReadStates[card.id] = true
+                    }
                 }
                 .font(.caption)
             }
