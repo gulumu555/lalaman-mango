@@ -205,6 +205,11 @@ struct NotificationsView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+                if filterEchoOnly {
+                    Text("筛选：仅回声卡")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
                 if !angelStatusHint.isEmpty {
                     Text(angelStatusHint)
                         .font(.caption2)
