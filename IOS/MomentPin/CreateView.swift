@@ -913,6 +913,14 @@ private struct PonyStep: View {
                             .background(ponyPlacement == placement ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
                             .cornerRadius(999)
                         }
+                        Button("随机站位") {
+                            ponyPlacement = placements.randomElement() ?? ponyPlacement
+                        }
+                        .font(.caption2)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(Color.gray.opacity(0.12))
+                        .cornerRadius(999)
                     }
                     Text("风格ID：\(selectedStyle)")
                         .font(.caption2)
