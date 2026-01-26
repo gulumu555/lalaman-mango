@@ -123,6 +123,11 @@ struct CreateView: View {
                 .foregroundColor(.secondary)
                 .padding(.horizontal, 20)
                 .padding(.bottom, 6)
+            Text("发布后可进入微展浏览（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 6)
             StepControls(
                 step: $step,
                 canProceed: canProceed
