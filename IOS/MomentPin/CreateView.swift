@@ -1343,6 +1343,9 @@ private struct VoiceStep: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
+                Text("字幕默认 1-2 行显示（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             HStack(spacing: 8) {
                 Text("段落长度")
