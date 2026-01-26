@@ -951,6 +951,9 @@ private struct PonyStep: View {
                     Text("风格ID：\(selectedStyle)")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("小马资产按风格匹配（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     HStack(spacing: 8) {
                         Text("融合说明")
                             .font(.caption2)
