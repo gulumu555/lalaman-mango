@@ -76,6 +76,28 @@ struct NotificationsView: View {
                     Text("漂流瓶靠岸后会在这里提醒")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Button("重新拉取") {
+                        notificationLoading = true
+                        notificationStatusHint = "刷新中..."
+                        apiClient.fetchNotifications { items in
+                            notifications = items
+                            for item in items where readStates[item.id] == nil {
+                                readStates[item.id] = false
+                            }
+                            notificationLoading = false
+                            notificationLastUpdated = currentTimeString()
+                            notificationStatusHint = "已刷新（占位）"
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                                notificationStatusHint = ""
+                            }
+                        }
+                    }
+                    .font(.caption2)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(Color.black)
+                    .foregroundColor(.white)
+                    .cornerRadius(999)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 24)
