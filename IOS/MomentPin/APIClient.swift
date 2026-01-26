@@ -41,6 +41,7 @@ struct AngelCardSummary {
     let id: String
     let title: String
     let type: String
+    let timeText: String
 }
 
 struct NotificationSummary {
@@ -111,9 +112,9 @@ struct APIClient {
     func fetchAngelCards(completion: @escaping ([AngelCardSummary]) -> Void) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             completion([
-                AngelCardSummary(id: "angel_exhibit_1", title: "附近有一个小展：雨天慢下来", type: "microcuration"),
-                AngelCardSummary(id: "angel_echo_1", title: "回声卡：有人也在「下班路上」说了一句", type: "echo"),
-                AngelCardSummary(id: "angel_capsule_1", title: "时间胶囊：三天前的你想对现在说", type: "timecapsule")
+                AngelCardSummary(id: "angel_exhibit_1", title: "附近有一个小展：雨天慢下来", type: "microcuration", timeText: "10:10"),
+                AngelCardSummary(id: "angel_echo_1", title: "回声卡：有人也在「下班路上」说了一句", type: "echo", timeText: "10:06"),
+                AngelCardSummary(id: "angel_capsule_1", title: "时间胶囊：三天前的你想对现在说", type: "timecapsule", timeText: "09:58")
             ])
         }
     }

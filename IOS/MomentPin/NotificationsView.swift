@@ -332,7 +332,7 @@ struct NotificationsView: View {
                                     .foregroundColor(.secondary)
                             }
                             Spacer()
-                            Text("10:10")
+                            Text(item.timeText)
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
                         }
