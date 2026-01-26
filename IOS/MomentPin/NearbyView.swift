@@ -26,6 +26,7 @@ struct NearbyView: View {
     private let apiClient = APIClient()
     @State private var exhibitHint = ""
     @State private var angelHint = ""
+    @State private var angelCardCount = 0
 
     private let moments: [Moment] = Moment.sample
     private var filteredMoments: [Moment] {
@@ -204,7 +205,7 @@ struct NearbyView: View {
                         .buttonStyle(.plain)
                     }
                     HStack(spacing: 12) {
-                        Button("天使卡片") {
+                        Button("天使卡片 \(angelCardCount)") {
                             showAngelSheet = true
                             angelHint = "已打开天使卡片（占位）"
                         }
@@ -351,6 +352,9 @@ struct NearbyView: View {
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                     locationStatus = "已定位"
+                }
+                apiClient.fetchAngelCards { cards in
+                    angelCardCount = cards.count
                 }
             }
         }
