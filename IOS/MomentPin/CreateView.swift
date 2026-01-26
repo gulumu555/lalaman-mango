@@ -38,6 +38,7 @@ struct CreateView: View {
     @State private var moodHint = "情绪标签：默认轻松/治愈（占位）"
     @State private var recoveryHint = "中断后可在我的片刻继续（占位）"
     @State private var selectedMood = "轻松"
+    @State private var hideMood = false
     private let moodOptions = ["轻松", "治愈", "emo"]
     @State private var angelEnabled = false
     @State private var allowMicrocuration = false
@@ -483,6 +484,17 @@ struct CreateView: View {
             return "语音钩子 + 字幕滚动"
         case .video:
             return "默认生成微动 MP4"
+        }
+    }
+
+    private var moodCode: String {
+        switch selectedMood {
+        case "治愈":
+            return "healing"
+        case "emo":
+            return "emo"
+        default:
+            return "light"
         }
     }
 
