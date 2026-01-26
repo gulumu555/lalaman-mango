@@ -208,6 +208,10 @@ struct CreateView: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
                 .padding(.bottom, 8)
+            Text("公开内容可被收藏（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.bottom, 8)
         }
         .background(Color.white)
         .sheet(isPresented: $showPublishSheet) {
