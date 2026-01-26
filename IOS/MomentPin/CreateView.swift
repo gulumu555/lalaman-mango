@@ -599,6 +599,9 @@ private struct PublishSheet: View {
                         .cornerRadius(999)
                     }
                 }
+                Text("默认继承创作情绪（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
