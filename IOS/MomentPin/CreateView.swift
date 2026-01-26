@@ -908,6 +908,9 @@ private struct PonyStep: View {
                     Text("站位候选（随机性）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("每次合成可能略有不同（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     HStack(spacing: 8) {
                         ForEach(placements, id: \.self) { placement in
                             VStack(spacing: 4) {
