@@ -43,6 +43,7 @@ struct CreateView: View {
     @State private var allowTimecapsule = true
     @State private var horseTrailEnabled = false
     @State private var horseWitnessEnabled = false
+    @State private var shareToMoments = false
     @State private var publishSummary = ""
     @State private var publishStatusHint = ""
     @State private var publishFailed = false
@@ -157,6 +158,7 @@ struct CreateView: View {
                 allowTimecapsule: $allowTimecapsule,
                 horseTrailEnabled: $horseTrailEnabled,
                 horseWitnessEnabled: $horseWitnessEnabled,
+                shareToMoments: $shareToMoments,
                 presetZoneName: presetZoneName,
                 onCancel: {
                     showPublishSheet = false
@@ -394,6 +396,9 @@ struct CreateView: View {
         if horseWitnessEnabled {
             items.append("马年见证")
         }
+        if shareToMoments {
+            items.append("朋友圈")
+        }
         return items.isEmpty ? "" : "发布设置：" + items.joined(separator: " · ")
     }
 }
@@ -423,10 +428,10 @@ private struct PublishSheet: View {
     @Binding var allowTimecapsule: Bool
     @Binding var horseTrailEnabled: Bool
     @Binding var horseWitnessEnabled: Bool
+    @Binding var shareToMoments: Bool
     var presetZoneName: String? = nil
     var onCancel: () -> Void = {}
     var onConfirm: () -> Void = {}
-    @State private var shareToMoments = false
     @State private var hideLocation = false
     @State private var openDate = Date().addingTimeInterval(60 * 60 * 24 * 90)
 
@@ -463,6 +468,9 @@ private struct PublishSheet: View {
                     if horseTrailEnabled {
                         CapsuleLabel(text: "马年足迹", isPrimary: false)
                     }
+                    if shareToMoments {
+                        CapsuleLabel(text: "朋友圈", isPrimary: false)
+                    }
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -473,6 +481,8 @@ private struct PublishSheet: View {
                 Toggle("隐藏位置", isOn: $hideLocation)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
                 Toggle("放进漂流瓶", isOn: $includeBottle)
+                    .toggleStyle(SwitchToggleStyle(tint: .black))
+                Toggle("同步到朋友圈（占位）", isOn: $shareToMoments)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
                 if includeBottle {
                     HStack {
