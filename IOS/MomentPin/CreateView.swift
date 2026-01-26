@@ -1243,6 +1243,14 @@ private struct VoiceStep: View {
                 .cornerRadius(999)
                 .disabled(!hasVoice)
             }
+            Button("手动输入字幕") {
+                subtitleText = "（手动输入占位）"
+            }
+            .font(.caption)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
+            .background(Color.gray.opacity(0.12))
+            .cornerRadius(999)
             Button("重录") {
                 hasVoice = false
                 isRecording = false
