@@ -1506,6 +1506,9 @@ private struct VoiceStep: View {
             Text("建议 6–10 秒，最长 15 秒")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("可重录直到满意（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             HStack(spacing: 12) {
                 Button("原话版") {
                     subtitleText = "今天的我有点累，但很想记住此刻"
