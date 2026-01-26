@@ -180,6 +180,10 @@ struct CreateView: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
                 .padding(.bottom, 8)
+            Text("时间胶囊到期会提醒回访（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.bottom, 8)
         }
         .background(Color.white)
         .sheet(isPresented: $showPublishSheet) {
