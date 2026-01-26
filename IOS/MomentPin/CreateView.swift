@@ -1685,6 +1685,9 @@ private struct VideoStep: View {
             Text("可先下载再发布（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("静帧与 MP4 可独立下载（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             Button("发布") {
                 onPublish()
             }
