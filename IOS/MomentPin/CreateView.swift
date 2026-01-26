@@ -1407,6 +1407,17 @@ private struct VoiceStep: View {
     @State private var asrProgress: CGFloat = 0.4
     @State private var asrHint = "ASR ≤ 2s（占位）"
 
+    private var moodEmoji: String {
+        switch selectedMood {
+        case "治愈":
+            return "🫧"
+        case "emo":
+            return "🥲"
+        default:
+            return "🙂"
+        }
+    }
+
     var body: some View {
         VStack(spacing: 16) {
             Text("Step 3/4 · 语音输入")
@@ -1494,7 +1505,7 @@ private struct VoiceStep: View {
             Text("字幕：\(subtitleText)")
                 .font(.caption)
                 .foregroundColor(.secondary)
-            Text("情绪：\(selectedMood)")
+            Text("情绪：\(moodEmoji) \(selectedMood)")
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Text("字幕跟随语音滚动（占位）")
