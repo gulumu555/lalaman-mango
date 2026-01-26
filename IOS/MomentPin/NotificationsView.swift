@@ -15,6 +15,7 @@ struct NotificationsView: View {
     @State private var notificationLoading = false
     @State private var notificationLastUpdated = "—"
     @State private var filterEchoOnly = false
+    @State private var filterBottleOnly = false
     private let apiClient = APIClient()
 
     var body: some View {
@@ -66,17 +67,23 @@ struct NotificationsView: View {
                 }
                 .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
             }
+            if filterBottleOnly {
+                Text("筛选：仅漂流瓶通知")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
+            }
             if !notificationStatusHint.isEmpty {
                 Text(notificationStatusHint)
                     .font(.caption2)
                     .foregroundColor(.secondary)
                     .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
             }
-            if notifications.isEmpty {
+            if displayedNotifications.isEmpty {
                 VStack(spacing: 8) {
                     Text("暂无通知")
                         .font(.subheadline)
-                    Text("漂流瓶靠岸后会在这里提醒")
+                    Text(filterBottleOnly ? "当前仅看漂流瓶通知，暂无匹配" : "漂流瓶靠岸后会在这里提醒")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     Button("重新拉取") {
@@ -106,7 +113,7 @@ struct NotificationsView: View {
                 .padding(.vertical, 24)
                 .listRowSeparator(.hidden)
             } else {
-                ForEach(Array(notifications.enumerated()), id: \.offset) { index, item in
+                ForEach(Array(displayedNotifications.enumerated()), id: \.offset) { index, item in
                     NavigationLink(destination: DetailView(moment: Moment.sample.first!)) {
                         HStack(spacing: 12) {
                             Circle()
@@ -156,6 +163,11 @@ struct NotificationsView: View {
                     Spacer()
                     Button(filterEchoOnly ? "显示全部" : "只看回声") {
                         filterEchoOnly.toggle()
+                    }
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    Button(filterBottleOnly ? "显示全部" : "只看漂流瓶") {
+                        filterBottleOnly.toggle()
                     }
                     .font(.caption2)
                     .foregroundColor(.secondary)
@@ -346,7 +358,7 @@ struct NotificationsView: View {
     }
 
     private var unreadCount: Int {
-        notifications.filter { readStates[$0.id] != true }.count
+        displayedNotifications.filter { readStates[$0.id] != true }.count
     }
 
     private var angelUnreadCount: Int {
@@ -373,6 +385,13 @@ struct NotificationsView: View {
             return angelCards.filter { $0.type == "echo" }
         }
         return angelCards
+    }
+
+    private var displayedNotifications: [NotificationSummary] {
+        if filterBottleOnly {
+            return notifications.filter { $0.type == "bottle" }
+        }
+        return notifications
     }
 
     private func typeLabel(for type: String) -> String {
