@@ -344,6 +344,9 @@ struct CreateView: View {
             Text("情绪已记录（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("情绪已同步到天气统计（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             if publishFailed {
                 Text("发布设置保存失败，可重试（占位）")
                     .font(.caption2)
