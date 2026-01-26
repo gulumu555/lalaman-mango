@@ -1695,6 +1695,17 @@ private struct VideoStep: View {
     @State private var shareHint = "发布后可分享链接（占位）"
     @State private var renderRetryHint = "渲染失败可重试（占位）"
 
+    private var moodEmoji: String {
+        switch selectedMood {
+        case "治愈":
+            return "🫧"
+        case "emo":
+            return "🥲"
+        default:
+            return "🙂"
+        }
+    }
+
     var body: some View {
         VStack(spacing: 16) {
             Text("Step 4/4 · 生成视频 MP4")
@@ -1712,7 +1723,7 @@ private struct VideoStep: View {
                         Text("字幕滚动：\(subtitleText)")
                             .font(.caption2)
                             .foregroundColor(.secondary)
-                        Text(hideMood ? "情绪：隐藏" : "情绪：\(selectedMood)")
+                        Text(hideMood ? "情绪：隐藏" : "情绪：\(moodEmoji) \(selectedMood)")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                         Text("情绪标签随播放展示（占位）")
