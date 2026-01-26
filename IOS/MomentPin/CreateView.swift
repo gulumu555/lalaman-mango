@@ -599,6 +599,9 @@ private struct PublishSheet: View {
                     .toggleStyle(SwitchToggleStyle(tint: .black))
                 Toggle("马年见证（默认关）", isOn: $horseWitnessEnabled)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
+                Text("里程碑触发：第1地点/第7条/首漂流瓶（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             .padding(12)
             .background(Color.gray.opacity(0.08))
