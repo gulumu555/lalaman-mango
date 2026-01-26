@@ -37,6 +37,8 @@ struct CreateView: View {
     @State private var audioHint = "语音原声默认开启（可选静音导出）"
     @State private var moodHint = "情绪标签：默认轻松/治愈（占位）"
     @State private var recoveryHint = "中断后可在我的片刻继续（占位）"
+    @State private var selectedMood = "轻松"
+    private let moodOptions = ["轻松", "治愈", "emo"]
     @State private var angelEnabled = false
     @State private var allowMicrocuration = false
     @State private var allowEcho = false
