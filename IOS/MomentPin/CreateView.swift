@@ -198,7 +198,7 @@ struct CreateView: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
                 .padding(.bottom, 8)
-            Text(hideMood ? "当前情绪：隐藏" : "当前情绪：\(selectedMood)")
+            Text(hideMood ? "当前情绪：隐藏" : "当前情绪：\(moodEmoji) \(selectedMood)")
                 .font(.caption2)
                 .foregroundColor(.secondary)
                 .padding(.bottom, 8)
