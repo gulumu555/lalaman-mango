@@ -492,6 +492,9 @@ private struct PublishSheet: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
+            Text("发布权限与天使设置可随时调整")
+                .font(.caption2)
+                .foregroundColor(.secondary)
 
             VStack(alignment: .leading, spacing: 10) {
                 Text("发布到")
