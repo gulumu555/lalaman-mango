@@ -830,6 +830,9 @@ private struct StyleStep: View {
             Text("生成超时可重试（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("失败也能继续后续步骤（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             VStack(alignment: .leading, spacing: 8) {
             Text("风格候选（3-4张）")
                 .font(.caption)
