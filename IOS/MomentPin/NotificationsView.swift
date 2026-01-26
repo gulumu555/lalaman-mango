@@ -10,6 +10,7 @@ struct NotificationsView: View {
     @State private var readStates: [Int: Bool] = [:]
     @State private var angelReadStates: [String: Bool] = [:]
     @State private var showAngelCards = true
+    @State private var showClearAngelConfirm = false
     private let apiClient = APIClient()
 
     var body: some View {
@@ -81,7 +82,7 @@ struct NotificationsView: View {
                         .foregroundColor(.secondary)
                     Spacer()
                     Button("清空") {
-                        angelCards.removeAll()
+                        showClearAngelConfirm = true
                     }
                     .font(.caption2)
                     .foregroundColor(.secondary)
@@ -130,6 +131,14 @@ struct NotificationsView: View {
         }
         .navigationTitle("通知中心")
         .navigationBarTitleDisplayMode(.inline)
+        .alert("清空天使卡片？", isPresented: $showClearAngelConfirm) {
+            Button("取消", role: .cancel) {}
+            Button("清空", role: .destructive) {
+                angelCards.removeAll()
+            }
+        } message: {
+            Text("该操作只清空占位列表，可稍后重新拉取。")
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("全部已读") {
