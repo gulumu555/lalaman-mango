@@ -1139,6 +1139,9 @@ private struct VoiceStep: View {
                     .cornerRadius(999)
                 }
             }
+            Text("识别失败可手动输入字幕（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             GeometryReader { proxy in
                 ZStack(alignment: .leading) {
                     Capsule()
