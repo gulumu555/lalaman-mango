@@ -271,6 +271,8 @@ struct CreateView: View {
                     let payload = PublishPayload(
                         isPublic: isPublic,
                         includeBottle: includeBottle,
+                        moodCode: moodCode,
+                        hideMood: hideMood,
                         settings: PublishSettings(
                             allowMicrocuration: allowMicrocuration,
                             allowEcho: allowEcho,
@@ -359,12 +361,14 @@ struct CreateView: View {
                         Button("重试保存") {
                             publishStatusHint = "正在重试保存..."
                             apiClient.publish(
-                                payload: PublishPayload(
-                                    isPublic: isPublic,
-                                    includeBottle: includeBottle,
-                                    settings: PublishSettings(
-                                        allowMicrocuration: allowMicrocuration,
-                                        allowEcho: allowEcho,
+                            payload: PublishPayload(
+                                isPublic: isPublic,
+                                includeBottle: includeBottle,
+                                moodCode: moodCode,
+                                hideMood: hideMood,
+                                settings: PublishSettings(
+                                    allowMicrocuration: allowMicrocuration,
+                                    allowEcho: allowEcho,
                                         allowTimecapsule: allowTimecapsule,
                                         angelEnabled: angelEnabled,
                                         horseTrailEnabled: horseTrailEnabled,
