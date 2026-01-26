@@ -83,6 +83,13 @@ struct NotificationsView: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     Spacer()
+                    Button("全读") {
+                        for card in angelCards {
+                            angelReadStates[card.id] = true
+                        }
+                    }
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                     Button("刷新") {
                         angelLoading = true
                         angelStatusHint = "刷新中..."
