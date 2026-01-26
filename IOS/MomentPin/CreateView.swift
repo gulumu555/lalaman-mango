@@ -597,15 +597,18 @@ private struct PublishSheet: View {
                         CapsuleLabel(text: "情绪·\(selectedMood)", isPrimary: false)
                     }
                 }
-                Text("情绪标签用于微展/回声（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("情绪可用于情绪天气统计（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("情绪可用于微展标题（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
+            Text("情绪标签用于微展/回声（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text("情绪可用于情绪天气统计（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text("情绪可用于微展标题（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text("情绪可影响附近浏览排序（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
                 HStack(spacing: 8) {
                     ForEach(moodOptions, id: \.self) { mood in
                         Button(mood) {
