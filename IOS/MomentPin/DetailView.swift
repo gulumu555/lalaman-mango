@@ -77,6 +77,9 @@ struct DetailView: View {
                         Text("字幕 2：我把它留在这里")
                             .font(.caption2)
                             .foregroundColor(.secondary)
+                        Text("字幕模式：语义分段滚动")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
