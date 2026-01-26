@@ -74,6 +74,12 @@ struct NotificationsView: View {
                     .foregroundColor(.secondary)
                     .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
             }
+            if filterSystemOnly {
+                Text("筛选：仅系统通知")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
+            }
             if !notificationStatusHint.isEmpty {
                 Text(notificationStatusHint)
                     .font(.caption2)
@@ -84,7 +90,7 @@ struct NotificationsView: View {
                 VStack(spacing: 8) {
                     Text("暂无通知")
                         .font(.subheadline)
-                    Text(filterBottleOnly ? "当前仅看漂流瓶通知，暂无匹配" : "漂流瓶靠岸后会在这里提醒")
+                    Text(filterSystemOnly ? "当前仅看系统通知，暂无匹配" : (filterBottleOnly ? "当前仅看漂流瓶通知，暂无匹配" : "漂流瓶靠岸后会在这里提醒"))
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     Button("重新拉取") {
