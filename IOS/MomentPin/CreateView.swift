@@ -18,7 +18,6 @@ struct CreateView: View {
     @State private var showGenerating = false
     @State private var showPublished = false
     @State private var showPublishSheet = false
-    private let previewMoment = Moment.sample.first!
     @State private var draftStyle = "治愈手绘A"
     @State private var hasVoice = false
     @State private var hasPhoto = false
@@ -513,6 +512,17 @@ struct CreateView: View {
         default:
             return "🙂"
         }
+    }
+
+    private var previewMoment: Moment {
+        let base = Moment.sample.first!
+        return Moment(
+            title: base.title,
+            moodEmoji: moodEmoji,
+            zoneName: base.zoneName,
+            coordinate: base.coordinate,
+            count: base.count
+        )
     }
 
     private func moodLabel(_ mood: String) -> String {
