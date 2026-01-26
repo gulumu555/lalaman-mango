@@ -481,6 +481,9 @@ struct CreateView: View {
         if shareToMoments {
             items.append("朋友圈")
         }
+        if !selectedMood.isEmpty {
+            items.append("情绪：\(selectedMood)")
+        }
         return items.isEmpty ? "" : "发布设置：" + items.joined(separator: " · ")
     }
 }
