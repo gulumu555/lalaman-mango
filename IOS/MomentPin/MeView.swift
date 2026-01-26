@@ -67,6 +67,11 @@ struct MeView: View {
                 horseStatusLabel = payload.horseTrailEnabled ? "马年足迹：开启" : "马年足迹：关闭"
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .notificationsUpdated)) { notification in
+            if let count = notification.userInfo?["count"] as? Int {
+                notificationCount = count
+            }
+        }
         .onAppear {
             apiClient.fetchNotifications { items in
                 notificationCount = items.count
