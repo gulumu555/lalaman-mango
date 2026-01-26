@@ -981,6 +981,9 @@ private struct PonyStep: View {
                     Text("每次合成可能略有不同（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("小马为资产合成，不由 AI 生成（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     HStack(spacing: 8) {
                         ForEach(placements, id: \.self) { placement in
                             VStack(spacing: 4) {
