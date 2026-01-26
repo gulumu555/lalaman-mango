@@ -13,6 +13,7 @@ struct NotificationsView: View {
     @State private var showClearAngelConfirm = false
     @State private var angelStatusHint = ""
     @State private var angelLoading = false
+    @State private var angelLastUpdated = "—"
     private let apiClient = APIClient()
 
     var body: some View {
@@ -82,6 +83,9 @@ struct NotificationsView: View {
                     Text("未读：\(angelUnreadCount)")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("更新：\(angelLastUpdated)")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     Spacer()
                     Button("全读") {
                         for card in angelCards {
@@ -96,6 +100,7 @@ struct NotificationsView: View {
                         apiClient.fetchAngelCards { cards in
                             angelCards = cards
                             angelLoading = false
+                            angelLastUpdated = currentTimeString()
                             angelStatusHint = "已刷新（占位）"
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                                 angelStatusHint = ""
@@ -208,6 +213,7 @@ struct NotificationsView: View {
             apiClient.fetchAngelCards { cards in
                 angelCards = cards
                 angelLoading = false
+                angelLastUpdated = currentTimeString()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                     angelStatusHint = ""
                 }
@@ -234,6 +240,12 @@ struct NotificationsView: View {
         default:
             return "天使卡片"
         }
+    }
+
+    private func currentTimeString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: Date())
     }
 }
 
