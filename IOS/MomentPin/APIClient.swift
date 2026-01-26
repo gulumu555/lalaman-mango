@@ -18,6 +18,8 @@ struct PublishSettings {
 struct PublishPayload {
     let isPublic: Bool
     let includeBottle: Bool
+    let moodCode: String
+    let hideMood: Bool
     let settings: PublishSettings
 }
 
