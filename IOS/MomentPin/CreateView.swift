@@ -100,6 +100,7 @@ struct CreateView: View {
                     ponyEnabled: $ponyEnabled,
                     selectedStyle: $draftStyle,
                     subtitleText: $subtitleText,
+                    selectedMood: $selectedMood,
                     onPublish: { showPublishSheet = true }
                 )
                 .tag(Step.video)
@@ -1563,6 +1564,7 @@ private struct VideoStep: View {
     @Binding var ponyEnabled: Bool
     @Binding var selectedStyle: String
     @Binding var subtitleText: String
+    @Binding var selectedMood: String
     var onPublish: () -> Void = {}
     @State private var subtitleStyle = "默认白字"
     private let subtitleStyles = ["默认白字", "薄雾底条"]
@@ -1591,6 +1593,9 @@ private struct VideoStep: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                         Text("字幕滚动：\(subtitleText)")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                        Text("情绪：\(selectedMood)")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                         Text("字幕样式：\(subtitleStyle)")
