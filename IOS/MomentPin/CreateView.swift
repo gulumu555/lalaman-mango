@@ -1508,13 +1508,16 @@ private struct VideoStep: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
             if renderStatus == "失败" {
-                Text("失败兜底：静帧字幕 MP4")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("失败不影响继续发布（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-            }
+            Text("失败兜底：静帧字幕 MP4")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text("失败不影响继续发布（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text("失败后可直接下载静帧（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+        }
             HStack(spacing: 8) {
                 Text("字幕样式")
                     .font(.caption2)
