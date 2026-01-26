@@ -565,6 +565,9 @@ private struct PublishSheet: View {
                         CapsuleLabel(text: "情绪·\(selectedMood)", isPrimary: false)
                     }
                 }
+                Text("情绪标签用于微展/回声（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
