@@ -163,6 +163,18 @@ struct DetailView: View {
 
                 InteractionNotice(isPublic: isPublic, allowReplies: allowReplies, isInteractive: isInteractive)
 
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("天使设置（占位）")
+                        .font(.headline)
+                    Text("微展：允许 · 回声：允许 · 时间胶囊：开启")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(16)
+                .background(Color.gray.opacity(0.08))
+                .cornerRadius(16)
+
                 ReactionRow(
                     selectedReaction: $selectedReaction,
                     isEnabled: isInteractive && isPublic && !hasReactedToday
