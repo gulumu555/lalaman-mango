@@ -106,6 +106,7 @@ struct CreateView: View {
                     selectedStyle: $draftStyle,
                     subtitleText: $subtitleText,
                     selectedMood: $selectedMood,
+                    hideMood: $hideMood,
                     onPublish: { showPublishSheet = true }
                 )
                 .tag(Step.video)
@@ -1669,6 +1670,7 @@ private struct VideoStep: View {
     @Binding var selectedStyle: String
     @Binding var subtitleText: String
     @Binding var selectedMood: String
+    @Binding var hideMood: Bool
     var onPublish: () -> Void = {}
     @State private var subtitleStyle = "默认白字"
     private let subtitleStyles = ["默认白字", "薄雾底条"]
@@ -1699,7 +1701,7 @@ private struct VideoStep: View {
                         Text("字幕滚动：\(subtitleText)")
                             .font(.caption2)
                             .foregroundColor(.secondary)
-                        Text("情绪：\(selectedMood)")
+                        Text(hideMood ? "情绪：隐藏" : "情绪：\(selectedMood)")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                         Text("情绪标签随播放展示（占位）")
