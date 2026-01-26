@@ -619,6 +619,9 @@ private struct PublishSheet: View {
                     Text("可设置自定义日期（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("提醒可关闭（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                 }
             }
             .padding(12)
