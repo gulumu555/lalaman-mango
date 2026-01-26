@@ -699,6 +699,9 @@ private struct PublishSheet: View {
                 Text("活动入口：马年合影（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("马年足迹仅公开展示（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             .padding(12)
             .background(Color.gray.opacity(0.08))
