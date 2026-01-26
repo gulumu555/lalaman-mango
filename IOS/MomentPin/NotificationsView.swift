@@ -97,6 +97,9 @@ struct NotificationsView: View {
                             angelCards = cards
                             angelLoading = false
                             angelStatusHint = "已刷新（占位）"
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                                angelStatusHint = ""
+                            }
                         }
                     }
                     .font(.caption2)
@@ -205,6 +208,9 @@ struct NotificationsView: View {
             apiClient.fetchAngelCards { cards in
                 angelCards = cards
                 angelLoading = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                    angelStatusHint = ""
+                }
             }
         }
     }
