@@ -76,6 +76,9 @@ struct NotificationsView: View {
                     Text("天使卡片")
                         .font(.caption)
                         .foregroundColor(.secondary)
+                    Text("未读：\(angelUnreadCount)")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     Spacer()
                     Button(showAngelCards ? "收起" : "展开") {
                         showAngelCards.toggle()
@@ -141,6 +144,10 @@ struct NotificationsView: View {
 
     private var unreadCount: Int {
         notifications.indices.filter { readStates[$0] != true }.count
+    }
+
+    private var angelUnreadCount: Int {
+        angelCards.filter { angelReadStates[$0.id] != true }.count
     }
 }
 
