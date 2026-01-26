@@ -219,7 +219,7 @@ struct NotificationsView: View {
                     VStack(spacing: 6) {
                         Text("暂无天使卡片")
                             .font(.subheadline)
-                        Text("开启天使模式后，回声/微展会出现在这里")
+                        Text(filterEchoOnly ? "当前仅看回声卡，暂无匹配" : "开启天使模式后，回声/微展会出现在这里")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                         Button("重新拉取") {
