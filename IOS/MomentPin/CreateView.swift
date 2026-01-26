@@ -232,6 +232,7 @@ struct CreateView: View {
                 horseTrailEnabled: $horseTrailEnabled,
                 horseWitnessEnabled: $horseWitnessEnabled,
                 shareToMoments: $shareToMoments,
+                selectedMood: $selectedMood,
                 presetZoneName: presetZoneName,
                 onCancel: {
                     showPublishSheet = false
@@ -514,6 +515,7 @@ private struct PublishSheet: View {
     @Binding var horseTrailEnabled: Bool
     @Binding var horseWitnessEnabled: Bool
     @Binding var shareToMoments: Bool
+    @Binding var selectedMood: String
     var presetZoneName: String? = nil
     var onCancel: () -> Void = {}
     var onConfirm: () -> Void = {}
@@ -558,6 +560,9 @@ private struct PublishSheet: View {
                     }
                     if shareToMoments {
                         CapsuleLabel(text: "朋友圈", isPrimary: false)
+                    }
+                    if !selectedMood.isEmpty {
+                        CapsuleLabel(text: "情绪·\(selectedMood)", isPrimary: false)
                     }
                 }
             }
