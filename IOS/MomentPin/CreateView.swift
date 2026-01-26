@@ -96,6 +96,11 @@ struct CreateView: View {
                 .foregroundColor(.secondary)
                 .padding(.horizontal, 20)
                 .padding(.bottom, 6)
+            Text("发布后才出现天使/马年开关")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 6)
             StepControls(
                 step: $step,
                 canProceed: canProceed
