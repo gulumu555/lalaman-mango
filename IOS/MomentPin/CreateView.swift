@@ -295,6 +295,9 @@ struct CreateView: View {
             Text("完成后可返回附近（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("发布后可在“我”查看记录（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             if publishFailed {
                 Text("发布设置保存失败，可重试（占位）")
                     .font(.caption2)
