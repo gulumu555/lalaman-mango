@@ -1384,6 +1384,9 @@ private struct VideoStep: View {
                 Text("失败兜底：静帧字幕 MP4")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("失败不影响继续发布（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             HStack(spacing: 8) {
                 Text("字幕样式")
