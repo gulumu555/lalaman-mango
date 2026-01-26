@@ -8,7 +8,7 @@ struct NotificationsView: View {
     ]
     @State private var angelCards: [String] = []
     @State private var readStates: [Int: Bool] = [:]
-    @State private var angelReadStates: [Int: Bool] = [:]
+    @State private var angelReadStates: [String: Bool] = [:]
     @State private var showAngelCards = true
     private let apiClient = APIClient()
 
@@ -90,12 +90,12 @@ struct NotificationsView: View {
                     NavigationLink(destination: AngelCardDetailView(title: item)) {
                         HStack(spacing: 12) {
                             Circle()
-                                .fill(angelReadStates[index] == true ? Color.clear : Color.blue)
+                                .fill(angelReadStates[item] == true ? Color.clear : Color.blue)
                                 .frame(width: 8, height: 8)
                             VStack(alignment: .leading, spacing: 6) {
                                 Text(item)
                                     .font(.subheadline)
-                                Text(angelReadStates[index] == true ? "已读 · 占位" : "未读 · 占位")
+                                Text(angelReadStates[item] == true ? "已读 · 占位" : "未读 · 占位")
                                     .font(.caption2)
                                     .foregroundColor(.secondary)
                                 Text("查看详情")
@@ -110,12 +110,12 @@ struct NotificationsView: View {
                         .padding(.vertical, 6)
                     }
                     .onAppear {
-                        if angelReadStates[index] == nil {
-                            angelReadStates[index] = false
+                        if angelReadStates[item] == nil {
+                            angelReadStates[item] = false
                         }
                     }
                     .onTapGesture {
-                        angelReadStates[index] = true
+                        angelReadStates[item] = true
                     }
                 }
             }
