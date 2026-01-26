@@ -70,6 +70,15 @@ struct DetailView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("字幕 1：这一刻有点像礼物")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                        Text("字幕 2：我把它留在这里")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
 
                 RenderStatusCard(renderStatus: $renderStatus, renderHint: $renderHint)
