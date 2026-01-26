@@ -187,6 +187,9 @@ struct DetailView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
 
                 InteractionNotice(isPublic: isPublic, allowReplies: allowReplies, isInteractive: isInteractive)
+                Text("私密内容不进入微展/回声（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("天使设置（占位）")
