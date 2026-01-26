@@ -4,6 +4,8 @@ struct MeView: View {
     @State private var showAngelSettings = false
     @State private var notificationCount = 0
     @State private var angelCardCount = 0
+    @State private var angelStatusLabel = "天使模式：关闭"
+    @State private var horseStatusLabel = "马年足迹：关闭"
     private let apiClient = APIClient()
 
     var body: some View {
@@ -36,9 +38,9 @@ struct MeView: View {
                         showAngelSettings = true
                     } label: {
                         SectionCard(title: "天使 / 马年设置", items: [
-                            "天使模式：默认关闭",
+                            angelStatusLabel,
                             "回声 / 微展 / 时间胶囊",
-                            "马年足迹 / 见证"
+                            horseStatusLabel
                         ])
                     }
                     .buttonStyle(.plain)
@@ -65,6 +67,10 @@ struct MeView: View {
             }
             apiClient.fetchAngelCards { cards in
                 angelCardCount = cards.count
+            }
+            apiClient.fetchUserSettings { payload in
+                angelStatusLabel = payload.allowAngel ? "天使模式：开启" : "天使模式：关闭"
+                horseStatusLabel = payload.horseTrailEnabled ? "马年足迹：开启" : "马年足迹：关闭"
             }
         }
     }
