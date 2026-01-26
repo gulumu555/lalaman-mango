@@ -547,6 +547,9 @@ private struct PublishSheet: View {
             VStack(spacing: 12) {
                 Toggle("匿名公开", isOn: $isPublic)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
+                Text("公开默认为匿名（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 Toggle("隐藏位置", isOn: $hideLocation)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
                 Text("地图展示：公开默认允许（占位）")
