@@ -1446,6 +1446,9 @@ private struct VideoStep: View {
             Text(shareHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("默认包含原声（可静音导出）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             Button("重试渲染") {}
                 .font(.caption2)
                 .padding(.horizontal, 10)
