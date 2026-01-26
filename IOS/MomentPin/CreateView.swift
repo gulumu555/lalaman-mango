@@ -1666,6 +1666,9 @@ private struct VideoStep: View {
             Text("渲染完成自动保存到“我的片刻”（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("可在“我”里管理片刻（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             }
         }
         .padding(20)
