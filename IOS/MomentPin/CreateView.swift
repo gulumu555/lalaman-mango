@@ -531,7 +531,7 @@ struct CreateView: View {
             items.append("朋友圈")
         }
         if !selectedMood.isEmpty {
-            items.append("情绪：\(selectedMood)")
+            items.append(hideMood ? "情绪隐藏" : "情绪：\(selectedMood)")
         }
         return items.isEmpty ? "" : "发布设置：" + items.joined(separator: " · ")
     }
