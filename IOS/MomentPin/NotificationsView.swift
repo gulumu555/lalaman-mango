@@ -68,6 +68,10 @@ struct NotificationsView: View {
                         for item in notifications {
                             readStates[item.id] = true
                         }
+                        notificationStatusHint = "通知已标记已读（占位）"
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                            notificationStatusHint = ""
+                        }
                     }
                     .font(.caption2)
                     .foregroundColor(.secondary)
