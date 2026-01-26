@@ -584,6 +584,18 @@ private struct PublishSheet: View {
     @State private var openDate = Date().addingTimeInterval(60 * 60 * 24 * 90)
     private let moodOptions = ["轻松", "治愈", "emo"]
 
+    private var moodEmoji: String {
+        switch selectedMood {
+        case "治愈":
+            return "🫧"
+        case "emo":
+            return "🥲"
+        default:
+            return "🙂"
+        }
+    }
+    private let moodOptions = ["轻松", "治愈", "emo"]
+
     var body: some View {
         VStack(spacing: 16) {
             HStack {
@@ -624,10 +636,13 @@ private struct PublishSheet: View {
                         CapsuleLabel(text: "朋友圈", isPrimary: false)
                     }
                     if !selectedMood.isEmpty {
-                        CapsuleLabel(text: hideMood ? "情绪·隐藏" : "情绪·\(selectedMood)", isPrimary: false)
+                        CapsuleLabel(
+                            text: hideMood ? "情绪·隐藏" : "情绪·\(moodEmoji) \(selectedMood)",
+                            isPrimary: false
+                        )
                     }
                 }
-            Text("情绪标签用于微展/回声（占位）")
+                Text("情绪标签用于微展/回声（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Text("情绪可用于情绪天气统计（占位）")
