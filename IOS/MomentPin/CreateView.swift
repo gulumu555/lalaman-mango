@@ -1280,6 +1280,9 @@ private struct VoiceStep: View {
             Text("建议 6–10 秒，上限 15 秒")
                 .font(.caption)
                 .foregroundColor(.secondary)
+            Text("钩子帮助降低开口门槛（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 10)], spacing: 10) {
                 ForEach(hooks, id: \.self) { hook in
                     Button(hook) {
