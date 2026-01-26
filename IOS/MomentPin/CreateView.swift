@@ -536,6 +536,9 @@ private struct PublishSheet: View {
                         .background(Color.gray.opacity(0.12))
                         .cornerRadius(999)
                     }
+                    Text("到期站内通知（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                 }
             }
             .padding(12)
