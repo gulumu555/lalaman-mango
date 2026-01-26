@@ -71,6 +71,9 @@ struct DetailView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
+                    Text("语音时长：8s（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     VStack(alignment: .leading, spacing: 6) {
                         Text("字幕 1：这一刻有点像礼物")
                             .font(.caption2)
