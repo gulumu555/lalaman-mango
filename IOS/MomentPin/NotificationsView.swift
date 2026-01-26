@@ -217,6 +217,25 @@ struct NotificationsView: View {
                         Text("开启天使模式后，回声/微展会出现在这里")
                             .font(.caption2)
                             .foregroundColor(.secondary)
+                        Button("重新拉取") {
+                            angelLoading = true
+                            angelStatusHint = "刷新中..."
+                            apiClient.fetchAngelCards { cards in
+                                angelCards = cards
+                                angelLoading = false
+                                angelLastUpdated = currentTimeString()
+                                angelStatusHint = "已刷新（占位）"
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                                    angelStatusHint = ""
+                                }
+                            }
+                        }
+                        .font(.caption2)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color.black)
+                        .foregroundColor(.white)
+                        .cornerRadius(999)
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
