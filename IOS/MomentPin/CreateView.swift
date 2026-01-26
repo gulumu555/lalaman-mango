@@ -610,6 +610,9 @@ private struct PublishSheet: View {
                 Text("默认继承创作情绪（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("可选择不展示情绪（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
