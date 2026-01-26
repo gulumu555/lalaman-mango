@@ -620,6 +620,9 @@ private struct PublishSheet: View {
                 Text("可选择不展示情绪（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("推荐情绪：轻松/治愈/emo（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
