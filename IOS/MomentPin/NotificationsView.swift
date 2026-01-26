@@ -90,6 +90,9 @@ struct NotificationsView: View {
                             VStack(alignment: .leading, spacing: 6) {
                                 Text(item.title)
                                     .font(.subheadline)
+                                Text(notificationTypeLabel(for: item.type))
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
                                 Text(readStates[item.id] == true ? "已读 · 占位" : "未读 · 占位")
                                     .font(.caption2)
                                     .foregroundColor(.secondary)
@@ -289,6 +292,17 @@ struct NotificationsView: View {
 
     private var angelUnreadCount: Int {
         angelCards.filter { angelReadStates[$0.id] != true }.count
+    }
+
+    private func notificationTypeLabel(for type: String) -> String {
+        switch type {
+        case "bottle":
+            return "漂流瓶通知"
+        case "system":
+            return "系统通知"
+        default:
+            return "通知"
+        }
     }
 
     private var displayedAngelCards: [AngelCardSummary] {
