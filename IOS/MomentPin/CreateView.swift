@@ -529,6 +529,12 @@ private struct PublishSheet: View {
             VStack(spacing: 12) {
                 Toggle("让天使偶尔路过（默认关）", isOn: $angelEnabled)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
+                Text("强度：低（MVP）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("频控：每天最多一次天使卡（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 Toggle("允许微展收录", isOn: $allowMicrocuration)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
                     .disabled(!angelEnabled || !isPublic)
