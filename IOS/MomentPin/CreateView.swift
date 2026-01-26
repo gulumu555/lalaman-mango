@@ -1379,6 +1379,9 @@ private struct VideoStep: View {
                     .cornerRadius(999)
                 }
             }
+            Text("字幕默认白字，必要时启用薄雾底条")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             Text("默认交付 MP4（无需手动让它动起来）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
