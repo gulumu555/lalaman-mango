@@ -828,6 +828,9 @@ private struct StyleStep: View {
             Text("同构图输出，主体不跑（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("主推：治愈手绘A（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             HStack(spacing: 8) {
                     Text("状态：\(styleStatus)")
                         .font(.caption2)
