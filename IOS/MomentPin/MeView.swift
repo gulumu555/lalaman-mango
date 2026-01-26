@@ -72,6 +72,11 @@ struct MeView: View {
                 notificationCount = count
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .angelCardsUpdated)) { notification in
+            if let count = notification.userInfo?["count"] as? Int {
+                angelCardCount = count
+            }
+        }
         .onAppear {
             apiClient.fetchNotifications { items in
                 notificationCount = items.count
