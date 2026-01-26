@@ -616,6 +616,9 @@ private struct PublishSheet: View {
                 Text("里程碑触发：第1地点/第7条/首漂流瓶（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("活动入口：马年合影（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             .padding(12)
             .background(Color.gray.opacity(0.08))
