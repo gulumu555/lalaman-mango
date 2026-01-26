@@ -583,6 +583,9 @@ private struct PublishSheet: View {
             Text("情绪可用于情绪天气统计（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("情绪可用于微展标题（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
         }
             .frame(maxWidth: .infinity, alignment: .leading)
 
