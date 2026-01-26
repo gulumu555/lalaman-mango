@@ -837,6 +837,9 @@ private struct StyleStep: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
+                Text("成功率目标 ≥95%（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 GeometryReader { proxy in
                     ZStack(alignment: .leading) {
                         Capsule()
