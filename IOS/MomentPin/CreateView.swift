@@ -69,6 +69,10 @@ struct CreateView: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
                 .padding(.top, 2)
+            Text("风格数量固定 3-4 个")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.top, 2)
 
             TabView(selection: $step) {
                 StyleStep(hasPhoto: $hasPhoto, selectedStyle: $draftStyle)
