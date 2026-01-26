@@ -24,6 +24,7 @@ struct NearbyView: View {
     @State private var showExhibitSheet = false
     @State private var exhibits: [ExhibitSummary] = []
     private let apiClient = APIClient()
+    @State private var exhibitHint = ""
 
     private let moments: [Moment] = Moment.sample
     private var filteredMoments: [Moment] {
@@ -217,6 +218,7 @@ struct NearbyView: View {
                         Button("附近微展") {
                             apiClient.fetchExhibits { titles in
                                 exhibits = titles
+                                exhibitHint = "已加载微展（占位）"
                                 showExhibitSheet = true
                             }
                         }
@@ -233,6 +235,11 @@ struct NearbyView: View {
                     Text("入口：点位气泡 / 列表 / 随机听听")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    if !exhibitHint.isEmpty {
+                        Text(exhibitHint)
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
                     Button("随机听听") {
                         selectedMoment = filteredMoments.first ?? moments.first
                         showDetail = true
