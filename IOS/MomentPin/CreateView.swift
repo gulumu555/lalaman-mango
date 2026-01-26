@@ -612,7 +612,7 @@ private struct PublishSheet: View {
                         CapsuleLabel(text: "朋友圈", isPrimary: false)
                     }
                     if !selectedMood.isEmpty {
-                        CapsuleLabel(text: "情绪·\(selectedMood)", isPrimary: false)
+                        CapsuleLabel(text: hideMood ? "情绪·隐藏" : "情绪·\(selectedMood)", isPrimary: false)
                     }
                 }
             Text("情绪标签用于微展/回声（占位）")
