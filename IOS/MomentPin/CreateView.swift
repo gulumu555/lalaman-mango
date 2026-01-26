@@ -92,7 +92,8 @@ struct CreateView: View {
                 VoiceStep(
                     hasVoice: $hasVoice,
                     hookText: $hookText,
-                    subtitleText: $subtitleText
+                    subtitleText: $subtitleText,
+                    selectedMood: $selectedMood
                 )
                 .tag(Step.voice)
                 VideoStep(
@@ -1264,6 +1265,7 @@ private struct VoiceStep: View {
     @Binding var hasVoice: Bool
     @Binding var hookText: String
     @Binding var subtitleText: String
+    @Binding var selectedMood: String
     @State private var recordHint = "未录音"
     @State private var isRecording = false
     @State private var micAuthorized = false
