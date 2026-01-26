@@ -731,6 +731,9 @@ private struct StyleStep: View {
             Text("构图保持一致（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("输出封面将用于地图点位（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             Button(hasPhoto ? "更换照片" : "选择照片") {
                 if !albumAuthorized {
                     albumAuthorized = true
