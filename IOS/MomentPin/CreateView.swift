@@ -504,6 +504,17 @@ struct CreateView: View {
         }
     }
 
+    private var moodEmoji: String {
+        switch selectedMood {
+        case "治愈":
+            return "🫧"
+        case "emo":
+            return "🥲"
+        default:
+            return "🙂"
+        }
+    }
+
     private func buildPublishSummary() -> String {
         var items: [String] = []
         items.append(isPublic ? "匿名公开" : "仅自己可见")
