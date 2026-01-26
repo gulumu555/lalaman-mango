@@ -222,6 +222,10 @@ struct NotificationsView: View {
                         for card in angelCards {
                             angelReadStates[card.id] = true
                         }
+                        angelStatusHint = "天使卡片已标记已读（占位）"
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                            angelStatusHint = ""
+                        }
                     }
                     .font(.caption2)
                     .foregroundColor(.secondary)
