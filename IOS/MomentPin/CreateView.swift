@@ -515,6 +515,17 @@ struct CreateView: View {
         }
     }
 
+    private func moodLabel(_ mood: String) -> String {
+        switch mood {
+        case "治愈":
+            return "🫧 治愈"
+        case "emo":
+            return "🥲 emo"
+        default:
+            return "🙂 轻松"
+        }
+    }
+
     private func buildPublishSummary() -> String {
         var items: [String] = []
         items.append(isPublic ? "匿名公开" : "仅自己可见")
@@ -656,7 +667,7 @@ private struct PublishSheet: View {
                 .foregroundColor(.secondary)
                 HStack(spacing: 8) {
                     ForEach(moodOptions, id: \.self) { mood in
-                        Button(mood) {
+                        Button(moodLabel(mood)) {
                             selectedMood = mood
                         }
                         .font(.caption2)
