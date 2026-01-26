@@ -1406,6 +1406,9 @@ private struct VoiceStep: View {
             Text("敏感词过滤后置（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("字幕生成失败可手动输入（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             HStack(spacing: 8) {
                 Text("识别状态")
                     .font(.caption2)
