@@ -847,6 +847,9 @@ private struct ShareRetrySection: View {
             Text("失败时仅重试渲染，不重复创建")
                 .font(.caption)
                 .foregroundColor(.secondary)
+            Text("可选静音导出（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             if showShareHint {
                 Text("系统分享（占位）")
                     .font(.caption2)
