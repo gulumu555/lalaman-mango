@@ -276,12 +276,15 @@ struct CreateView: View {
             if !publishSummary.isEmpty {
                 Text(publishSummary)
                     .font(.caption2)
-                            .foregroundColor(.secondary)
-                    }
-                    if publishFailed {
-                        Text("发布设置保存失败，可重试（占位）")
-                            .font(.caption2)
-                            .foregroundColor(.red)
+                    .foregroundColor(.secondary)
+            }
+            Text("完成后可返回附近（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            if publishFailed {
+                Text("发布设置保存失败，可重试（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.red)
                         Button("重试保存") {
                             publishStatusHint = "正在重试保存..."
                             apiClient.publish(
