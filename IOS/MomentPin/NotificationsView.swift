@@ -10,6 +10,7 @@ struct NotificationsView: View {
     @State private var angelStatusHint = ""
     @State private var angelLoading = false
     @State private var angelLastUpdated = "—"
+    @State private var showClearNotificationsConfirm = false
     @State private var notificationStatusHint = ""
     @State private var notificationLoading = false
     @State private var notificationLastUpdated = "—"
@@ -45,7 +46,9 @@ struct NotificationsView: View {
                     }
                     .font(.caption2)
                     .foregroundColor(.secondary)
-                    Button("清空") {}
+                    Button("清空") {
+                        showClearNotificationsConfirm = true
+                    }
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
@@ -235,6 +238,15 @@ struct NotificationsView: View {
             }
         } message: {
             Text("该操作只清空占位列表，可稍后重新拉取。")
+        }
+        .alert("清空通知？", isPresented: $showClearNotificationsConfirm) {
+            Button("取消", role: .cancel) {}
+            Button("清空", role: .destructive) {
+                notifications.removeAll()
+                readStates.removeAll()
+            }
+        } message: {
+            Text("该操作只清空占位通知列表。")
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
