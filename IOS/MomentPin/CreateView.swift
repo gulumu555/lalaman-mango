@@ -1458,6 +1458,9 @@ private struct VideoStep: View {
                     )
                     .cornerRadius(999)
             }
+            Text("下载不影响后续发布（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             Text("可先下载再发布（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
