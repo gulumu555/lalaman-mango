@@ -557,6 +557,10 @@ private struct PublishSheet: View {
                     .font(.caption2)
                     .foregroundColor(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                Text("默认不打扰，可随时关闭（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(12)
             .background(Color.gray.opacity(0.08))
