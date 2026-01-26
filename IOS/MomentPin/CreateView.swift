@@ -919,6 +919,9 @@ private struct StyleStep: View {
             Text("风格选择会影响小马资产（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("候选图一屏展示（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             HStack(spacing: 8) {
                     Text("状态：\(styleStatus)")
                         .font(.caption2)
