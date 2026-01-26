@@ -97,7 +97,8 @@ struct CreateView: View {
                     hasVoice: $hasVoice,
                     hookText: $hookText,
                     subtitleText: $subtitleText,
-                    selectedMood: $selectedMood
+                    selectedMood: $selectedMood,
+                    hideMood: $hideMood
                 )
                 .tag(Step.voice)
                 VideoStep(
@@ -1439,6 +1440,7 @@ private struct VoiceStep: View {
     @Binding var hookText: String
     @Binding var subtitleText: String
     @Binding var selectedMood: String
+    @Binding var hideMood: Bool
     @State private var recordHint = "未录音"
     @State private var isRecording = false
     @State private var micAuthorized = false
@@ -1557,7 +1559,7 @@ private struct VoiceStep: View {
             Text("字幕：\(subtitleText)")
                 .font(.caption)
                 .foregroundColor(.secondary)
-            Text("情绪：\(moodEmoji) \(selectedMood)")
+            Text(hideMood ? "情绪：隐藏" : "情绪：\(moodEmoji) \(selectedMood)")
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Text("字幕跟随语音滚动（占位）")
