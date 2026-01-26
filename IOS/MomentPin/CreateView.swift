@@ -1211,6 +1211,9 @@ private struct VoiceStep: View {
             Text("字幕跟随语音滚动（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("字幕为轻润色或原话（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             HStack(spacing: 8) {
                 Text("识别状态")
                     .font(.caption2)
