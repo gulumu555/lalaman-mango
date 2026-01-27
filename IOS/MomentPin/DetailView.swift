@@ -402,6 +402,9 @@ struct DetailView: View {
                         showFeedback = false
                     }
                 }
+                Text("反应 1 秒内完成（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 if hasReactedToday {
                     Text("今日已反应")
                         .font(.caption2)
