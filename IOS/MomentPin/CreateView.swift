@@ -729,6 +729,7 @@ private struct PublishSheet: View {
                     }
                 }
                 .disabled(hideMood)
+                .opacity(hideMood ? 0.5 : 1)
                 Text(hideMood ? "已隐藏情绪，发布页不展示" : "可在此调整情绪")
                     .font(.caption2)
                     .foregroundColor(.secondary)
