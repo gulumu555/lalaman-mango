@@ -507,6 +507,9 @@ struct CreateView: View {
     }
 
     private var moodCode: String {
+        if hideMood {
+            return "hidden"
+        }
         switch selectedMood {
         case "治愈":
             return "healing"
