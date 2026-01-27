@@ -1927,10 +1927,18 @@ private struct VideoStep: View {
             Text(renderRetryHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Button("再来一个动效") {
+                selectedTemplate = randomTemplate()
+            }
+            .font(.caption2)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(Color.gray.opacity(0.12))
+            .cornerRadius(999)
             if renderStatus == "失败" {
-            Text("失败兜底：静帧字幕 MP4")
-                .font(.caption2)
-                .foregroundColor(.secondary)
+                Text("失败兜底：静帧字幕 MP4")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             Text("失败不影响继续发布（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
