@@ -621,6 +621,14 @@ private struct StepHeader: View {
             Text("Step \(step.rawValue)/4")
                 .font(.caption)
                 .foregroundColor(.secondary)
+            HStack(spacing: 6) {
+                Circle()
+                    .fill(Color.black.opacity(0.4))
+                    .frame(width: 6, height: 6)
+                Text("AI 在场 · 静默")
+                    .font(.caption2)
+            }
+            .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
