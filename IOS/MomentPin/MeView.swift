@@ -52,6 +52,9 @@ struct MeView: View {
                     Text("定位权限影响附近内容（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("隐私设置可随时调整（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     Button {
                         showAngelSettings = true
                     } label: {
