@@ -301,6 +301,9 @@ struct NotificationsView: View {
                         Text(filterEchoOnly ? "当前仅看回声卡，暂无匹配" : "开启天使模式后，回声/微展会出现在这里")
                             .font(.caption2)
                             .foregroundColor(.secondary)
+                        Text("天使卡仅轻触发，不常驻（占位）")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
                         Button("重新拉取") {
                             angelLoading = true
                             angelStatusHint = "刷新中..."
