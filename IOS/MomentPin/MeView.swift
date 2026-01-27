@@ -36,6 +36,9 @@ struct MeView: View {
                         "隐私与安全",
                         "举报记录"
                     ])
+                    Text("AI 仅做桥梁，不常驻聊天（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     Button {
                         showAngelSettings = true
                     } label: {
