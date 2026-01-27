@@ -85,8 +85,11 @@ struct NotificationsView: View {
                         .foregroundColor(.secondary)
                 }
                 .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
-            }
-            if notificationLoading {
+                }
+                Text("天使卡类型：微展 / 回声 / 时间胶囊（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                if notificationLoading {
                 HStack(spacing: 8) {
                     ProgressView()
                     Text("通知加载中...")
