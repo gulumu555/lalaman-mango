@@ -1523,6 +1523,7 @@ private struct VoiceStep: View {
                 Toggle("隐藏情绪", isOn: $hideMood)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
                 Button("清除情绪") {
+                    hideMood = false
                     selectedMood = "轻松"
                 }
                 .font(.caption2)
