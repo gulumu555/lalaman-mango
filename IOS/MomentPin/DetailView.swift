@@ -315,6 +315,11 @@ struct DetailView: View {
                         Text("收藏 \(saveCount)")
                             .font(.caption2)
                             .foregroundColor(.secondary)
+                        if isSaved {
+                            Text("已收藏，可在“我”查看（占位）")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
                         Text("共鸣一次 / 日（占位）")
                             .font(.caption2)
                             .foregroundColor(.secondary)
