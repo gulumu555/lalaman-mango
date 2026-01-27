@@ -345,6 +345,10 @@ struct DetailView: View {
                             .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
+                    Text("回声匹配：同地点/同情绪（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
                     Button {
                         showEchoCreateSheet = true
