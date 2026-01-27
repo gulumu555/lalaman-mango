@@ -2379,6 +2379,20 @@ private struct VideoStep: View {
             Text("未渲染完成不可发布（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            VStack(alignment: .leading, spacing: 6) {
+                Text("发布前检查")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text(hasPhoto ? "✅ 已有照片" : "⚠️ 未选择照片")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text(hasVoice ? "✅ 已有语音" : "⚠️ 未录语音")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text(renderState == .publishable ? "✅ 已渲染" : "⚠️ 未渲染")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
             Button("发布") {
                 renderState = .published
                 onPublish()
