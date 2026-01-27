@@ -1879,6 +1879,8 @@ private struct VideoStep: View {
                 switch value {
                 case "生成中":
                     renderProgress = 0.5
+                    didDownloadMP4 = false
+                    didDownloadStill = false
                 case "已完成":
                     renderProgress = 1.0
                 case "失败":
