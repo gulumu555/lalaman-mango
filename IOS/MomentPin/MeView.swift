@@ -17,7 +17,8 @@ struct MeView: View {
                     NavigationLink(destination: MyMomentsView()) {
                         SectionCard(title: "我的片刻", items: [
                             "私密 2",
-                            "匿名公开 1"
+                            "匿名公开 1",
+                            "地图足迹（占位）"
                         ])
                     }
                     .buttonStyle(.plain)
