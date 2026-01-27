@@ -1806,6 +1806,10 @@ private struct VideoStep: View {
         }
     }
 
+    private var canPublish: Bool {
+        hasPhoto && hasVoice
+    }
+
     var body: some View {
         VStack(spacing: 16) {
             Text("Step 4/4 · 生成视频 MP4")
@@ -2019,9 +2023,10 @@ private struct VideoStep: View {
             .font(.headline)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 12)
-            .background(Color.black)
+            .background(canPublish ? Color.black : Color.gray.opacity(0.4))
             .foregroundColor(.white)
             .cornerRadius(999)
+            .disabled(!canPublish)
             Text("公开/漂流瓶/仅自己 · 按旧规则")
                 .font(.caption2)
                 .foregroundColor(.secondary)
