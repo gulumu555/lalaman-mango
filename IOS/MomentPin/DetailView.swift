@@ -490,6 +490,9 @@ struct DetailView: View {
                 }
                 Toggle("互动开关（占位）", isOn: $isInteractive)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
+                Text("离开页面自动暂停播放（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             .padding(20)
         }
@@ -946,6 +949,9 @@ private struct ModerationSection: View {
             Text("屏蔽后不再出现同源内容（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("拉黑后不再收到互动（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -970,6 +976,9 @@ private struct BottleSection: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Text("漂流瓶不参与微展/回声（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text("可关闭回访提醒（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
             if includeBottle {
