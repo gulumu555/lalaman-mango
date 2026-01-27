@@ -307,6 +307,12 @@ struct DetailView: View {
                             .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
+                    if !isInteractive {
+                        Text("互动已关闭（占位）")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
 
                     Button {
                         showEchoCreateSheet = true
