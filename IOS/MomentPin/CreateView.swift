@@ -266,6 +266,13 @@ struct CreateView: View {
                 onCancel: {
                     showPublishSheet = false
                 },
+                onDraft: {
+                    showPublishSheet = false
+                    autoSaveHint = "草稿已保存"
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                        autoSaveHint = "已自动保存草稿"
+                    }
+                },
                 onConfirm: {
                     showPublishSheet = false
                     showGenerating = true
@@ -631,6 +638,7 @@ private struct PublishSheet: View {
     @Binding var hideMood: Bool
     var presetZoneName: String? = nil
     var onCancel: () -> Void = {}
+    var onDraft: () -> Void = {}
     var onConfirm: () -> Void = {}
     @State private var hideLocation = false
     @State private var openDate = Date().addingTimeInterval(60 * 60 * 24 * 90)
@@ -660,7 +668,9 @@ private struct PublishSheet: View {
                 Text("发布")
                     .font(.headline)
                 Spacer()
-                Button("草稿") {}
+                Button("草稿") {
+                    onDraft()
+                }
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
