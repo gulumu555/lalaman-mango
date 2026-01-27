@@ -1442,6 +1442,15 @@ private struct PonyStep: View {
                         .background(Color.gray.opacity(0.12))
                         .cornerRadius(999)
                     }
+                    Button("随机合影") {
+                        ponyPlacement = placements.randomElement() ?? ponyPlacement
+                        ponyPose = ponyPoses.randomElement() ?? ponyPose
+                    }
+                    .font(.caption2)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(Color.gray.opacity(0.12))
+                    .cornerRadius(999)
                     Text("姿态：\(ponyPose)（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
