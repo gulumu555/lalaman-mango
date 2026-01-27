@@ -349,6 +349,10 @@ struct DetailView: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                    Text("仅轻互动，无长评论（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
                     Button {
                         showEchoCreateSheet = true
