@@ -2372,6 +2372,9 @@ private struct VideoStep: View {
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
+            Text("下载后自动保存到相册（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             Text("下载不影响后续发布（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
