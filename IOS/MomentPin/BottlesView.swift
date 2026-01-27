@@ -35,6 +35,9 @@ struct BottlesView: View {
                         .padding(.vertical, 6)
                     }
                 }
+                Text("漂流中内容不在地图展示（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             Section("已靠岸") {
                 ForEach(openedItems, id: \.self) { item in
