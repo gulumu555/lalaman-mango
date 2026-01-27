@@ -2372,6 +2372,9 @@ private struct VideoStep: View {
             )
             .cornerRadius(999)
             .disabled(!canDownload)
+            Text("GIF 仅用于分享，不作为发布形态（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             if didDownloadMP4 || didDownloadStill {
                 Text(downloadStatusText)
                     .font(.caption2)
