@@ -355,6 +355,12 @@ struct DetailView: View {
                             .stroke(Color.black.opacity(0.08), lineWidth: 1)
                     )
                     .disabled(!isInteractive || !isPublic)
+                    if !isInteractive || !isPublic {
+                        Text("公开且互动开启后可送回声（占位）")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
                 }
                 .padding(12)
                 .background(Color.gray.opacity(0.06))
