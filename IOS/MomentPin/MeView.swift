@@ -46,6 +46,9 @@ struct MeView: View {
                     Text("黑名单管理后置（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("天使默认关闭（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     Button {
                         showAngelSettings = true
                     } label: {

@@ -43,6 +43,9 @@ struct MyMomentsView: View {
                 Text("草稿可继续完善（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("私密内容不参与微展/回声（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             Section("匿名公开") {
                 ForEach(publicItems, id: \.self) { item in
