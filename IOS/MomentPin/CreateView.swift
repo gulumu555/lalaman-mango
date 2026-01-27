@@ -2036,6 +2036,11 @@ private struct VideoStep: View {
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
+            if !canDownload {
+                Text("渲染完成后可下载")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
             Text("下载不影响后续发布（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
