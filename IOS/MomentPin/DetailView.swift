@@ -118,6 +118,14 @@ struct DetailView: View {
                     Text("\(moment.moodEmoji) \(moment.title)")
                         .font(.title3)
                         .fontWeight(.semibold)
+                    HStack(spacing: 6) {
+                        Circle()
+                            .fill(Color.black.opacity(0.4))
+                            .frame(width: 6, height: 6)
+                        Text("AI 在场 · 静默")
+                            .font(.caption2)
+                    }
+                    .foregroundColor(.secondary)
                     Text("发布于 \(moment.zoneName) · 仅展示商圈级位置")
                         .font(.caption2)
                         .foregroundColor(.secondary)
