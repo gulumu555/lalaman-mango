@@ -2027,6 +2027,11 @@ private struct VideoStep: View {
             .foregroundColor(.white)
             .cornerRadius(999)
             .disabled(!canPublish)
+            if !canPublish {
+                Text("需完成照片与语音才可发布")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
             Text("公开/漂流瓶/仅自己 · 按旧规则")
                 .font(.caption2)
                 .foregroundColor(.secondary)
