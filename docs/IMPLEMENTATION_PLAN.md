@@ -5,6 +5,11 @@
 - Provide a lightweight schema aligned with the MVP API spec for future integration with storage and seed data.
 - Track post-publish “Angel system” capabilities (micro-curation, echo cards, time capsule) behind explicit user opt-in.
 
+## Cost-safe MVP (no extra spend)
+- Keep current FastAPI + SQLite scaffold for MVP validation.
+- Use local FFmpeg-based rendering (no paid GPU services in MVP).
+- Avoid new paid services unless required by the owner.
+
 ## Phase 0: Scaffolding (this PR)
 - Add API skeleton endpoints mapped to the MVP spec.
 - Define a SQLite-friendly schema for Moments, Reactions, Template Replies, Bottles, and Notifications.
