@@ -489,6 +489,11 @@ struct CreateView: View {
                 lastMoodBeforeHide = newValue
             }
         }
+        .onChange(of: isPublic) { value in
+            if !value {
+                allowMapDisplay = false
+            }
+        }
     }
 
     private var canProceed: Bool {
