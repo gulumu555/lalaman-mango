@@ -969,6 +969,9 @@ private struct BottleSection: View {
             Text("回访节奏：3天/30天/1年（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("漂流瓶不参与微展/回声（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             if includeBottle {
                 HStack {
                     Text("靠岸时间")

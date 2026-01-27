@@ -70,6 +70,9 @@ struct BottlesView: View {
                 Text("已靠岸可再次设置时间（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("已靠岸可一键回听（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             Section("已捡起") {
                 if pickedItems.isEmpty {
