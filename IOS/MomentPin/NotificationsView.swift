@@ -86,6 +86,9 @@ struct NotificationsView: View {
                 }
                 .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
                 }
+                Text("通知仅站内提示（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 Text("天使卡类型：微展 / 回声 / 时间胶囊（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
@@ -340,6 +343,9 @@ struct NotificationsView: View {
                     .padding(.vertical, 12)
                     .listRowSeparator(.hidden)
                 }
+                Text("点击卡片可查看详情（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 ForEach(Array(displayedAngelCards.enumerated()), id: \.offset) { index, item in
                     NavigationLink(destination: AngelCardDetailView(title: item.title, type: item.type)) {
                         HStack(spacing: 12) {

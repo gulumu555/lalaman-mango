@@ -41,6 +41,9 @@ struct BottlesView: View {
                 Text("可修改靠岸时间（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("可随时取消漂流瓶（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             Section("已靠岸") {
                 ForEach(openedItems, id: \.self) { item in
@@ -78,6 +81,9 @@ struct BottlesView: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     Text("可设置静默 7 天（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text("捡起后可回听（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 } else {

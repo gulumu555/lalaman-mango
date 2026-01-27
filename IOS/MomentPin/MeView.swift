@@ -49,6 +49,9 @@ struct MeView: View {
                     Text("天使默认关闭（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("定位权限影响附近内容（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     Button {
                         showAngelSettings = true
                     } label: {
@@ -68,6 +71,9 @@ struct MeView: View {
                         ])
                     }
                     .buttonStyle(.plain)
+                    Text("红点仅站内提示（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                 }
                 .padding(20)
             }
