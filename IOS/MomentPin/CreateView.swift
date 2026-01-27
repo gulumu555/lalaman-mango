@@ -1489,6 +1489,7 @@ private struct VoiceStep: View {
     private let asrStatuses = ["识别中", "已完成", "失败"]
     @State private var asrProgress: CGFloat = 0.4
     @State private var asrHint = "ASR ≤ 2s（占位）"
+    @State private var showAIHelper = false
 
     private var moodEmoji: String {
         switch selectedMood {
@@ -1572,6 +1573,18 @@ private struct VoiceStep: View {
             Text("也可随机一个钩子（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Button("帮我想个开头") {
+                showAIHelper.toggle()
+            }
+            .font(.caption)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
+            .background(Color.white)
+            .overlay(
+                RoundedRectangle(cornerRadius: 999)
+                    .stroke(Color.black.opacity(0.12), lineWidth: 1)
+            )
+            .cornerRadius(999)
             HStack {
                 Text("当前时长")
                     .font(.caption)
