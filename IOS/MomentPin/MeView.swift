@@ -40,6 +40,9 @@ struct MeView: View {
                     Text("AI 仅做桥梁，不常驻聊天（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("隐私优先于网络效应（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     Button {
                         showAngelSettings = true
                     } label: {
