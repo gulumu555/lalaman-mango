@@ -26,6 +26,7 @@ struct DetailView: View {
     @State private var echoCount = 12
     @State private var isSaved = false
     @State private var showEchoCreateSheet = false
+    @State private var showEchoMapHint = false
     @State private var renderStatus = "ready"
     @State private var renderHint = "已生成"
     @State private var motionLevel = "轻"
@@ -224,8 +225,12 @@ struct DetailView: View {
                             feedbackText = "共鸣已送达"
                             showFeedback = true
                             showEchoPulse = true
+                            showEchoMapHint = true
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
                                 showEchoPulse = false
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                                showEchoMapHint = false
                             }
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                                 showFeedback = false
@@ -282,6 +287,12 @@ struct DetailView: View {
                     Text("共鸣一次 / 日（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                }
+                if showEchoMapHint {
+                    Text("地图光点已点亮（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
 
                 Button {
