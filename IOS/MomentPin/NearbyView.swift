@@ -227,7 +227,10 @@ struct NearbyView: View {
                     Text("首屏 2 秒内可点击入口（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
-                HStack(spacing: 12) {
+                    Text("点位点击打开地点抽屉（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    HStack(spacing: 12) {
                     Button(angelButtonLabel) {
                         showAngelSheet = true
                         angelHint = "已打开天使卡片（占位）"
@@ -270,10 +273,16 @@ struct NearbyView: View {
                     Text("入口：点位气泡 / 列表 / 随机听听")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("列表点击进入播放（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     Text("微展包含 6–12 条片刻（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     Text("微展推荐每日最多一次（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text("微展基于 500m/1km（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     Text("共鸣触发地图波纹（占位）")
@@ -506,6 +515,9 @@ private struct MoodCard: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Text("情绪浏览以标签切换（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text("点击情绪进入浏览（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
         }
