@@ -29,6 +29,7 @@ struct DetailView: View {
     @State private var showEchoMapHint = false
     @State private var isPublished = true
     @State private var saveCount = 24
+    @State private var echoCooldownHint = "不需要时冷却 30 天（占位）"
     @State private var renderStatus = "ready"
     @State private var renderHint = "已生成"
     @State private var motionLevel = "轻"
@@ -315,6 +316,9 @@ struct DetailView: View {
                             .font(.caption2)
                             .foregroundColor(.secondary)
                         Text("共鸣一次 / 日（占位）")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                        Text(echoCooldownHint)
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }
