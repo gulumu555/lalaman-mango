@@ -185,6 +185,9 @@ struct NearbyView: View {
                             RoundedRectangle(cornerRadius: 999)
                                 .stroke(Color.black.opacity(0.08), lineWidth: 1)
                         )
+                        Text("AI 静默在场（占位）")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
                         Button {
                             showListSheet = true
                         } label: {
