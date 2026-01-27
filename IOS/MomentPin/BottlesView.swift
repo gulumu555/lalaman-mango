@@ -65,6 +65,9 @@ struct BottlesView: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                         .padding(.vertical, 6)
+                    Text("漂流瓶到期仅站内提醒（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                 } else {
                     ForEach(pickedItems, id: \.self) { item in
                         NavigationLink(destination: DetailView(moment: Moment.sample.first!)) {
