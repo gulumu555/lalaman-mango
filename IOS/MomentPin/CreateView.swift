@@ -2421,6 +2421,9 @@ private struct VideoStep: View {
             Text("可分享给好友查看（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("发布后可进入回声/微展（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             VStack(alignment: .leading, spacing: 6) {
                 Text("兜底策略")
                     .font(.caption2)
