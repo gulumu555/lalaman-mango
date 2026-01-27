@@ -1810,7 +1810,7 @@ private struct VideoStep: View {
     }
 
     private var canPublish: Bool {
-        hasPhoto && hasVoice
+        hasPhoto && hasVoice && renderStatus == "已完成"
     }
 
     private var canDownload: Bool {
