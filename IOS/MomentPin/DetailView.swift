@@ -939,6 +939,9 @@ private struct BottleSection: View {
             Text("到期通知：你有一个漂流瓶靠岸了 🎁")
                 .font(.caption)
                 .foregroundColor(.secondary)
+            Text("回访节奏：3天/30天/1年（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             if includeBottle {
                 HStack {
                     Text("靠岸时间")
