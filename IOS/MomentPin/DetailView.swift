@@ -21,6 +21,8 @@ struct DetailView: View {
     @State private var isMuted = false
     @State private var hasRepliedToday = false
     @State private var hasReactedToday = false
+    @State private var didEcho = false
+    @State private var showEchoPulse = false
     @State private var renderStatus = "ready"
     @State private var renderHint = "已生成"
     @State private var motionLevel = "轻"
@@ -209,6 +211,45 @@ struct DetailView: View {
                 .background(Color.gray.opacity(0.08))
                 .cornerRadius(16)
 
+                HStack(spacing: 12) {
+                    Button {
+                        guard !didEcho else { return }
+                        triggerLightHaptic()
+                        didEcho = true
+                        feedbackText = "共鸣已送达"
+                        showFeedback = true
+                        showEchoPulse = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                            showEchoPulse = false
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                            showFeedback = false
+                        }
+                    } label: {
+                        HStack(spacing: 8) {
+                            Image(systemName: "dot.radiowaves.left.and.right")
+                            Text(didEcho ? "已共鸣" : "我也来过")
+                        }
+                        .font(.caption)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                    }
+                    .background(Color.black)
+                    .foregroundColor(.white)
+                    .cornerRadius(999)
+                    .overlay(
+                        Circle()
+                            .stroke(Color.blue.opacity(0.4), lineWidth: 2)
+                            .scaleEffect(showEchoPulse ? 1.4 : 0.2)
+                            .opacity(showEchoPulse ? 0 : 1)
+                            .animation(.easeOut(duration: 0.6), value: showEchoPulse)
+                    )
+                    .disabled(didEcho || !isInteractive || !isPublic)
+                    Text("共鸣一次 / 日（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+
                 ReactionRow(
                     selectedReaction: $selectedReaction,
                     isEnabled: isInteractive && isPublic && !hasReactedToday
@@ -302,6 +343,12 @@ struct DetailView: View {
         } message: {
             Text("删除后不可恢复（占位）")
         }
+    }
+
+    private func triggerLightHaptic() {
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.prepare()
+        generator.impactOccurred()
     }
 }
 
