@@ -910,12 +910,22 @@ private struct PublishSheet: View {
                 Toggle("允许微展收录", isOn: $allowMicrocuration)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
                     .disabled(!angelEnabled || !isPublic)
+                if !angelEnabled || !isPublic {
+                    Text("需开启天使且公开才可收录微展（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
                 Text("微展默认关，用户可手动开启（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 Toggle("允许回声共鸣", isOn: $allowEcho)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
                     .disabled(!angelEnabled || !isPublic)
+                if !angelEnabled || !isPublic {
+                    Text("需开启天使且公开才可回声（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
             Text("回声为轻卡片，不做对话（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
