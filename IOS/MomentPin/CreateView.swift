@@ -738,6 +738,11 @@ private struct PublishSheet: View {
                     .disabled(!isPublic)
                 Toggle("隐藏位置", isOn: $hideLocation)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
+                if hideLocation {
+                    Text("隐藏位置仅保留商圈级（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
                 if !isPublic {
                     Text("仅自己可见时默认不展示地图（占位）")
                         .font(.caption2)
