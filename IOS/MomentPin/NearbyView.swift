@@ -158,26 +158,31 @@ struct NearbyView: View {
                         .background(Color.white.opacity(0.95))
                         .cornerRadius(16)
                     }
-                    if showMoodCard {
-                        MoodCard(selectedFilter: $moodFilter, onBrowse: {
-                            showMoodSheet = true
-                        }, onCollapse: {
-                            showMoodCard = false
-                        })
-                    } else {
-                        Button("展开情绪天气") {
-                            showMoodCard = true
-                        }
-                        .font(.footnote)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 8)
-                        .background(Color.white.opacity(0.95))
-                        .cornerRadius(999)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 999)
-                                .stroke(Color.black.opacity(0.08), lineWidth: 1)
-                        )
+                if showMoodCard {
+                    MoodCard(selectedFilter: $moodFilter, onBrowse: {
+                        showMoodSheet = true
+                    }, onCollapse: {
+                        showMoodCard = false
+                    })
+                } else {
+                    Button("展开情绪天气") {
+                        showMoodCard = true
                     }
+                    .font(.footnote)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(Color.white.opacity(0.95))
+                    .cornerRadius(999)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999)
+                            .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                    )
+                }
+                if !showMoodCard {
+                    Text("情绪卡已收起（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
                     HStack(spacing: 12) {
                         Button("按情绪浏览") {
                             showMoodSheet = true
@@ -222,33 +227,36 @@ struct NearbyView: View {
                     Text("首屏 2 秒内可点击入口（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
-                    HStack(spacing: 12) {
-                        Button(angelButtonLabel) {
-                            showAngelSheet = true
-                            angelHint = "已打开天使卡片（占位）"
+                HStack(spacing: 12) {
+                    Button(angelButtonLabel) {
+                        showAngelSheet = true
+                        angelHint = "已打开天使卡片（占位）"
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                            angelHint = ""
+                        }
+                    }
+                    .font(.footnote)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(Color.white.opacity(0.95))
+                    .cornerRadius(999)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999)
+                            .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                    )
+                    Text("天使卡默认关闭（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Button("附近微展") {
+                        apiClient.fetchExhibits { titles in
+                            exhibits = titles
+                            exhibitHint = "已加载微展（占位）"
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-                                angelHint = ""
+                                exhibitHint = ""
                             }
+                            showExhibitSheet = true
                         }
-                        .font(.footnote)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 8)
-                        .background(Color.white.opacity(0.95))
-                        .cornerRadius(999)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 999)
-                                .stroke(Color.black.opacity(0.08), lineWidth: 1)
-                        )
-                        Button("附近微展") {
-                            apiClient.fetchExhibits { titles in
-                                exhibits = titles
-                                exhibitHint = "已加载微展（占位）"
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-                                    exhibitHint = ""
-                                }
-                                showExhibitSheet = true
-                            }
-                        }
+                    }
                         .font(.footnote)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 8)
