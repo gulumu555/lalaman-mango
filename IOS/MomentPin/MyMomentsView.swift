@@ -94,6 +94,9 @@ struct MyMomentsView: View {
             Text("导出功能后置（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("列表仅本地缓存（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
         }
         .navigationTitle("我的片刻")
         .navigationBarTitleDisplayMode(.inline)

@@ -83,6 +83,9 @@ struct MeView: View {
                     Text("通知可手动刷新（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("通知不推送系统提醒（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                 }
                 .padding(20)
             }

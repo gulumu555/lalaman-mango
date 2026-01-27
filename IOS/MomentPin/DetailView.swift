@@ -145,6 +145,9 @@ struct DetailView: View {
                     Text("首屏到播放 ≤ 2 次点击（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("匿名展示，不显示身份（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     HStack(spacing: 6) {
                         Image(systemName: isPublished ? "checkmark.seal.fill" : "clock.fill")
                             .font(.caption2)
@@ -360,14 +363,18 @@ struct DetailView: View {
                             .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    Text("回声匹配：同地点/同情绪（占位）")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    Text("仅轻互动，无长评论（占位）")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                Text("回声匹配：同地点/同情绪（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text("仅轻互动，无长评论（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text("回声为一次性卡片（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
                     Button {
                         showEchoCreateSheet = true

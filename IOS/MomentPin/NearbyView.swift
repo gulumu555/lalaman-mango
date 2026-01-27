@@ -230,6 +230,9 @@ struct NearbyView: View {
                     Text("点位点击打开地点抽屉（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("地图刷新不影响草稿（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     HStack(spacing: 12) {
                     Button(angelButtonLabel) {
                         showAngelSheet = true
@@ -286,6 +289,9 @@ struct NearbyView: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     Text("共鸣触发地图波纹（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text("微展标题自动生成（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     if !exhibitHint.isEmpty {

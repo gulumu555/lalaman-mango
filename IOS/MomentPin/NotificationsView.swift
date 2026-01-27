@@ -104,6 +104,9 @@ struct NotificationsView: View {
                 Text("可筛选漂流瓶/系统通知（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("通知卡片不会触发聊天（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 if notificationLoading {
                 HStack(spacing: 8) {
                     ProgressView()
