@@ -1828,6 +1828,9 @@ private struct VoiceStep: View {
             Text(asrHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("关键词高亮（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             VStack(alignment: .leading, spacing: 4) {
                 Text("字幕分段预览")
                     .font(.caption2)
