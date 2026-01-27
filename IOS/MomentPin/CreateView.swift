@@ -1610,6 +1610,9 @@ private struct VoiceStep: View {
                 .padding(10)
                 .background(Color.gray.opacity(0.12))
                 .cornerRadius(12)
+                Text("完成一次动作后自动退场（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             HStack {
                 Text("当前时长")
