@@ -66,6 +66,9 @@ struct MyMomentsView: View {
                         .padding(.vertical, 6)
                     }
                 }
+                Text("可在详情页切换公开/私密（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
         }
         .navigationTitle("我的片刻")
