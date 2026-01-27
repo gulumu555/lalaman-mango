@@ -121,6 +121,12 @@ struct NearbyView: View {
                         .background(Color.white.opacity(0.95))
                         .cornerRadius(999)
                     }
+                    Text("地图为底图背景（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text("刷新会重新拉取附近数据（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     if !bubbleMoments.isEmpty {
                         HStack(spacing: 8) {
                             Text("点位")
@@ -444,6 +450,9 @@ private struct MoodCard: View {
                     .background(Color.black.opacity(0.06))
                     .cornerRadius(8)
             }
+            Text("可随时收起（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             HStack(spacing: 8) {
                 MoodChip(
                     emoji: "😮‍💨",

@@ -80,7 +80,13 @@ struct DetailView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
+                    Text("播放不影响互动（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     Text("语音时长：8s（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text("语音默认开启（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     VStack(alignment: .leading, spacing: 6) {
@@ -91,6 +97,9 @@ struct DetailView: View {
                             .font(.caption2)
                             .foregroundColor(.secondary)
                         Text("字幕模式：语义分段滚动")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                        Text("不逐字跳（占位）")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                         Text("字幕必保留（无声波）")
@@ -1072,6 +1081,9 @@ private struct ShareRetrySection: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Text("可选静音导出（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text("静音仅影响导出，不影响播放（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
             if showShareHint {
