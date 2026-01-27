@@ -55,6 +55,9 @@ struct MeView: View {
                     Text("隐私设置可随时调整（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("设置项将逐步完善（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     Button {
                         showAngelSettings = true
                     } label: {
@@ -75,6 +78,9 @@ struct MeView: View {
                     }
                     .buttonStyle(.plain)
                     Text("红点仅站内提示（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text("通知可手动刷新（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
