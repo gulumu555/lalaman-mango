@@ -28,6 +28,7 @@ struct DetailView: View {
     @State private var showEchoCreateSheet = false
     @State private var showEchoMapHint = false
     @State private var isPublished = true
+    @State private var saveCount = 24
     @State private var renderStatus = "ready"
     @State private var renderHint = "已生成"
     @State private var motionLevel = "轻"
@@ -275,6 +276,11 @@ struct DetailView: View {
                         Button {
                             triggerLightHaptic()
                             isSaved.toggle()
+                            if isSaved {
+                                saveCount += 1
+                            } else {
+                                saveCount = max(0, saveCount - 1)
+                            }
                             feedbackText = isSaved ? "已收藏" : "取消收藏"
                             showFeedback = true
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -297,6 +303,9 @@ struct DetailView: View {
                         )
                         .cornerRadius(999)
                         .disabled(!isInteractive || !isPublic)
+                        Text("收藏 \(saveCount)")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
                         Text("共鸣一次 / 日（占位）")
                             .font(.caption2)
                             .foregroundColor(.secondary)
