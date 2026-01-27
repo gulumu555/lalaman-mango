@@ -991,6 +991,7 @@ private struct StyleStep: View {
     @State private var downloadHint = "可下载也可单选继续"
     @State private var nextStepHint = "下一步：小马同框（可跳过）"
     @State private var retryHint = "风格失败可点此重试"
+    @State private var downloadedStyle = ""
 
     var body: some View {
         VStack(spacing: 16) {
@@ -1106,6 +1107,23 @@ private struct StyleStep: View {
             Text("静帧可下载（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Button("下载当前风格") {
+                downloadedStyle = selectedStyle
+            }
+            .font(.caption)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
+            .background(Color.white)
+            .overlay(
+                RoundedRectangle(cornerRadius: 999)
+                    .stroke(Color.black.opacity(0.15), lineWidth: 1)
+            )
+            .cornerRadius(999)
+            if !downloadedStyle.isEmpty {
+                Text("已下载：\(downloadedStyle)")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
             Text("首屏示例将引导去听听（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
