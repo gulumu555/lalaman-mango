@@ -1989,6 +1989,7 @@ private struct VideoStep: View {
     @State private var didDownloadMP4 = false
     @State private var didDownloadStill = false
     @State private var selectedTemplate = "T02_Cloud"
+    @State private var exportMuted = false
     private let templateOptions = ["T02_Cloud", "T07_Sparkle", "T04_LightLeak", "T06_Wind"]
 
     private var moodEmoji: String {
@@ -2164,6 +2165,8 @@ private struct VideoStep: View {
             Text("默认包含原声（可静音导出）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Toggle("静音导出（占位）", isOn: $exportMuted)
+                .toggleStyle(SwitchToggleStyle(tint: .black))
             HStack(spacing: 12) {
                 Button("重试渲染") {
                     simulateRender()
