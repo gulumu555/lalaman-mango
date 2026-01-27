@@ -1931,6 +1931,7 @@ private struct VideoStep: View {
     @State private var renderProgress: CGFloat = 0.5
     @State private var renderState: RenderState = .uploaded
     @State private var renderHint = "MP4 ≤ 12s（占位）"
+    @State private var renderFailReason = "网络超时（占位）"
     @State private var coverHint = "封面取首帧或合成图（占位）"
     @State private var previewHint = "可下载 MP4 与静帧（占位）"
     @State private var exportHint = "MP4 含原声 + 字幕滚动（占位）"
@@ -2034,20 +2035,25 @@ private struct VideoStep: View {
                 Text("生成状态")
                     .font(.caption2)
                     .foregroundColor(.secondary)
-                ForEach(renderStatuses, id: \.self) { status in
-                    Button(status) {
-                        renderStatus = status
-                    }
-                    .font(.caption2)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(renderStatus == status ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
-                    .cornerRadius(999)
+            ForEach(renderStatuses, id: \.self) { status in
+                Button(status) {
+                    renderStatus = status
                 }
+                .font(.caption2)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(renderStatus == status ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
+                .cornerRadius(999)
             }
-            Text("状态：\(renderStateText)")
+        }
+        if renderStatus == "失败" {
+            Text("失败原因：\(renderFailReason)")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+        }
+        Text("状态：\(renderStateText)")
+            .font(.caption2)
+            .foregroundColor(.secondary)
             Text("渲染队列：排队中（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
