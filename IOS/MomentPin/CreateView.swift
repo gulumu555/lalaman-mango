@@ -902,6 +902,9 @@ private struct PublishSheet: View {
                     Text("提醒可关闭（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("时间可后续修改（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                 }
             }
             .padding(12)
@@ -1151,6 +1154,9 @@ private struct StyleStep: View {
             Text("构图保持一致（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("原图仅用于生成（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             Text("输出封面将用于地图点位（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
@@ -1237,6 +1243,9 @@ private struct StyleStep: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Text("风格结果默认缓存（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text("缓存可减少等待（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
             VStack(alignment: .leading, spacing: 8) {
@@ -1749,6 +1758,9 @@ private struct VoiceStep: View {
                 Text("不选也可继续发布（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("情绪可跳过（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 10)], spacing: 10) {
                 ForEach(hooks, id: \.self) { hook in
@@ -1771,6 +1783,9 @@ private struct VoiceStep: View {
             .background(Color.gray.opacity(0.12))
             .cornerRadius(999)
             Text("也可随机一个钩子（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text("钩子可编辑（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Button("帮我想个开头") {
@@ -1911,6 +1926,9 @@ private struct VoiceStep: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Text("关键词高亮（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text("ASR 仅用于字幕（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
             VStack(alignment: .leading, spacing: 4) {
@@ -2234,6 +2252,9 @@ private struct VideoStep: View {
             Text("失败可重新排队（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("生成中可退出（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             Button("开始渲染") {
                 simulateRender()
             }
@@ -2532,6 +2553,9 @@ private struct VideoStep: View {
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
+            Text("发布前可保存草稿（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             Button("发布") {
                 renderState = .published
                 onPublish()
