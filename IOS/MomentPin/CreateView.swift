@@ -1918,12 +1918,28 @@ private struct VideoStep: View {
             Text("默认包含原声（可静音导出）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
-            Button("重试渲染") {}
+            HStack(spacing: 12) {
+                Button("重试渲染") {
+                    renderStatus = "生成中"
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                        renderStatus = "已完成"
+                    }
+                }
                 .font(.caption2)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 6)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
                 .background(Color.gray.opacity(0.12))
                 .cornerRadius(999)
+                Button("清除下载状态") {
+                    didDownloadMP4 = false
+                    didDownloadStill = false
+                }
+                .font(.caption2)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(Color.gray.opacity(0.12))
+                .cornerRadius(999)
+            }
             Text(renderRetryHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
