@@ -1813,6 +1813,14 @@ private struct VideoStep: View {
         hasPhoto && hasVoice
     }
 
+    private var downloadStatusText: String {
+        let parts = [
+            didDownloadMP4 ? "MP4 已下载" : nil,
+            didDownloadStill ? "静帧已下载" : nil
+        ].compactMap { $0 }
+        return parts.isEmpty ? "" : parts.joined(separator: " · ")
+    }
+
     var body: some View {
         VStack(spacing: 16) {
             Text("Step 4/4 · 生成视频 MP4")
@@ -2014,6 +2022,11 @@ private struct VideoStep: View {
                             .stroke(Color.black.opacity(0.15), lineWidth: 1)
                     )
                     .cornerRadius(999)
+            }
+            if didDownloadMP4 || didDownloadStill {
+                Text(downloadStatusText)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             Text("下载不影响后续发布（占位）")
                 .font(.caption2)
