@@ -2387,6 +2387,9 @@ private struct VideoStep: View {
             Text("未渲染完成不可发布（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("导出命名：momentpin_日期（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             VStack(alignment: .leading, spacing: 6) {
                 Text("发布前检查")
                     .font(.caption2)
