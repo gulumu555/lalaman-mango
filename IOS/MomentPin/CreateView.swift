@@ -473,6 +473,11 @@ struct CreateView: View {
                 selectedMood = lastMoodBeforeHide
             }
         }
+        .onChange(of: selectedMood) { newValue in
+            if !hideMood {
+                lastMoodBeforeHide = newValue
+            }
+        }
     }
 
     private var canProceed: Bool {
