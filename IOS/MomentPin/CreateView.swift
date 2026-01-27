@@ -687,11 +687,9 @@ private struct PublishSheet: View {
                     if shareToMoments {
                         CapsuleLabel(text: "朋友圈", isPrimary: false)
                     }
-                    if !selectedMood.isEmpty {
-                        CapsuleLabel(
-                            text: hideMood ? "情绪·隐藏" : "情绪·\(moodEmoji) \(selectedMood)",
-                            isPrimary: false
-                        )
+                    if hideMood || !selectedMood.isEmpty {
+                        let label = hideMood ? "情绪·隐藏" : "情绪·\(moodEmoji) \(selectedMood)"
+                        CapsuleLabel(text: label, isPrimary: false)
                     }
                 }
                 Text("情绪标签用于微展/回声（占位）")
