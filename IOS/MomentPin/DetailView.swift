@@ -24,6 +24,7 @@ struct DetailView: View {
     @State private var didEcho = false
     @State private var showEchoPulse = false
     @State private var echoCount = 12
+    @State private var isSaved = false
     @State private var renderStatus = "ready"
     @State private var renderHint = "已生成"
     @State private var motionLevel = "轻"
@@ -252,6 +253,31 @@ struct DetailView: View {
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }
+                    Button {
+                        triggerLightHaptic()
+                        isSaved.toggle()
+                        feedbackText = isSaved ? "已收藏" : "取消收藏"
+                        showFeedback = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                            showFeedback = false
+                        }
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
+                            Text(isSaved ? "已收藏" : "收藏")
+                        }
+                        .font(.caption)
+                        .frame(width: 120)
+                        .padding(.vertical, 10)
+                    }
+                    .background(Color.white)
+                    .foregroundColor(.black)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999)
+                            .stroke(Color.black.opacity(0.1), lineWidth: 1)
+                    )
+                    .cornerRadius(999)
+                    .disabled(!isInteractive || !isPublic)
                     Text("共鸣一次 / 日（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
