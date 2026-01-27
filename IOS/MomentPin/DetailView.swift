@@ -313,6 +313,12 @@ struct DetailView: View {
                             .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
+                    if !isPublic {
+                        Text("仅匿名公开可互动（占位）")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
 
                     Button {
                         showEchoCreateSheet = true
