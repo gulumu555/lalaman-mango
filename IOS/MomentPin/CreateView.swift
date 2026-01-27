@@ -1784,11 +1784,20 @@ private struct VideoStep: View {
     @Binding var hasPhoto: Bool
     @Binding var hasVoice: Bool
     var onPublish: () -> Void = {}
+    private enum RenderState: String {
+        case uploaded
+        case processing
+        case rendered
+        case publishable
+        case published
+    }
+
     @State private var subtitleStyle = "默认白字"
     private let subtitleStyles = ["默认白字", "薄雾底条"]
     @State private var renderStatus = "生成中"
     private let renderStatuses = ["生成中", "已完成", "失败"]
     @State private var renderProgress: CGFloat = 0.5
+    @State private var renderState: RenderState = .uploaded
     @State private var renderHint = "MP4 ≤ 12s（占位）"
     @State private var coverHint = "封面取首帧或合成图（占位）"
     @State private var previewHint = "可下载 MP4 与静帧（占位）"
@@ -1812,16 +1821,42 @@ private struct VideoStep: View {
     }
 
     private var canPublish: Bool {
-        hasPhoto && hasVoice && renderStatus == "已完成"
+        hasPhoto && hasVoice && renderState == .publishable
     }
 
     private var canDownload: Bool {
-        renderStatus == "已完成"
+        renderState == .publishable || renderState == .published
+    }
+
+    private var canStartRender: Bool {
+        hasPhoto && hasVoice
+    }
+
+    private var renderStateText: String {
+        switch renderState {
+        case .uploaded:
+            return "已上传"
+        case .processing:
+            return "生成中"
+        case .rendered:
+            return "已渲染"
+        case .publishable:
+            return "可发布"
+        case .published:
+            return "已发布"
+        }
     }
 
     private func randomTemplate() -> String {
         let candidates = templateOptions.filter { $0 != selectedTemplate }
         return candidates.randomElement() ?? selectedTemplate
+    }
+
+    private func simulateRender() {
+        renderStatus = "生成中"
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            renderStatus = "已完成"
+        }
     }
 
     private var downloadStatusText: String {
@@ -1878,6 +1913,19 @@ private struct VideoStep: View {
                     .cornerRadius(999)
                 }
             }
+            Text("状态：\(renderStateText)")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Button("开始渲染") {
+                simulateRender()
+            }
+            .font(.caption2)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(canStartRender ? Color.black : Color.gray.opacity(0.4))
+            .foregroundColor(.white)
+            .cornerRadius(999)
+            .disabled(!canStartRender)
             GeometryReader { proxy in
                 ZStack(alignment: .leading) {
                     Capsule()
@@ -1895,10 +1943,13 @@ private struct VideoStep: View {
                     renderProgress = 0.5
                     didDownloadMP4 = false
                     didDownloadStill = false
+                    renderState = .processing
                 case "已完成":
                     renderProgress = 1.0
+                    renderState = .publishable
                 case "失败":
                     renderProgress = 0.2
+                    renderState = .uploaded
                 default:
                     renderProgress = 0.5
                 }
@@ -1920,10 +1971,7 @@ private struct VideoStep: View {
                 .foregroundColor(.secondary)
             HStack(spacing: 12) {
                 Button("重试渲染") {
-                    renderStatus = "生成中"
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                        renderStatus = "已完成"
-                    }
+                    simulateRender()
                 }
                 .font(.caption2)
                 .padding(.horizontal, 12)
@@ -1945,10 +1993,7 @@ private struct VideoStep: View {
                 .foregroundColor(.secondary)
             Button("再来一个动效") {
                 selectedTemplate = randomTemplate()
-                renderStatus = "生成中"
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                    renderStatus = "已完成"
-                }
+                simulateRender()
             }
             .font(.caption2)
             .padding(.horizontal, 10)
@@ -2089,6 +2134,7 @@ private struct VideoStep: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Button("发布") {
+                renderState = .published
                 onPublish()
             }
             .font(.headline)
