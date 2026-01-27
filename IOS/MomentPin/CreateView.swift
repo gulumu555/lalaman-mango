@@ -2219,6 +2219,19 @@ private struct VideoStep: View {
                     .cornerRadius(999)
                     .disabled(!canDownload)
             }
+            Button("导出 GIF（占位）") {
+                didDownloadStill = true
+            }
+            .font(.caption)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
+            .background(Color.white)
+            .overlay(
+                RoundedRectangle(cornerRadius: 999)
+                    .stroke(Color.black.opacity(0.15), lineWidth: 1)
+            )
+            .cornerRadius(999)
+            .disabled(!canDownload)
             if didDownloadMP4 || didDownloadStill {
                 Text(downloadStatusText)
                     .font(.caption2)
