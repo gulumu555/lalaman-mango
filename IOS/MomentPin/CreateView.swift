@@ -1819,6 +1819,11 @@ private struct VideoStep: View {
         renderStatus == "已完成"
     }
 
+    private func randomTemplate() -> String {
+        let candidates = templateOptions.filter { $0 != selectedTemplate }
+        return candidates.randomElement() ?? selectedTemplate
+    }
+
     private var downloadStatusText: String {
         let parts = [
             didDownloadMP4 ? "MP4 已下载" : nil,
