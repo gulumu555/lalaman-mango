@@ -130,6 +130,9 @@ struct DetailView: View {
                     Text("发布于 \(moment.zoneName) · 仅展示商圈级位置")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("位置已模糊（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     HStack(spacing: 6) {
                         Image(systemName: isPublished ? "checkmark.seal.fill" : "clock.fill")
                             .font(.caption2)
