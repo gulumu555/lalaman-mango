@@ -95,6 +95,9 @@ struct NotificationsView: View {
                 Text("时间胶囊仅站内提醒（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("通知不会打断系统（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 if notificationLoading {
                 HStack(spacing: 8) {
                     ProgressView()
@@ -344,6 +347,9 @@ struct NotificationsView: View {
                     .listRowSeparator(.hidden)
                 }
                 Text("点击卡片可查看详情（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("卡片仅轻互动，无私信（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 ForEach(Array(displayedAngelCards.enumerated()), id: \.offset) { index, item in
