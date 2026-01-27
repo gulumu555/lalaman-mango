@@ -2018,6 +2018,9 @@ private struct VideoStep: View {
             Text("状态：\(renderStateText)")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("渲染队列：排队中（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             Button("开始渲染") {
                 simulateRender()
             }
