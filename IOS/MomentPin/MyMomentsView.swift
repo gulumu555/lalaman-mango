@@ -20,6 +20,9 @@ struct MyMomentsView: View {
                 Text("默认仅自己可见（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("可按私密/公开筛选（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             Section("私密") {
                 ForEach(privateItems, id: \.self) { item in
@@ -47,6 +50,9 @@ struct MyMomentsView: View {
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 Text("私密内容不参与微展/回声（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("私密内容可删除（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
