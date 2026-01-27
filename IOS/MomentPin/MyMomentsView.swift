@@ -13,6 +13,11 @@ struct MyMomentsView: View {
 
     var body: some View {
         List {
+            Section("汇总") {
+                Text("私密 \(privateItems.count) · 匿名公开 \(publicItems.count)")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
             Section("私密") {
                 ForEach(privateItems, id: \.self) { item in
                     NavigationLink(destination: DetailView(moment: Moment.sample.first!)) {
