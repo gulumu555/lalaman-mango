@@ -253,6 +253,9 @@ struct NearbyView: View {
                     Text("入口：点位气泡 / 列表 / 随机听听")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("共鸣触发地图波纹（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     if !exhibitHint.isEmpty {
                         Text(exhibitHint)
                             .font(.caption2)
