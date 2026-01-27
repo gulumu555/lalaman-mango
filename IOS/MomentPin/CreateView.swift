@@ -2238,6 +2238,9 @@ private struct VideoStep: View {
             Text("静帧与 MP4 可独立下载（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("未渲染完成不可发布（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             Button("发布") {
                 renderState = .published
                 onPublish()
