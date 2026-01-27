@@ -819,9 +819,11 @@ private struct PublishSheet: View {
                     .toggleStyle(SwitchToggleStyle(tint: .black))
                 Toggle("放进漂流瓶", isOn: $includeBottle)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
-                Text("漂流瓶默认不在地图展示（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
+                if includeBottle {
+                    Text("漂流瓶默认不在地图展示（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
                 Toggle("同步到朋友圈（占位）", isOn: $shareToMoments)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
                 Text("朋友圈分享为可选（占位）")
