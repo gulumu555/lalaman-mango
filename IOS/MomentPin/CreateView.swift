@@ -1555,6 +1555,8 @@ private struct VoiceStep: View {
     @State private var asrProgress: CGFloat = 0.4
     @State private var asrHint = "ASR ≤ 2s（占位）"
     @State private var showAIHelper = false
+    @State private var manualSubtitle = ""
+    @State private var showManualInput = false
 
     private var moodEmoji: String {
         switch selectedMood {
@@ -1752,6 +1754,7 @@ private struct VoiceStep: View {
                     asrProgress = 1.0
                 case "失败":
                     asrProgress = 0.2
+                    showManualInput = true
                 default:
                     asrProgress = 0.4
                 }
@@ -1850,13 +1853,29 @@ private struct VoiceStep: View {
                 .disabled(!hasVoice)
             }
             Button("手动输入字幕") {
-                subtitleText = "（手动输入占位）"
+                showManualInput = true
             }
             .font(.caption)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 8)
             .background(Color.gray.opacity(0.12))
             .cornerRadius(999)
+            if showManualInput {
+                VStack(alignment: .leading, spacing: 8) {
+                    TextField("输入字幕（占位）", text: $manualSubtitle)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    Button("应用字幕") {
+                        subtitleText = manualSubtitle.isEmpty ? "（手动输入占位）" : manualSubtitle
+                        showManualInput = false
+                    }
+                    .font(.caption)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(Color.black)
+                    .foregroundColor(.white)
+                    .cornerRadius(999)
+                }
+            }
             Button("重录") {
                 hasVoice = false
                 isRecording = false
