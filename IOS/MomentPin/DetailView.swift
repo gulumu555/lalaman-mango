@@ -27,6 +27,7 @@ struct DetailView: View {
     @State private var isSaved = false
     @State private var showEchoCreateSheet = false
     @State private var showEchoMapHint = false
+    @State private var isPublished = true
     @State private var renderStatus = "ready"
     @State private var renderHint = "已生成"
     @State private var motionLevel = "轻"
@@ -119,6 +120,13 @@ struct DetailView: View {
                     Text("发布于 \(moment.zoneName) · 仅展示商圈级位置")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    HStack(spacing: 6) {
+                        Image(systemName: isPublished ? "checkmark.seal.fill" : "clock.fill")
+                            .font(.caption2)
+                        Text(isPublished ? "已发布" : "未发布")
+                            .font(.caption2)
+                    }
+                    .foregroundColor(.secondary)
                     HStack(spacing: 8) {
                         Text(isPublic ? "匿名公开" : "仅自己")
                             .font(.caption)
