@@ -466,6 +466,13 @@ struct CreateView: View {
                 horseWitnessEnabled = payload.horseWitnessEnabled
             }
         }
+        .onChange(of: hideMood) { newValue in
+            if newValue {
+                lastMoodBeforeHide = selectedMood
+            } else {
+                selectedMood = lastMoodBeforeHide
+            }
+        }
     }
 
     private var canProceed: Bool {
