@@ -741,6 +741,9 @@ private struct PublishSheet: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
+                Text("位置精度：商圈级（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 Text("情绪标签用于微展/回声（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
