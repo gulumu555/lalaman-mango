@@ -1989,6 +1989,7 @@ private struct VideoStep: View {
     @State private var renderState: RenderState = .uploaded
     @State private var renderHint = "MP4 ≤ 12s（占位）"
     @State private var renderFailReason = "网络超时（占位）"
+    @State private var renderTaskId = "MP4-20260127-001"
     @State private var coverHint = "封面取首帧或合成图（占位）"
     @State private var previewHint = "可下载 MP4 与静帧（占位）"
     @State private var exportHint = "MP4 含原声 + 字幕滚动（占位）"
@@ -2116,6 +2117,9 @@ private struct VideoStep: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Text("渲染队列：排队中（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text("任务ID：\(renderTaskId)（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Button("开始渲染") {
