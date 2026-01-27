@@ -2091,6 +2091,11 @@ private struct VideoStep: View {
             .foregroundColor(.white)
             .cornerRadius(999)
             .disabled(!canStartRender)
+            if !canStartRender {
+                Text("需完成照片与语音后再渲染")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
             GeometryReader { proxy in
                 ZStack(alignment: .leading) {
                     Capsule()
