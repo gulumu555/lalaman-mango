@@ -101,6 +101,9 @@ struct NotificationsView: View {
                 Text("通知不会打断系统（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("可筛选漂流瓶/系统通知（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 if notificationLoading {
                 HStack(spacing: 8) {
                     ProgressView()
@@ -311,6 +314,9 @@ struct NotificationsView: View {
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 Text("长按可标记已读（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("筛选不影响实际触达（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 if !angelStatusHint.isEmpty {
