@@ -223,6 +223,10 @@ struct DetailView: View {
                 .background(Color.gray.opacity(0.08))
                 .cornerRadius(16)
 
+                Text("轻互动")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
                 HStack(spacing: 12) {
                     VStack(alignment: .leading, spacing: 6) {
                         Button {
