@@ -47,6 +47,7 @@ struct CreateView: View {
     @State private var horseTrailEnabled = false
     @State private var horseWitnessEnabled = false
     @State private var shareToMoments = false
+    @State private var allowMapDisplay = true
     @State private var publishSummary = ""
     @State private var publishStatusHint = ""
     @State private var publishFailed = false
@@ -262,6 +263,7 @@ struct CreateView: View {
                 horseTrailEnabled: $horseTrailEnabled,
                 horseWitnessEnabled: $horseWitnessEnabled,
                 shareToMoments: $shareToMoments,
+                allowMapDisplay: $allowMapDisplay,
                 selectedMood: $selectedMood,
                 hideMood: $hideMood,
                 presetZoneName: presetZoneName,
@@ -601,6 +603,9 @@ struct CreateView: View {
         if shareToMoments {
             items.append("朋友圈")
         }
+        if !allowMapDisplay {
+            items.append("地图不展示")
+        }
         if hideMood {
             items.append("情绪隐藏")
         } else if !selectedMood.isEmpty {
@@ -644,6 +649,7 @@ private struct PublishSheet: View {
     @Binding var horseTrailEnabled: Bool
     @Binding var horseWitnessEnabled: Bool
     @Binding var shareToMoments: Bool
+    @Binding var allowMapDisplay: Bool
     @Binding var selectedMood: String
     @Binding var hideMood: Bool
     var presetZoneName: String? = nil
@@ -711,6 +717,14 @@ private struct PublishSheet: View {
                         let label = hideMood ? "情绪·隐藏" : "情绪·\(moodEmoji) \(selectedMood)"
                         CapsuleLabel(text: label, isPrimary: false)
                     }
+                }
+                Toggle("允许地图展示", isOn: $allowMapDisplay)
+                    .toggleStyle(SwitchToggleStyle(tint: .black))
+                    .disabled(!isPublic)
+                if !isPublic {
+                    Text("仅自己可见时默认不展示地图（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                 }
                 Text("情绪标签用于微展/回声（占位）")
                 .font(.caption2)
