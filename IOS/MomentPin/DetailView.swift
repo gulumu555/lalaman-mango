@@ -23,6 +23,7 @@ struct DetailView: View {
     @State private var hasReactedToday = false
     @State private var didEcho = false
     @State private var showEchoPulse = false
+    @State private var echoCount = 12
     @State private var renderStatus = "ready"
     @State private var renderHint = "已生成"
     @State private var motionLevel = "轻"
@@ -212,39 +213,45 @@ struct DetailView: View {
                 .cornerRadius(16)
 
                 HStack(spacing: 12) {
-                    Button {
-                        guard !didEcho else { return }
-                        triggerLightHaptic()
-                        didEcho = true
-                        feedbackText = "共鸣已送达"
-                        showFeedback = true
-                        showEchoPulse = true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                            showEchoPulse = false
+                    VStack(alignment: .leading, spacing: 6) {
+                        Button {
+                            guard !didEcho else { return }
+                            triggerLightHaptic()
+                            didEcho = true
+                            echoCount += 1
+                            feedbackText = "共鸣已送达"
+                            showFeedback = true
+                            showEchoPulse = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                                showEchoPulse = false
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                showFeedback = false
+                            }
+                        } label: {
+                            HStack(spacing: 8) {
+                                Image(systemName: "dot.radiowaves.left.and.right")
+                                Text(didEcho ? "已共鸣" : "我也来过")
+                            }
+                            .font(.caption)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
                         }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                            showFeedback = false
-                        }
-                    } label: {
-                        HStack(spacing: 8) {
-                            Image(systemName: "dot.radiowaves.left.and.right")
-                            Text(didEcho ? "已共鸣" : "我也来过")
-                        }
-                        .font(.caption)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 10)
+                        .background(Color.black)
+                        .foregroundColor(.white)
+                        .cornerRadius(999)
+                        .overlay(
+                            Circle()
+                                .stroke(Color.blue.opacity(0.4), lineWidth: 2)
+                                .scaleEffect(showEchoPulse ? 1.4 : 0.2)
+                                .opacity(showEchoPulse ? 0 : 1)
+                                .animation(.easeOut(duration: 0.6), value: showEchoPulse)
+                        )
+                        .disabled(didEcho || !isInteractive || !isPublic)
+                        Text("共鸣 \(echoCount)")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
                     }
-                    .background(Color.black)
-                    .foregroundColor(.white)
-                    .cornerRadius(999)
-                    .overlay(
-                        Circle()
-                            .stroke(Color.blue.opacity(0.4), lineWidth: 2)
-                            .scaleEffect(showEchoPulse ? 1.4 : 0.2)
-                            .opacity(showEchoPulse ? 0 : 1)
-                            .animation(.easeOut(duration: 0.6), value: showEchoPulse)
-                    )
-                    .disabled(didEcho || !isInteractive || !isPublic)
                     Text("共鸣一次 / 日（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
