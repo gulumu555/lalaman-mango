@@ -1795,6 +1795,8 @@ private struct VideoStep: View {
     @State private var exportHint = "MP4 含原声 + 字幕滚动（占位）"
     @State private var shareHint = "发布后可分享链接（占位）"
     @State private var renderRetryHint = "渲染失败可重试（占位）"
+    @State private var didDownloadMP4 = false
+    @State private var didDownloadStill = false
 
     private var moodEmoji: String {
         switch selectedMood {
