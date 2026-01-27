@@ -1993,14 +1993,18 @@ private struct VideoStep: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
             HStack(spacing: 12) {
-                Button("下载 MP4") {}
+                Button("下载 MP4") {
+                    didDownloadMP4 = true
+                }
                     .font(.caption)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
                     .background(Color.black)
                     .foregroundColor(.white)
                     .cornerRadius(999)
-                Button("下载静帧") {}
+                Button("下载静帧") {
+                    didDownloadStill = true
+                }
                     .font(.caption)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
