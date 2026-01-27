@@ -1925,6 +1925,12 @@ private struct VoiceStep: View {
                 Text("需要麦克风权限（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Button("去设置授权（占位）") {}
+                    .font(.caption2)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(Color.gray.opacity(0.12))
+                    .cornerRadius(999)
             }
         }
         .padding(20)
