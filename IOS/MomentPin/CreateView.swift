@@ -38,6 +38,7 @@ struct CreateView: View {
     @State private var recoveryHint = "中断后可在我的片刻继续（占位）"
     @State private var selectedMood = "轻松"
     @State private var hideMood = false
+    @State private var lastMoodBeforeHide = "轻松"
     private let moodOptions = ["轻松", "治愈", "emo"]
     @State private var angelEnabled = false
     @State private var allowMicrocuration = false
