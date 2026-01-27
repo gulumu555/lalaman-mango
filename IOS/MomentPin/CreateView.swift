@@ -2145,6 +2145,15 @@ private struct VideoStep: View {
                 Text("失败兜底：静帧字幕 MP4")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Button("使用兜底版本") {
+                    renderState = .publishable
+                    renderStatus = "已完成"
+                }
+                .font(.caption2)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(Color.black.opacity(0.12))
+                .cornerRadius(999)
             Text("失败不影响继续发布（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
