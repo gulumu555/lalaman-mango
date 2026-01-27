@@ -27,6 +27,7 @@ struct CreateView: View {
     @State private var hookText = "今天的我有点___"
     @State private var subtitleText = "（字幕占位）"
     @State private var recentTaskHint = "最近任务：风格已完成，小马合成中"
+    @State private var taskQueueHint = "任务队列：0/1（占位）"
     @State private var totalDurationHint = "预计 20-30 秒完成（占位）"
     @State private var publishHint = "生成完成后可下载/发布"
     @State private var failoverHint = "任何步骤失败都会有兜底（占位）"
@@ -171,6 +172,10 @@ struct CreateView: View {
                 .foregroundColor(.secondary)
                 .padding(.bottom, 12)
             Text(totalDurationHint)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.bottom, 8)
+            Text(taskQueueHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
                 .padding(.bottom, 8)
