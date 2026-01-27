@@ -1303,6 +1303,8 @@ private struct PonyStep: View {
     @Binding var ponyPlacement: String
     @Binding var selectedStyle: String
     private let placements = ["左侧合影", "右侧合影", "肩旁合影"]
+    private let ponyPoses = ["挥手", "比心", "站立", "坐姿"]
+    @State private var ponyPose = "挥手"
     @State private var fusionStatus = "融合中"
     private let fusionStatuses = ["融合中", "完成", "失败"]
     @State private var fusionProgress: CGFloat = 0.5
@@ -1381,6 +1383,29 @@ private struct PonyStep: View {
                         .background(Color.gray.opacity(0.12))
                         .cornerRadius(999)
                     }
+                    HStack(spacing: 8) {
+                        ForEach(ponyPoses, id: \.self) { pose in
+                            Button(pose) {
+                                ponyPose = pose
+                            }
+                            .font(.caption2)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .background(ponyPose == pose ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
+                            .cornerRadius(999)
+                        }
+                        Button("随机姿态") {
+                            ponyPose = ponyPoses.randomElement() ?? ponyPose
+                        }
+                        .font(.caption2)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(Color.gray.opacity(0.12))
+                        .cornerRadius(999)
+                    }
+                    Text("姿态：\(ponyPose)（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     Text("风格ID：\(selectedStyle)")
                         .font(.caption2)
                         .foregroundColor(.secondary)
