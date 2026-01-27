@@ -1680,6 +1680,14 @@ private struct VoiceStep: View {
                     .cornerRadius(12)
                 }
             }
+            Button("随机一个钩子") {
+                hookText = hooks.randomElement() ?? hookText
+            }
+            .font(.caption2)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(Color.gray.opacity(0.12))
+            .cornerRadius(999)
             Text("也可随机一个钩子（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
