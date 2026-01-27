@@ -70,6 +70,9 @@ struct MyMomentsView: View {
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
+            Text("导出功能后置（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
         }
         .navigationTitle("我的片刻")
         .navigationBarTitleDisplayMode(.inline)
