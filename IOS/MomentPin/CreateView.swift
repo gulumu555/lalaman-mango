@@ -1020,6 +1020,7 @@ private struct StyleStep: View {
     private let styleStatuses = ["生成中", "可选", "失败"]
     @State private var styleProgress: CGFloat = 0.4
     @State private var styleHint = "并行生成 3-4 张（≤15s）"
+    @State private var styleEta = "预计 8s（占位）"
     @State private var selectedStyleId = "style_heal_a"
     @State private var selectHint = "已选风格将进入下一步"
     @State private var styleGuideHint = "风格一致：线条/色彩/质感保持稳定"
@@ -1235,6 +1236,9 @@ private struct StyleStep: View {
                     }
                 }
                 .frame(height: 6)
+                Text(styleEta)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 .onChange(of: styleStatus) { value in
                     switch value {
                     case "生成中":
