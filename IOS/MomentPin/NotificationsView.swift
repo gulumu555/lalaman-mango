@@ -89,6 +89,9 @@ struct NotificationsView: View {
                 Text("天使卡类型：微展 / 回声 / 时间胶囊（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("时间胶囊仅站内提醒（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 if notificationLoading {
                 HStack(spacing: 8) {
                     ProgressView()
