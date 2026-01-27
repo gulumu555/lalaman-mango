@@ -736,6 +736,8 @@ private struct PublishSheet: View {
                 Toggle("允许地图展示", isOn: $allowMapDisplay)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
                     .disabled(!isPublic)
+                Toggle("隐藏位置", isOn: $hideLocation)
+                    .toggleStyle(SwitchToggleStyle(tint: .black))
                 if !isPublic {
                     Text("仅自己可见时默认不展示地图（占位）")
                         .font(.caption2)
