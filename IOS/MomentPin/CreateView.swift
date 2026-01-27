@@ -1411,6 +1411,9 @@ private struct PonyStep: View {
             Text("默认关闭，可选开启")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("不开启小马也可继续（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             if ponyEnabled {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("站位候选（随机性）")
