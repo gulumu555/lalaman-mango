@@ -2298,6 +2298,14 @@ private struct VideoStep: View {
             Text("封面可用合影静帧（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Button("选择封面（占位）") {
+                coverHint = "封面已更新（占位）"
+            }
+            .font(.caption2)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(Color.gray.opacity(0.12))
+            .cornerRadius(999)
             Text("失败重试：仅重新渲染，不重复创建")
                 .font(.caption2)
                 .foregroundColor(.secondary)
