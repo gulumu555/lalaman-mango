@@ -108,6 +108,8 @@ struct CreateView: View {
                     subtitleText: $subtitleText,
                     selectedMood: $selectedMood,
                     hideMood: $hideMood,
+                    hasPhoto: $hasPhoto,
+                    hasVoice: $hasVoice,
                     onPublish: { showPublishSheet = true }
                 )
                 .tag(Step.video)
@@ -1778,6 +1780,8 @@ private struct VideoStep: View {
     @Binding var subtitleText: String
     @Binding var selectedMood: String
     @Binding var hideMood: Bool
+    @Binding var hasPhoto: Bool
+    @Binding var hasVoice: Bool
     var onPublish: () -> Void = {}
     @State private var subtitleStyle = "默认白字"
     private let subtitleStyles = ["默认白字", "薄雾底条"]
