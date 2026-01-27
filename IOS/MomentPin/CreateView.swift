@@ -1797,6 +1797,8 @@ private struct VideoStep: View {
     @State private var renderRetryHint = "渲染失败可重试（占位）"
     @State private var didDownloadMP4 = false
     @State private var didDownloadStill = false
+    @State private var selectedTemplate = "T02_Cloud"
+    private let templateOptions = ["T02_Cloud", "T07_Sparkle", "T04_LightLeak", "T06_Wind"]
 
     private var moodEmoji: String {
         switch selectedMood {
