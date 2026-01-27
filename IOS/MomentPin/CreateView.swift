@@ -1155,6 +1155,17 @@ private struct StyleStep: View {
             Text("候选图一屏展示（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("风格 ID：\(selectedStyleId)")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            HStack(spacing: 8) {
+                Button("A") { selectedStyleId = "style_heal_a" }
+                Button("B") { selectedStyleId = "style_heal_b" }
+                Button("C") { selectedStyleId = "style_movie_c" }
+                Button("D") { selectedStyleId = "style_manga_d" }
+            }
+            .font(.caption2)
+            .padding(.vertical, 4)
             HStack(spacing: 8) {
                     Text("状态：\(styleStatus)")
                         .font(.caption2)
