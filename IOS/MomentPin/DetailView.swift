@@ -25,6 +25,7 @@ struct DetailView: View {
     @State private var showEchoPulse = false
     @State private var echoCount = 12
     @State private var isSaved = false
+    @State private var showEchoCreateSheet = false
     @State private var renderStatus = "ready"
     @State private var renderHint = "已生成"
     @State private var motionLevel = "轻"
@@ -283,6 +284,33 @@ struct DetailView: View {
                         .foregroundColor(.secondary)
                 }
 
+                Button {
+                    showEchoCreateSheet = true
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("送回声")
+                                .font(.headline)
+                            Text("生成一条同地片刻")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "arrow.right.circle.fill")
+                            .font(.title3)
+                            .foregroundColor(.black)
+                    }
+                    .padding(.vertical, 12)
+                }
+                .padding(.horizontal, 14)
+                .background(Color.white)
+                .cornerRadius(16)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                )
+                .disabled(!isInteractive || !isPublic)
+
                 ReactionRow(
                     selectedReaction: $selectedReaction,
                     isEnabled: isInteractive && isPublic && !hasReactedToday
@@ -363,6 +391,9 @@ struct DetailView: View {
         }
         .navigationTitle("片刻")
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $showEchoCreateSheet) {
+            CreateView(presetZoneName: moment.zoneName)
+        }
         .alert("风控", isPresented: $showModerationSheet) {
             Button("确定", role: .cancel) {}
         } message: {
