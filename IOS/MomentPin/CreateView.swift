@@ -2061,7 +2061,7 @@ private struct VideoStep: View {
             .cornerRadius(999)
             .disabled(!canPublish)
             if !canPublish {
-                Text("需完成照片与语音才可发布")
+                Text("需完成照片/语音并生成 MP4 才可发布")
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
