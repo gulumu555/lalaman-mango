@@ -467,6 +467,9 @@ private struct MoodCard: View {
             Text(hintText)
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("默认情绪：轻松/治愈（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
         }
         .padding(12)
         .background(Color.white.opacity(0.95))
