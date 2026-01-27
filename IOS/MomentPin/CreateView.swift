@@ -706,6 +706,7 @@ private struct PublishSheet: View {
                 HStack(spacing: 8) {
                     CapsuleLabel(text: isPublic ? "匿名公开" : "仅自己", isPrimary: true)
                     CapsuleLabel(text: hideLocation ? "隐藏位置" : "显示位置", isPrimary: false)
+                    CapsuleLabel(text: allowMapDisplay ? "地图展示" : "地图不展示", isPrimary: false)
                     if includeBottle {
                         CapsuleLabel(text: "漂流瓶", isPrimary: false)
                     }
