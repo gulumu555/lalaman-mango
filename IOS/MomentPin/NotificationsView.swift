@@ -107,6 +107,12 @@ struct NotificationsView: View {
                 Text("通知卡片不会触发聊天（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("通知点击跳转详情（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("下拉可刷新（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 if notificationLoading {
                 HStack(spacing: 8) {
                     ProgressView()

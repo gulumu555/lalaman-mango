@@ -50,6 +50,12 @@ struct BottlesView: View {
                 Text("靠岸后红点提醒（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("漂流瓶默认私密（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("漂流瓶可编辑内容（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             Section("已靠岸") {
                 ForEach(openedItems, id: \.self) { item in

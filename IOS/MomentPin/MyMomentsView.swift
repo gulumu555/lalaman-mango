@@ -90,11 +90,17 @@ struct MyMomentsView: View {
                 Text("公开内容可分享（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("公开内容可删除（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             Text("导出功能后置（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Text("列表仅本地缓存（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text("按时间倒序展示（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
         }

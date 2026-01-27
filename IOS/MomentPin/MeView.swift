@@ -86,6 +86,12 @@ struct MeView: View {
                     Text("通知不推送系统提醒（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("仅站内查看通知（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text("版本号：0.1.0（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                 }
                 .padding(20)
             }

@@ -150,9 +150,14 @@ struct NearbyView: View {
                                             RoundedRectangle(cornerRadius: 999)
                                                 .stroke(Color.black.opacity(0.2), lineWidth: 1)
                                         )
-                                }
                             }
                         }
+                    }
+                    if bubbleMoments.isEmpty {
+                        Text("附近暂无点位（占位）")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
                         .padding(.horizontal, 12)
                         .padding(.vertical, 8)
                         .background(Color.white.opacity(0.95))
@@ -371,6 +376,18 @@ struct NearbyView: View {
                             .foregroundColor(.white)
                             .cornerRadius(999)
                             .padding(.top, 12)
+                    }
+                    if locationStatus == "定位中..." {
+                        Text("定位中，请稍候（占位）")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                            .padding(.top, 48)
+                    }
+                    if locationStatus == "定位失败" {
+                        Text("定位失败，请稍后重试（占位）")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                            .padding(.top, 48)
                     }
                 }
                 .overlay(alignment: .bottom) {

@@ -338,6 +338,9 @@ struct DetailView: View {
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
                         }
+                        Text("收藏不触发通知（占位）")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
                         Text("共鸣一次 / 日（占位）")
                             .font(.caption2)
                             .foregroundColor(.secondary)
@@ -372,6 +375,10 @@ struct DetailView: View {
                     .foregroundColor(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Text("回声为一次性卡片（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text("回声可在设置中关闭（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -435,6 +442,9 @@ struct DetailView: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
+                Text("反应仅记录本日（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
 
                 TemplateReplies(
                     selectedTemplate: $selectedTemplate,
@@ -454,6 +464,9 @@ struct DetailView: View {
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 Text("模板回复点按即发（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("模板回复不可编辑（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 if !allowReplies {
@@ -1103,6 +1116,9 @@ private struct ShareRetrySection: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Text("分享链接可复制（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text("导出后可在相册查看（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Text("可选静音导出（占位）")
