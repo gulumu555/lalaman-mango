@@ -1718,6 +1718,9 @@ private struct VoiceStep: View {
             Text("滚动逻辑：按语义分段，不逐字跳")
                 .font(.caption2)
                 .foregroundColor(.secondary)
+            Text("按住说可触发语音录制（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
             Button(isRecording ? "停止录音" : "开始录音") {
                 if isRecording {
                     isRecording = false
