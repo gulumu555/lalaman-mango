@@ -227,112 +227,117 @@ struct DetailView: View {
                     .font(.headline)
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                HStack(spacing: 12) {
-                    VStack(alignment: .leading, spacing: 6) {
+                VStack(spacing: 12) {
+                    HStack(spacing: 12) {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Button {
+                                guard !didEcho else { return }
+                                triggerLightHaptic()
+                                didEcho = true
+                                echoCount += 1
+                                feedbackText = "共鸣已送达"
+                                showFeedback = true
+                                showEchoPulse = true
+                                showEchoMapHint = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                                    showEchoPulse = false
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                                    showEchoMapHint = false
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                    showFeedback = false
+                                }
+                            } label: {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "dot.radiowaves.left.and.right")
+                                    Text(didEcho ? "已共鸣" : "我也来过")
+                                }
+                                .font(.caption)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 10)
+                            }
+                            .background(Color.black)
+                            .foregroundColor(.white)
+                            .cornerRadius(999)
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.blue.opacity(0.4), lineWidth: 2)
+                                    .scaleEffect(showEchoPulse ? 1.4 : 0.2)
+                                    .opacity(showEchoPulse ? 0 : 1)
+                                    .animation(.easeOut(duration: 0.6), value: showEchoPulse)
+                            )
+                            .disabled(didEcho || !isInteractive || !isPublic)
+                            Text("共鸣 \(echoCount)")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
                         Button {
-                            guard !didEcho else { return }
                             triggerLightHaptic()
-                            didEcho = true
-                            echoCount += 1
-                            feedbackText = "共鸣已送达"
+                            isSaved.toggle()
+                            feedbackText = isSaved ? "已收藏" : "取消收藏"
                             showFeedback = true
-                            showEchoPulse = true
-                            showEchoMapHint = true
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                                showEchoPulse = false
-                            }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-                                showEchoMapHint = false
-                            }
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                                 showFeedback = false
                             }
                         } label: {
-                            HStack(spacing: 8) {
-                                Image(systemName: "dot.radiowaves.left.and.right")
-                                Text(didEcho ? "已共鸣" : "我也来过")
+                            HStack(spacing: 6) {
+                                Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
+                                Text(isSaved ? "已收藏" : "收藏")
                             }
                             .font(.caption)
-                            .frame(maxWidth: .infinity)
+                            .frame(width: 120)
                             .padding(.vertical, 10)
                         }
-                        .background(Color.black)
-                        .foregroundColor(.white)
-                        .cornerRadius(999)
+                        .background(Color.white)
+                        .foregroundColor(.black)
                         .overlay(
-                            Circle()
-                                .stroke(Color.blue.opacity(0.4), lineWidth: 2)
-                                .scaleEffect(showEchoPulse ? 1.4 : 0.2)
-                                .opacity(showEchoPulse ? 0 : 1)
-                                .animation(.easeOut(duration: 0.6), value: showEchoPulse)
+                            RoundedRectangle(cornerRadius: 999)
+                                .stroke(Color.black.opacity(0.1), lineWidth: 1)
                         )
-                        .disabled(didEcho || !isInteractive || !isPublic)
-                        Text("共鸣 \(echoCount)")
+                        .cornerRadius(999)
+                        .disabled(!isInteractive || !isPublic)
+                        Text("共鸣一次 / 日（占位）")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }
-                    Button {
-                        triggerLightHaptic()
-                        isSaved.toggle()
-                        feedbackText = isSaved ? "已收藏" : "取消收藏"
-                        showFeedback = true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                            showFeedback = false
-                        }
-                    } label: {
-                        HStack(spacing: 6) {
-                            Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
-                            Text(isSaved ? "已收藏" : "收藏")
-                        }
-                        .font(.caption)
-                        .frame(width: 120)
-                        .padding(.vertical, 10)
+                    if showEchoMapHint {
+                        Text("地图光点已点亮（占位）")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    .background(Color.white)
-                    .foregroundColor(.black)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 999)
-                            .stroke(Color.black.opacity(0.1), lineWidth: 1)
-                    )
-                    .cornerRadius(999)
-                    .disabled(!isInteractive || !isPublic)
-                    Text("共鸣一次 / 日（占位）")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                }
-                if showEchoMapHint {
-                    Text("地图光点已点亮（占位）")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
 
-                Button {
-                    showEchoCreateSheet = true
-                } label: {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("送回声")
-                                .font(.headline)
-                            Text("生成一条同地片刻")
-                                .font(.caption2)
-                                .foregroundColor(.secondary)
+                    Button {
+                        showEchoCreateSheet = true
+                    } label: {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("送回声")
+                                    .font(.headline)
+                                Text("生成一条同地片刻")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                            Image(systemName: "arrow.right.circle.fill")
+                                .font(.title3)
+                                .foregroundColor(.black)
                         }
-                        Spacer()
-                        Image(systemName: "arrow.right.circle.fill")
-                            .font(.title3)
-                            .foregroundColor(.black)
+                        .padding(.vertical, 12)
                     }
-                    .padding(.vertical, 12)
+                    .padding(.horizontal, 14)
+                    .background(Color.white)
+                    .cornerRadius(16)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                    )
+                    .disabled(!isInteractive || !isPublic)
                 }
-                .padding(.horizontal, 14)
-                .background(Color.white)
+                .padding(12)
+                .background(Color.gray.opacity(0.06))
                 .cornerRadius(16)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(Color.black.opacity(0.08), lineWidth: 1)
-                )
-                .disabled(!isInteractive || !isPublic)
 
                 ReactionRow(
                     selectedReaction: $selectedReaction,
