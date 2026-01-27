@@ -292,6 +292,9 @@ struct NotificationsView: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
+                Text("回声卡每日最多一次（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 if !angelStatusHint.isEmpty {
                     Text(angelStatusHint)
                         .font(.caption2)
