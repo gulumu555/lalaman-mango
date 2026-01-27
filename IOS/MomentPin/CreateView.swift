@@ -1929,6 +1929,10 @@ private struct VideoStep: View {
                 .foregroundColor(.secondary)
             Button("再来一个动效") {
                 selectedTemplate = randomTemplate()
+                renderStatus = "生成中"
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                    renderStatus = "已完成"
+                }
             }
             .font(.caption2)
             .padding(.horizontal, 10)
