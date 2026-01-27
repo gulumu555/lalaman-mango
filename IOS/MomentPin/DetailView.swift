@@ -916,6 +916,9 @@ private struct ModerationSection: View {
             Text("占位：后续接入举报/屏蔽/拉黑逻辑")
                 .font(.caption)
                 .foregroundColor(.secondary)
+            Text("举报会屏蔽对方内容（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
