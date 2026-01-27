@@ -1813,6 +1813,10 @@ private struct VideoStep: View {
         hasPhoto && hasVoice
     }
 
+    private var canDownload: Bool {
+        renderStatus == "已完成"
+    }
+
     private var downloadStatusText: String {
         let parts = [
             didDownloadMP4 ? "MP4 已下载" : nil,
@@ -2009,9 +2013,10 @@ private struct VideoStep: View {
                     .font(.caption)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
-                    .background(Color.black)
+                    .background(canDownload ? Color.black : Color.gray.opacity(0.4))
                     .foregroundColor(.white)
                     .cornerRadius(999)
+                    .disabled(!canDownload)
                 Button("下载静帧") {
                     didDownloadStill = true
                 }
@@ -2024,6 +2029,7 @@ private struct VideoStep: View {
                             .stroke(Color.black.opacity(0.15), lineWidth: 1)
                     )
                     .cornerRadius(999)
+                    .disabled(!canDownload)
             }
             if didDownloadMP4 || didDownloadStill {
                 Text(downloadStatusText)
