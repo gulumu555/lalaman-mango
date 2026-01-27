@@ -298,6 +298,9 @@ struct NotificationsView: View {
                 Text("回声卡每日最多一次（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("可在设置中关闭天使卡（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 if !angelStatusHint.isEmpty {
                     Text(angelStatusHint)
                         .font(.caption2)

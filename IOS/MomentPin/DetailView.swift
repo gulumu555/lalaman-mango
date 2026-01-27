@@ -133,6 +133,9 @@ struct DetailView: View {
                     Text("位置已模糊（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("首屏到播放 ≤ 2 次点击（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     HStack(spacing: 6) {
                         Image(systemName: isPublished ? "checkmark.seal.fill" : "clock.fill")
                             .font(.caption2)
@@ -408,6 +411,9 @@ struct DetailView: View {
                 Text("反应 1 秒内完成（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("私密内容不展示反应（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 if hasReactedToday {
                     Text("今日已反应")
                         .font(.caption2)
@@ -426,6 +432,9 @@ struct DetailView: View {
                     }
                 }
                 Text("模板回应：每日最多 1 条 · 无评论区（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("模板回复不弹键盘（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 if !allowReplies {
@@ -923,6 +932,9 @@ private struct ModerationSection: View {
                 .font(.caption)
                 .foregroundColor(.secondary)
             Text("举报会屏蔽对方内容（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text("屏蔽后不再出现同源内容（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
         }

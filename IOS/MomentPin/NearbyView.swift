@@ -213,6 +213,9 @@ struct NearbyView: View {
                     Text("点位聚合显示（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("首屏 2 秒内可点击入口（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     HStack(spacing: 12) {
                         Button(angelButtonLabel) {
                             showAngelSheet = true
@@ -483,6 +486,9 @@ private struct MoodCard: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
             Text("默认情绪：轻松/治愈（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Text("情绪浏览以标签切换（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
         }
