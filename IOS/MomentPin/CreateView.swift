@@ -1585,6 +1585,32 @@ private struct VoiceStep: View {
                     .stroke(Color.black.opacity(0.12), lineWidth: 1)
             )
             .cornerRadius(999)
+            if showAIHelper {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("AI 一次性帮我（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Button("给我一个开头") {
+                        hookText = "我想把这一刻留给___"
+                        showAIHelper = false
+                    }
+                    .font(.caption)
+                    Button("帮我把话说完整") {
+                        hookText = "如果这张照片会说话，它会说___"
+                        showAIHelper = false
+                    }
+                    .font(.caption)
+                    Button("我不知道说什么") {
+                        hookText = "今天的我有点___"
+                        showAIHelper = false
+                    }
+                    .font(.caption)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(10)
+                .background(Color.gray.opacity(0.12))
+                .cornerRadius(12)
+            }
             HStack {
                 Text("当前时长")
                     .font(.caption)
