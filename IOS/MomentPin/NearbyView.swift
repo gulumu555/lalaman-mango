@@ -210,6 +210,9 @@ struct NearbyView: View {
                     Text("默认范围：3km（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("点位聚合显示（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     HStack(spacing: 12) {
                         Button(angelButtonLabel) {
                             showAngelSheet = true
