@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C2D9F7B1A3E4C5D6F708192 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F3A5D1C8B3E4A1F9D2E6C10 /* APIClient.swift */; };
 		0055B785137EDB04F533089D /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAF23E7472D21E56F42CFED /* NotificationsView.swift */; };
 		12A524A8A2FE9CD4C81FC360 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2D13AE7C229C6E1037568B /* Models.swift */; };
 		1CD6D51B11F205EC509E7F0C /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF6AAEADDFDB417C02C652 /* DetailView.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7F3A5D1C8B3E4A1F9D2E6C10 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		0AAF23E7472D21E56F42CFED /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
 		1D6C308D4E9720E14A229A38 /* MeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeView.swift; sourceTree = "<group>"; };
 		26EB767148F82649BF3A4002 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -46,6 +48,7 @@
 		B268793957FDC5797D16A85F /* MomentPin */ = {
 			isa = PBXGroup;
 			children = (
+				7F3A5D1C8B3E4A1F9D2E6C10 /* APIClient.swift */,
 				BD14FC90FE17F463EA62E25E /* BottlesView.swift */,
 				52E90E091F7F4466425C07DD /* CreateView.swift */,
 				9CCF6AAEADDFDB417C02C652 /* DetailView.swift */,
@@ -122,6 +125,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C2D9F7B1A3E4C5D6F708192 /* APIClient.swift in Sources */,
 				AE8B58007DEA74792D1F50E2 /* BottlesView.swift in Sources */,
 				B4FD061B8570AD0ABDC02EB6 /* CreateView.swift in Sources */,
 				1CD6D51B11F205EC509E7F0C /* DetailView.swift in Sources */,
