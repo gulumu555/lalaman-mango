@@ -65,6 +65,15 @@ struct BottlesView: View {
                 Text("漂流瓶提醒不推送系统通知（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("漂流瓶可设置靠岸日期（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("靠岸前不可公开（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("靠岸后可转公开（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             Section("已靠岸") {
                 ForEach(openedItems, id: \.self) { item in
@@ -103,6 +112,15 @@ struct BottlesView: View {
                 Text("靠岸后可导出 MP4（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("靠岸后可保存为收藏（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("靠岸后可生成回声（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("靠岸后可再次漂流（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             Section("已捡起") {
                 if pickedItems.isEmpty {
@@ -129,6 +147,12 @@ struct BottlesView: View {
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 Text("捡起仅自己可见（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("捡起后可改回公开（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("捡起后可再生成视频（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
             } else {

@@ -28,14 +28,23 @@ struct RootView: View {
                 }
             }
             .overlay(alignment: .bottom) {
-                Text("首页地图为背景 · 中间 + 开始创作")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(Color.white.opacity(0.9))
-                    .cornerRadius(12)
-                    .padding(.bottom, 110)
+                VStack(spacing: 6) {
+                    Text("首页地图为背景 · 中间 + 开始创作")
+                    Text("底部仅三栏：附近 / + / 我（占位）")
+                    Text("进入创作即进入主流程（占位）")
+                    Text("不显示聊天入口（占位）")
+                    Text("地图默认 3km（占位）")
+                    Text("地图为默认背景层（占位）")
+                    Text("点位可进入详情（占位）")
+                    Text("隐私优先（占位）")
+                }
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(Color.white.opacity(0.9))
+                .cornerRadius(12)
+                .padding(.bottom, 110)
             }
         }
         .ignoresSafeArea(edges: [.bottom])
