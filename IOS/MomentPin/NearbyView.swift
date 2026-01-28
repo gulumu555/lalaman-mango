@@ -361,6 +361,18 @@ struct NearbyView: View {
                     Text("地图点位不展示群聊入口（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("地图点位不展示认证入口（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text("地图点位不展示实名入口（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text("地图点位不展示位置入口（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text("地图点位不展示轨迹入口（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     if !bubbleMoments.isEmpty {
                         HStack(spacing: 8) {
                             Text("点位")

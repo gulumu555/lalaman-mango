@@ -104,6 +104,10 @@ struct RootView: View {
                     Text("地图层不展示外链入口（占位）")
                     Text("地图层不展示群聊入口（占位）")
                     Text("地图层不展示分享按钮（占位）")
+                    Text("地图层不展示认证入口（占位）")
+                    Text("地图层不展示实名入口（占位）")
+                    Text("地图层不展示位置入口（占位）")
+                    Text("地图层不展示轨迹入口（占位）")
                 }
                 .font(.caption2)
                 .foregroundColor(.secondary)
