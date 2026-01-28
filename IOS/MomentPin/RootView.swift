@@ -37,6 +37,11 @@ struct RootView: View {
                     Text("地图为默认背景层（占位）")
                     Text("点位可进入详情（占位）")
                     Text("隐私优先（占位）")
+                    Text("共鸣触发光点反馈（占位）")
+                    Text("共鸣触发轻震动（占位）")
+                    Text("发布后才可公开（占位）")
+                    Text("未渲染不可发布（占位）")
+                    Text("AI 默认隐身（占位）")
                 }
                 .font(.caption2)
                 .foregroundColor(.secondary)
