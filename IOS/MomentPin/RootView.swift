@@ -58,6 +58,12 @@ struct RootView: View {
                     Text("内容以真实语音为核（占位）")
                     Text("不做强社交（占位）")
                     Text("不做长评论（占位）")
+                    Text("轻互动替代评论区（占位）")
+                    Text("仅三种互动（占位）")
+                    Text("AI 卡片不常驻（占位）")
+                    Text("AI 不主动私聊（占位）")
+                    Text("地图层不过度信息（占位）")
+                    Text("内容不做外部推荐（占位）")
                 }
                 .font(.caption2)
                 .foregroundColor(.secondary)
