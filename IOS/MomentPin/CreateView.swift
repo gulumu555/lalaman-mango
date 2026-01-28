@@ -673,6 +673,46 @@ struct CreateView: View {
                 .foregroundColor(.secondary)
                 .padding(.horizontal, 20)
                 .padding(.bottom, 6)
+            Text("发布后可设置卡片触发等级（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 6)
+            Text("发布后可设置卡片触发条件组（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 6)
+            Text("发布后可设置卡片触发开关（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 6)
+            Text("发布后可设置卡片触发筛选（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 6)
+            Text("发布后可设置卡片触发类型（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 6)
+            Text("发布后可设置卡片触发模板（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 6)
+            Text("发布后可设置卡片触发提示语（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 6)
+            Text("发布后可设置卡片触发按钮（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 6)
             Text("发布后可设置卡片触发上限（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
@@ -1150,28 +1190,6 @@ struct CreateView: View {
         )
     }
 
-    private func moodLabel(_ mood: String) -> String {
-        switch mood {
-        case "治愈":
-            return "🫧 治愈"
-        case "emo":
-            return "🥲 emo"
-        default:
-            return "🙂 轻松"
-        }
-    }
-
-    private func moodLabel(_ mood: String) -> String {
-        switch mood {
-        case "治愈":
-            return "🫧 治愈"
-        case "emo":
-            return "🥲 emo"
-        default:
-            return "🙂 轻松"
-        }
-    }
-
     private func buildPublishSummary() -> String {
         var items: [String] = []
         items.append(isPublic ? "匿名公开" : "仅自己可见")
@@ -1257,7 +1275,6 @@ private struct PublishSheet: View {
     var onConfirm: () -> Void = {}
     @State private var hideLocation = false
     @State private var openDate = Date().addingTimeInterval(60 * 60 * 24 * 90)
-    private let moodOptions = ["轻松", "治愈", "emo"]
 
     private var moodEmoji: String {
         switch selectedMood {
@@ -3309,5 +3326,16 @@ private struct StepControls: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
         }
+    }
+}
+
+fileprivate func moodLabel(_ mood: String) -> String {
+    switch mood {
+    case "治愈":
+        return "🫧 治愈"
+    case "emo":
+        return "🥲 emo"
+    default:
+        return "🙂 轻松"
     }
 }
