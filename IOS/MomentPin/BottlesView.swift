@@ -121,6 +121,15 @@ struct BottlesView: View {
                 Text("靠岸后可再次漂流（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("靠岸后可分享（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("靠岸后可改私密（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("靠岸后可改公开（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
             Section("已捡起") {
                 if pickedItems.isEmpty {
@@ -153,6 +162,12 @@ struct BottlesView: View {
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 Text("捡起后可再生成视频（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("捡起后可导出 MP4（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("捡起后可关闭提醒（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
             } else {
