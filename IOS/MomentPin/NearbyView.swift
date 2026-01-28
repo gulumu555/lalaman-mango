@@ -151,6 +151,18 @@ struct NearbyView: View {
                     Text("地图层支持马年足迹（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    Text("地图仅展示匿名公开（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text("AI 只在卡片出现（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text("点位为轻量交互入口（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text("情绪天气非强运营（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                     if !bubbleMoments.isEmpty {
                         HStack(spacing: 8) {
                             Text("点位")

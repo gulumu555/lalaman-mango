@@ -134,6 +134,18 @@ struct NotificationsView: View {
                 Text("只做动作卡，不做对话（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
+                Text("AI 仅桥梁角色（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("不做聊天机器人（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("卡片展示后可关闭（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("关闭后进入冷却（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 if notificationLoading {
                 HStack(spacing: 8) {
                     ProgressView()
