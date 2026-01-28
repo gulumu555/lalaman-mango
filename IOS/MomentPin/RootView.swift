@@ -126,6 +126,8 @@ struct RootView: View {
                     Text("地图层不展示实名信息（占位）")
                     Text("地图层不展示身份信息（占位）")
                     Text("地图层不展示设备信息（占位）")
+                    Text("地图层不展示位置信息（占位）")
+                    Text("地图层不展示轨迹信息（占位）")
                 }
                 .font(.caption2)
                 .foregroundColor(.secondary)
