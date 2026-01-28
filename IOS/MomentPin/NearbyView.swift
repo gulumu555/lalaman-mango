@@ -484,42 +484,44 @@ struct NearbyView: View {
                     Text("地图点位不展示设备入口（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
-                    if !bubbleMoments.isEmpty {
-                        HStack(spacing: 8) {
-                            Text("点位")
-                                .font(.caption2)
-                                .foregroundColor(.secondary)
-                            ForEach(bubbleMoments) { moment in
-                                Button {
-                                    selectedMoment = moment
-                                    selectedZoneName = moment.zoneName
-                                    selectedMomentId = moment.id
-                                    showPlaceSheet = true
-                                } label: {
-                                    Text("\(moment.count)")
-                                        .font(.caption2)
-                                        .foregroundColor(.black)
-                                        .padding(.horizontal, 8)
-                                        .padding(.vertical, 5)
-                                        .background(Color.white)
-                                        .cornerRadius(999)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 999)
-                                                .stroke(Color.black.opacity(0.2), lineWidth: 1)
-                                        )
+                    Group {
+                        if !bubbleMoments.isEmpty {
+                            HStack(spacing: 8) {
+                                Text("点位")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                                ForEach(bubbleMoments) { moment in
+                                    Button {
+                                        selectedMoment = moment
+                                        selectedZoneName = moment.zoneName
+                                        selectedMomentId = moment.id
+                                        showPlaceSheet = true
+                                    } label: {
+                                        Text("\(moment.count)")
+                                            .font(.caption2)
+                                            .foregroundColor(.black)
+                                            .padding(.horizontal, 8)
+                                            .padding(.vertical, 5)
+                                            .background(Color.white)
+                                            .cornerRadius(999)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 999)
+                                                    .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                                            )
+                                    }
+                                }
                             }
                         }
+                        if bubbleMoments.isEmpty {
+                            Text("附近暂无点位（占位）")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
                     }
-                    if bubbleMoments.isEmpty {
-                        Text("附近暂无点位（占位）")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                    }
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .background(Color.white.opacity(0.95))
-                        .cornerRadius(16)
-                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Color.white.opacity(0.95))
+                    .cornerRadius(16)
                 if showMoodCard {
                     MoodCard(selectedFilter: $moodFilter, onBrowse: {
                         showMoodSheet = true
@@ -545,41 +547,41 @@ struct NearbyView: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
-                    HStack(spacing: 12) {
-                        Button("按情绪浏览") {
-                            showMoodSheet = true
+                HStack(spacing: 12) {
+                    Button("按情绪浏览") {
+                        showMoodSheet = true
+                    }
+                    .font(.footnote)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(Color.white.opacity(0.95))
+                    .cornerRadius(999)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999)
+                            .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                    )
+                    Text("AI 静默在场（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Button {
+                        showListSheet = true
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: "list.bullet")
+                                .font(.footnote)
+                            Text("列表")
+                                .font(.footnote)
+                            Text("\(filteredMoments.count)")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
                         }
-                        .font(.footnote)
-                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, 12)
                         .padding(.vertical, 8)
                         .background(Color.white.opacity(0.95))
                         .cornerRadius(999)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 999)
-                                .stroke(Color.black.opacity(0.08), lineWidth: 1)
-                        )
-                        Text("AI 静默在场（占位）")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                        Button {
-                            showListSheet = true
-                        } label: {
-                            HStack(spacing: 6) {
-                                Image(systemName: "list.bullet")
-                                    .font(.footnote)
-                                Text("列表")
-                                    .font(.footnote)
-                                Text("\(filteredMoments.count)")
-                                    .font(.caption2)
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 8)
-                            .background(Color.white.opacity(0.95))
-                            .cornerRadius(999)
-                        }
-                        .buttonStyle(.plain)
                     }
+                    .buttonStyle(.plain)
+                }
                     Text("默认范围：3km（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
