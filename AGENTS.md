@@ -22,15 +22,20 @@ Content is consumed via a nearby 3km map with “mood weather” and can be save
 1) Be verifiable: never claim something works unless you ran it locally and show:
    - exact command(s)
    - short output summary / screenshots reference (if available)
-2) Small diffs: implement in small increments (<= 5 files per increment, ideally <= 300 LOC).
-3) After each increment, provide:
+2) Small diffs preferred, but **batch mode is allowed**:
+   - You may group up to **100 small steps** before reporting.
+   - When batching, keep edits focused and avoid unnecessary refactors.
+3) When reporting (per batch), provide:
    - What changed (1 paragraph)
    - Files touched (list)
    - How to verify (<= 3 commands)
    - Expected results (bullet points)
-4) Prefer simplest implementation. Avoid over-engineering and avoid introducing new frameworks unless necessary.
-5) No breaking changes without migration notes.
-6) No secrets in code. Use .env.example for configs.
+4) Self‑verification is authorized:
+   - Run builds/tests yourself; **do not require user to type “继续”** between steps.
+   - Still report the exact commands used and results.
+5) Prefer simplest implementation. Avoid over-engineering and avoid introducing new frameworks unless necessary.
+6) No breaking changes without migration notes.
+7) No secrets in code. Use .env.example for configs.
 
 ## Repo-first
 - Read existing docs and follow repo conventions.
