@@ -356,6 +356,14 @@ struct NearbyView: View {
                 }
             }
             .onAppear {
+                let env = ProcessInfo.processInfo.environment
+                if env["MP_DEBUG_DETAIL"] == "1" {
+                    selectedMoment = moments.first
+                    showDetail = true
+                }
+                if env["MP_DEBUG_CREATE"] == "1" {
+                    showCreate = true
+                }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                     locationStatus = "已定位"
                 }
