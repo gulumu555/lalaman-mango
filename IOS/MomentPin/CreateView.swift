@@ -138,6 +138,14 @@ struct CreateView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
 
+            StepControls(
+                step: $step,
+                canProceed: canProceed,
+                onComplete: { showPublishSheet = true }
+            )
+            .padding(.horizontal, 20)
+            .padding(.top, 8)
+
             Text("发布时可设置可见性/漂流瓶")
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -2446,6 +2454,7 @@ private struct VideoStep: View {
 private struct StepControls: View {
     @Binding var step: CreateView.Step
     var canProceed: Bool = true
+    var onComplete: () -> Void = {}
     @State private var stepHint = "完成当前步骤后进入下一步"
 
     var body: some View {
@@ -2474,6 +2483,10 @@ private struct StepControls: View {
                 .disabled(step == .style)
 
                 Button(step == .video ? "完成" : "下一步") {
+                    if step == .video {
+                        onComplete()
+                        return
+                    }
                     if let next = CreateView.Step(rawValue: step.rawValue + 1) {
                         step = next
                     }
@@ -2485,7 +2498,7 @@ private struct StepControls: View {
                 .foregroundColor(.white)
                 .cornerRadius(999)
                 .opacity(canProceed ? 1 : 0.4)
-                .disabled(!canProceed || step == .video)
+                .disabled(!canProceed)
             }
             Text(stepHint)
                 .font(.caption2)
