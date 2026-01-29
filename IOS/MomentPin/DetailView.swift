@@ -34,6 +34,7 @@ struct DetailView: View {
     @State private var renderHint = "已生成"
     @State private var motionLevel = "轻"
     @State private var usePolishedCaption = false
+    @State private var showAngelBridgeCard = true
 
     var body: some View {
         ScrollView {
@@ -919,6 +920,23 @@ struct DetailView: View {
                     .foregroundColor(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
 
+                    if showAngelBridgeCard && isPublic && isInteractive && !hasRepliedToday && !hasReactedToday {
+                        AngelBridgeCard(
+                            onAccept: {
+                                feedbackText = "已收下这份回声"
+                                showFeedback = true
+                                showAngelBridgeCard = false
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                    showFeedback = false
+                                }
+                            },
+                            onDismiss: {
+                                echoCooldownHint = "已关闭类似回声（占位）"
+                                showAngelBridgeCard = false
+                            }
+                        )
+                    }
+
                     Button {
                         showEchoCreateSheet = true
                     } label: {
@@ -1079,6 +1097,51 @@ struct DetailView: View {
         let generator = UIImpactFeedbackGenerator(style: .light)
         generator.prepare()
         generator.impactOccurred()
+    }
+}
+
+private struct AngelBridgeCard: View {
+    var onAccept: () -> Void = {}
+    var onDismiss: () -> Void = {}
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("天使回声卡（占位）")
+                .font(.headline)
+            Text("我收到了。要不要收下这份回声？")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            HStack(spacing: 8) {
+                Button("收下这份回声") {
+                    onAccept()
+                }
+                .font(.caption)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(Color.black)
+                .foregroundColor(.white)
+                .cornerRadius(999)
+
+                Button("不需要") {
+                    onDismiss()
+                }
+                .font(.caption)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(Color.white)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 999)
+                        .stroke(Color.black.opacity(0.12), lineWidth: 1)
+                )
+                .cornerRadius(999)
+            }
+            Text("只出现一次，不进入聊天（占位）")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+        }
+        .padding(12)
+        .background(Color.gray.opacity(0.08))
+        .cornerRadius(16)
     }
 }
 

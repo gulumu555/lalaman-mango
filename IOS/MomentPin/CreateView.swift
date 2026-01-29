@@ -214,6 +214,11 @@ struct CreateView: View {
                     Text("天使/马年设置已同步（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
+                    if !publishSummary.isEmpty {
+                        Text(publishSummary)
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
                     Button("去附近看看") {
                         showPublished = false
                         onPublished()
@@ -284,6 +289,7 @@ struct CreateView: View {
                 },
                 onConfirm: {
                     showPublishSheet = false
+                    publishSummary = buildPublishSummary()
                     showPublished = true
                 }
             )
