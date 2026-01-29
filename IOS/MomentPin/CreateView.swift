@@ -54,6 +54,7 @@ struct CreateView: View {
     @State private var publishFailed = false
     private let apiClient = APIClient()
     @State private var settingsLoaded = false
+    @State private var debugApplied = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -307,6 +308,36 @@ struct CreateView: View {
                 allowTimecapsule = payload.allowTimecapsule
                 horseTrailEnabled = payload.horseTrailEnabled
                 horseWitnessEnabled = payload.horseWitnessEnabled
+            }
+        }
+        .onAppear {
+            guard !debugApplied else { return }
+            debugApplied = true
+            let env = ProcessInfo.processInfo.environment
+            if env["MP_DEBUG_CREATE"] == "1" {
+                if let stepValue = env["MP_DEBUG_CREATE_STEP"]?.lowercased() {
+                    switch stepValue {
+                    case "style":
+                        step = .style
+                    case "pony":
+                        step = .pony
+                    case "voice":
+                        step = .voice
+                        hasPhoto = true
+                    case "video":
+                        step = .video
+                        hasPhoto = true
+                        hasVoice = true
+                    default:
+                        break
+                    }
+                }
+                if env["MP_DEBUG_SHOW_PUBLISH"] == "1" {
+                    step = .video
+                    hasPhoto = true
+                    hasVoice = true
+                    showPublishSheet = true
+                }
             }
         }
         .onChange(of: hideMood) { newValue in
