@@ -678,7 +678,7 @@ private struct PublishSheet: View {
                 Text("默认仅自己可见（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
-                if includeBottle {
+                VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Text("靠岸时间")
                             .font(.caption)
@@ -714,7 +714,7 @@ private struct PublishSheet: View {
                         .background(Color.gray.opacity(0.12))
                         .cornerRadius(999)
                     }
-                    Text("到期站内通知（占位）")
+                    Text(includeBottle ? "到期站内通知（占位）" : "开启漂流瓶后可选择日期")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     Text("可设置自定义日期（占位）")
@@ -727,6 +727,9 @@ private struct PublishSheet: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
+                .opacity(includeBottle ? 1 : 0.35)
+                .disabled(!includeBottle)
+                .animation(.easeInOut(duration: 0.2), value: includeBottle)
             }
             .padding(12)
             .background(Color.gray.opacity(0.08))
