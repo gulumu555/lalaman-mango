@@ -259,6 +259,34 @@ struct CreateView: View {
                     }
             }
         }
+        .sheet(isPresented: $showPublishSheet) {
+            PublishSheet(
+                isPublic: $isPublic,
+                includeBottle: $includeBottle,
+                angelEnabled: $angelEnabled,
+                allowMicrocuration: $allowMicrocuration,
+                allowEcho: $allowEcho,
+                allowTimecapsule: $allowTimecapsule,
+                horseTrailEnabled: $horseTrailEnabled,
+                horseWitnessEnabled: $horseWitnessEnabled,
+                shareToMoments: $shareToMoments,
+                allowMapDisplay: $allowMapDisplay,
+                selectedMood: $selectedMood,
+                hideMood: $hideMood,
+                presetZoneName: presetZoneName,
+                onCancel: {
+                    showPublishSheet = false
+                },
+                onDraft: {
+                    showPublishSheet = false
+                    publishStatusHint = "草稿已保存（占位）"
+                },
+                onConfirm: {
+                    showPublishSheet = false
+                    showPublished = true
+                }
+            )
+        }
         .onReceive(NotificationCenter.default.publisher(for: .userSettingsUpdated)) { _ in
             apiClient.fetchUserSettings { payload in
                 angelEnabled = payload.allowAngel
