@@ -802,6 +802,7 @@ struct DetailView: View {
                                 showFeedback = true
                                 showEchoPulse = true
                                 showEchoMapHint = true
+                                NotificationCenter.default.post(name: .echoPulse, object: nil)
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
                                     showEchoPulse = false
                                 }

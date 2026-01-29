@@ -23,6 +23,7 @@ struct NearbyView: View {
     @State private var showAngelSheet = false
     @State private var showExhibitSheet = false
     @State private var exhibits: [ExhibitSummary] = []
+    @State private var showEchoPulse = false
     private let apiClient = APIClient()
     @State private var exhibitHint = ""
     @State private var angelHint = ""
@@ -75,6 +76,14 @@ struct NearbyView: View {
                     endPoint: .bottom
                 )
                 .ignoresSafeArea()
+                if showEchoPulse {
+                    Circle()
+                        .stroke(Color.blue.opacity(0.35), lineWidth: 3)
+                        .frame(width: 40, height: 40)
+                        .scaleEffect(showEchoPulse ? 6.0 : 1.0)
+                        .opacity(showEchoPulse ? 0 : 1)
+                        .animation(.easeOut(duration: 0.8), value: showEchoPulse)
+                }
 
                 VStack(spacing: 16) {
                     HStack {
@@ -374,6 +383,12 @@ struct NearbyView: View {
             .onReceive(NotificationCenter.default.publisher(for: .angelCardsUpdated)) { notification in
                 if let count = notification.userInfo?["count"] as? Int {
                     angelCardCount = count
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .echoPulse)) { _ in
+                showEchoPulse = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
+                    showEchoPulse = false
                 }
             }
         }

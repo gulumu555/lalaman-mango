@@ -4,6 +4,7 @@ extension Notification.Name {
     static let userSettingsUpdated = Notification.Name("UserSettingsUpdated")
     static let angelCardsUpdated = Notification.Name("AngelCardsUpdated")
     static let notificationsUpdated = Notification.Name("NotificationsUpdated")
+    static let echoPulse = Notification.Name("EchoPulse")
 }
 
 struct PublishSettings {
