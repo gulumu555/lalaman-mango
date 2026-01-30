@@ -363,6 +363,11 @@ struct CreateView: View {
                 allowMapDisplay = false
             }
         }
+        .onChange(of: includeBottle) { value in
+            if value {
+                allowMapDisplay = false
+            }
+        }
     }
 
     private var canProceed: Bool {
@@ -1957,6 +1962,12 @@ private struct VoiceStep: View {
                     .padding(.vertical, 6)
                     .background(Color.gray.opacity(0.12))
                     .cornerRadius(999)
+            }
+        }
+        .onChange(of: showAIHelper) { value in
+            guard value else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 8.0) {
+                showAIHelper = false
             }
         }
         .padding(20)
