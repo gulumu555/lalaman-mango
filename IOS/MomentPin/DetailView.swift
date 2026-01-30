@@ -40,6 +40,10 @@ struct DetailView: View {
         renderState == .publishable || renderState == .published
     }
 
+    private var canInteract: Bool {
+        isInteractive && isPublic && renderState == .publishable
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
@@ -836,7 +840,7 @@ struct DetailView: View {
                                     .opacity(showEchoPulse ? 0 : 1)
                                     .animation(.easeOut(duration: 0.6), value: showEchoPulse)
                             )
-                            .disabled(didEcho || !isInteractive || !isPublic)
+                            .disabled(didEcho || !canInteract)
                             Text("共鸣 \(echoCount)")
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
@@ -870,7 +874,7 @@ struct DetailView: View {
                                 .stroke(Color.black.opacity(0.1), lineWidth: 1)
                         )
                         .cornerRadius(999)
-                        .disabled(!isInteractive || !isPublic)
+                        .disabled(!canInteract)
                         Text("收藏 \(saveCount)")
                             .font(.caption2)
                             .foregroundColor(.secondary)
@@ -891,6 +895,12 @@ struct DetailView: View {
                     }
                     if showEchoMapHint {
                         Text("地图光点已点亮（占位）")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    if renderState != .publishable {
+                        Text("渲染未完成，互动暂不可用（占位）")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -924,7 +934,7 @@ struct DetailView: View {
                     .foregroundColor(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                    if showAngelBridgeCard && isPublic && isInteractive && !hasRepliedToday && !hasReactedToday {
+                    if showAngelBridgeCard && canInteract && !hasRepliedToday && !hasReactedToday {
                         AngelBridgeCard(
                             onAccept: {
                                 feedbackText = "已收下这份回声"
@@ -966,8 +976,8 @@ struct DetailView: View {
                         RoundedRectangle(cornerRadius: 16)
                             .stroke(Color.black.opacity(0.08), lineWidth: 1)
                     )
-                    .disabled(!isInteractive || !isPublic)
-                    if !isInteractive || !isPublic {
+                    .disabled(!canInteract)
+                    if !canInteract {
                         Text("公开且互动开启后可送回声（占位）")
                             .font(.caption2)
                             .foregroundColor(.secondary)
