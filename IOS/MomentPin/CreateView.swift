@@ -627,8 +627,10 @@ private struct PublishSheet: View {
                 }
                 Toggle("同步到朋友圈（占位）", isOn: $shareToMoments)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
+                    .disabled(!isPublic)
                 GuidelinesList(items: [
                     "朋友圈分享为可选（占位）",
+                    "仅公开内容可分享（占位）",
                     "发布权限可随时调整（占位）",
                     "发布设置仅影响当前片刻（占位）",
                     "默认仅自己可见（占位）"
