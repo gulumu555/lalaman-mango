@@ -2246,39 +2246,43 @@ private struct VideoStep: View {
                 "发布后可进入回声/微展（占位）",
                 "发布后可调整可见性（占位）"
             ])
-            HStack(spacing: 12) {
-                Button("分享马年合影") {
-                    showShareToast = true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                        showShareToast = false
+            if canShare {
+                HStack(spacing: 12) {
+                    Button("分享马年合影") {
+                        showShareToast = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                            showShareToast = false
+                        }
                     }
-                }
-                .font(.caption)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 10)
-                .background(canShare ? Color.black : Color.gray.opacity(0.4))
-                .foregroundColor(.white)
-                .cornerRadius(999)
-                .disabled(!canShare)
-                Button("复制分享链接") {
-                    showShareToast = true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                        showShareToast = false
+                    .font(.caption)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                    .background(Color.black)
+                    .foregroundColor(.white)
+                    .cornerRadius(999)
+                    Button("复制分享链接") {
+                        showShareToast = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                            showShareToast = false
+                        }
                     }
+                    .font(.caption)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                    .background(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 999)
+                            .stroke(Color.black.opacity(0.15), lineWidth: 1)
+                    )
+                    .cornerRadius(999)
                 }
-                .font(.caption)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 10)
-                .background(canShare ? Color.white : Color.gray.opacity(0.2))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 999)
-                        .stroke(Color.black.opacity(0.15), lineWidth: 1)
-                )
-                .cornerRadius(999)
-                .disabled(!canShare)
-            }
-            if showShareToast {
-                Text("分享已触发（占位）")
+                if showShareToast {
+                    Text("分享已触发（占位）")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+            } else {
+                Text("发布后可分享马年合影")
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
