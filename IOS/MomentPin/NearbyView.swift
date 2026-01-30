@@ -98,6 +98,9 @@ struct NearbyView: View {
                             locationHintText = "已定位"
                             showLocationHint = true
                             locationStatus = "已定位"
+                            #if canImport(UIKit)
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                            #endif
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                                 showLocationHint = false
                             }
@@ -117,6 +120,9 @@ struct NearbyView: View {
                             locationHintText = "已刷新"
                             showLocationHint = true
                             locationStatus = "已定位"
+                            #if canImport(UIKit)
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                            #endif
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                                 showLocationHint = false
                             }
@@ -252,7 +258,13 @@ struct NearbyView: View {
                             .foregroundColor(.secondary)
                     }
                     Button("随机听听") {
-                        selectedMoment = filteredMoments.first ?? moments.first
+                        let picked = filteredMoments.randomElement() ?? moments.first
+                        selectedMoment = picked
+                        selectedZoneName = picked?.zoneName
+                        selectedMomentId = picked?.id
+                        #if canImport(UIKit)
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                        #endif
                         showDetail = true
                     }
                     .font(.footnote)
