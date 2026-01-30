@@ -568,21 +568,12 @@ private struct PublishSheet: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
-                Text("位置精度：商圈级（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("情绪标签用于微展/回声（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("情绪可用于情绪天气统计（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("情绪可用于微展标题（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("情绪可影响附近浏览排序（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
+                GuidelinesList(items: [
+                    "位置精度：商圈级（占位）",
+                    "情绪标签用于微展/回声（占位）",
+                    "情绪可用于情绪天气统计（占位）",
+                    "情绪可用于微展标题（占位）"
+                ])
                 HStack(spacing: 8) {
                     ForEach(moodOptions, id: \.self) { mood in
                         Button(moodLabel(mood)) {
@@ -600,38 +591,25 @@ private struct PublishSheet: View {
                 Text(hideMood ? "已隐藏情绪，发布页不展示" : "可在此调整情绪")
                     .font(.caption2)
                     .foregroundColor(.secondary)
-                Text("默认继承创作情绪（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("可选择不展示情绪（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("推荐情绪：轻松/治愈/emo（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
+                GuidelinesList(items: [
+                    "默认继承创作情绪（占位）",
+                    "可选择不展示情绪（占位）",
+                    "推荐情绪：轻松/治愈/emo（占位）"
+                ])
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
             VStack(spacing: 12) {
                 Toggle("匿名公开", isOn: $isPublic)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
-                Text("公开默认为匿名（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
+                GuidelinesList(items: [
+                    "公开默认为匿名（占位）",
+                    "地图展示：公开默认允许（占位）",
+                    "位置默认模糊到商圈/区域（占位）",
+                    "发布页可调整情绪（占位）"
+                ])
                 Toggle("隐藏位置", isOn: $hideLocation)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
-                Text("地图展示：公开默认允许（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("位置默认模糊到商圈/区域（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("情绪会展示在播放页（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("发布页可调整情绪（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
                 Text("私密内容不展示情绪（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
@@ -649,21 +627,12 @@ private struct PublishSheet: View {
                 }
                 Toggle("同步到朋友圈（占位）", isOn: $shareToMoments)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
-                Text("朋友圈分享为可选（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-            Text("发布权限可随时调整（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("可记忆上次发布设置（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-                Text("发布设置仅影响当前片刻（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("默认仅自己可见（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
+                GuidelinesList(items: [
+                    "朋友圈分享为可选（占位）",
+                    "发布权限可随时调整（占位）",
+                    "发布设置仅影响当前片刻（占位）",
+                    "默认仅自己可见（占位）"
+                ])
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Text("靠岸时间")
@@ -703,15 +672,11 @@ private struct PublishSheet: View {
                     Text(includeBottle ? "到期站内通知（占位）" : "开启漂流瓶后可选择日期")
                         .font(.caption2)
                         .foregroundColor(.secondary)
-                    Text("可设置自定义日期（占位）")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                    Text("提醒可关闭（占位）")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                    Text("时间可后续修改（占位）")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
+                    GuidelinesList(items: [
+                        "可设置自定义日期（占位）",
+                        "提醒可关闭（占位）",
+                        "时间可后续修改（占位）"
+                    ])
                 }
                 .opacity(includeBottle ? 1 : 0.35)
                 .disabled(!includeBottle)
@@ -727,24 +692,12 @@ private struct PublishSheet: View {
                     .foregroundColor(.secondary)
                 Toggle("让天使偶尔路过（默认关）", isOn: $angelEnabled)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
-                Text("AI 不常驻聊天，只在卡片出现（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("可随时关闭天使（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("强度：低（MVP）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("频控：每天最多一次天使卡（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("天使仅在你同意后触发（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("每条片刻最多触发一次（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
+                GuidelinesList(items: [
+                    "AI 不常驻聊天，只在卡片出现（占位）",
+                    "强度：低（MVP）",
+                    "频控：每天最多一次天使卡（占位）",
+                    "天使仅在你同意后触发（占位）"
+                ])
                 Toggle("允许微展收录", isOn: $allowMicrocuration)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
                     .disabled(!angelEnabled || !isPublic)
@@ -753,9 +706,6 @@ private struct PublishSheet: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
-                Text("微展默认关，用户可手动开启（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
                 Toggle("允许回声共鸣", isOn: $allowEcho)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
                     .disabled(!angelEnabled || !isPublic)
@@ -764,50 +714,24 @@ private struct PublishSheet: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
-            Text("回声为轻卡片，不做对话（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("可用字幕关键词做匹配（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("点“不需要”后冷却 30 天（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("每日最多一次回声卡（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("可举报/屏蔽（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("对方信息匿名展示（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("情绪可能影响回声匹配（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
+                GuidelinesList(items: [
+                    "微展默认关，用户可手动开启（占位）",
+                    "回声为轻卡片，不做对话（占位）",
+                    "点“不需要”后冷却 30 天（占位）",
+                    "每日最多一次回声卡（占位）",
+                    "对方信息匿名展示（占位）"
+                ])
             Toggle("允许时间胶囊回访", isOn: $allowTimecapsule)
                 .toggleStyle(SwitchToggleStyle(tint: .black))
                 .disabled(!angelEnabled)
-            Text("回访节奏：3天 / 30天 / 1年（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("触达方式：站内卡片（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("可设置静默 7 天（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("仅自己可见内容仅用于时间胶囊（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text(isPublic ? "公开内容才可进入微展/回声" : "私密内容不进入微展/回声")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                Text("默认不打扰，可随时关闭（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+            GuidelinesList(items: [
+                "回访节奏：3天 / 30天 / 1年（占位）",
+                "触达方式：站内卡片（占位）",
+                "可设置静默 7 天（占位）",
+                "仅自己可见内容仅用于时间胶囊（占位）",
+                isPublic ? "公开内容才可进入微展/回声" : "私密内容不进入微展/回声",
+                "默认不打扰，可随时关闭（占位）"
+            ])
             }
             .padding(12)
             .background(Color.gray.opacity(0.08))
@@ -818,18 +742,12 @@ private struct PublishSheet: View {
                     .toggleStyle(SwitchToggleStyle(tint: .black))
                 Toggle("马年见证（默认关）", isOn: $horseWitnessEnabled)
                     .toggleStyle(SwitchToggleStyle(tint: .black))
-                Text("里程碑触发：第1地点/第7条/首漂流瓶（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("活动入口：马年合影（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("马年足迹仅公开展示（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("退出活动后对外隐藏足迹（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
+                GuidelinesList(items: [
+                    "里程碑触发：第1地点/第7条/首漂流瓶（占位）",
+                    "活动入口：马年合影（占位）",
+                    "马年足迹仅公开展示（占位）",
+                    "退出活动后对外隐藏足迹（占位）"
+                ])
             }
             .padding(12)
             .background(Color.gray.opacity(0.08))
@@ -966,21 +884,13 @@ private struct StyleStep: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                 )
-            Text("支持裁切与旋转（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("构图保持一致（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("原图仅用于生成（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("输出封面将用于地图点位（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("首帧用于封面（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
+            GuidelinesList(items: [
+                "支持裁切与旋转（占位）",
+                "构图保持一致（占位）",
+                "原图仅用于生成（占位）",
+                "输出封面将用于地图点位（占位）",
+                "首帧用于封面（占位）"
+            ])
             Button(hasPhoto ? "更换照片" : "选择照片") {
                 if !albumAuthorized {
                     albumAuthorized = true
@@ -1025,18 +935,12 @@ private struct StyleStep: View {
             Text("失败兜底：原图直出")
                 .font(.caption2)
                 .foregroundColor(.secondary)
-            Text("静帧可下载（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("可更换照片重试（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("选择照片后进入风格生成（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("同构图输出避免跑偏（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
+            GuidelinesList(items: [
+                "静帧可下载（占位）",
+                "可更换照片重试（占位）",
+                "选择照片后进入风格生成（占位）",
+                "同构图输出避免跑偏（占位）"
+            ])
             Button("下载当前风格") {
                 downloadedStyle = selectedStyle
             }
@@ -1054,49 +958,25 @@ private struct StyleStep: View {
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
-            Text("下载后仍可切换风格（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("首屏示例将引导去听听（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("生成超时可重试（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("失败也能继续后续步骤（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("失败会提示重试（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("风格生成支持并行（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("风格结果默认缓存（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("缓存可减少等待（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
+            GuidelinesList(items: [
+                "下载后仍可切换风格（占位）",
+                "首屏示例将引导去听听（占位）",
+                "生成超时可重试（占位）",
+                "失败也能继续后续步骤（占位）",
+                "风格生成支持并行（占位）",
+                "风格结果默认缓存（占位）"
+            ])
             VStack(alignment: .leading, spacing: 8) {
             Text("风格候选（3-4张）")
                 .font(.caption)
                 .foregroundColor(.secondary)
-            Text("同构图输出，主体不跑（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("主推：治愈手绘A（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("风格选择会影响小马资产（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("候选图一屏展示（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("候选支持左右滑动（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
+            GuidelinesList(items: [
+                "同构图输出，主体不跑（占位）",
+                "主推：治愈手绘A（占位）",
+                "风格选择会影响小马资产（占位）",
+                "候选图一屏展示（占位）",
+                "候选支持左右滑动（占位）"
+            ])
             Text("风格 ID：\(selectedStyleId)")
                 .font(.caption2)
                 .foregroundColor(.secondary)
@@ -1157,45 +1037,21 @@ private struct StyleStep: View {
                         styleProgress = 0.4
                     }
                 }
-                Text("提示：风格固定 3-4 个（强治愈）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text(styleHint)
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("动效在视频阶段默认生成（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("失败可降级为原图（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("当前风格ID：\(selectedStyleId)")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text(selectHint)
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("选中后可继续，不强制下载（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text(downloadHint)
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text(nextStepHint)
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("下载不影响继续选择（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-            Text("风格可多次切换（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("风格失败可跳过（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text(styleGuideHint)
-                .font(.caption2)
-                .foregroundColor(.secondary)
+                GuidelinesList(items: [
+                    "提示：风格固定 3-4 个（强治愈）",
+                    styleHint,
+                    "动效在视频阶段默认生成（占位）",
+                    "失败可降级为原图（占位）",
+                    "当前风格ID：\(selectedStyleId)",
+                    selectHint,
+                    "选中后可继续，不强制下载（占位）",
+                    downloadHint,
+                    nextStepHint,
+                    "下载不影响继续选择（占位）",
+                    "风格可多次切换（占位）",
+                    "风格失败可跳过（占位）",
+                    styleGuideHint
+                ])
                 Button("重试生成") {}
                     .font(.caption2)
                     .padding(.horizontal, 10)
@@ -1252,6 +1108,21 @@ private struct StyleStep: View {
     }
 }
 
+private struct GuidelinesList: View {
+    let items: [String]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            ForEach(items, id: \.self) { item in
+                Text(item)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
 private struct PonyStep: View {
     @Binding var ponyEnabled: Bool
     @Binding var ponyPlacement: String
@@ -1301,15 +1172,11 @@ private struct PonyStep: View {
                     Text("站位候选（随机性）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
-                    Text("每次合成可能略有不同（占位）")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                    Text("小马为资产合成，不由 AI 生成（占位）")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                    Text("可切姿态与表情（占位）")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
+                    GuidelinesList(items: [
+                        "每次合成可能略有不同（占位）",
+                        "小马为资产合成，不由 AI 生成（占位）",
+                        "可切姿态与表情（占位）"
+                    ])
                     HStack(spacing: 8) {
                         ForEach(placements, id: \.self) { placement in
                             VStack(spacing: 4) {
@@ -1375,27 +1242,15 @@ private struct PonyStep: View {
                     Text("随机用于避免重复（占位）")
                         .font(.caption2)
                         .foregroundColor(.secondary)
-                    Text("姿态：\(ponyPose)（占位）")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                    Text("姿态切换不影响站位（占位）")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                    Text("风格ID：\(selectedStyle)")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                    Text("小马资产按风格匹配（占位）")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                    Text("融合仅修饰，不重画小马（占位）")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                    Text("合影不影响语音（占位）")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                    Text("融合失败可自动关闭（占位）")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
+                    GuidelinesList(items: [
+                        "姿态：\(ponyPose)（占位）",
+                        "姿态切换不影响站位（占位）",
+                        "风格ID：\(selectedStyle)",
+                        "小马资产按风格匹配（占位）",
+                        "融合仅修饰，不重画小马（占位）",
+                        "合影不影响语音（占位）",
+                        "融合失败可自动关闭（占位）"
+                    ])
                     HStack(spacing: 8) {
                         Text("融合说明")
                             .font(.caption2)
@@ -1475,6 +1330,7 @@ private struct PonyStep: View {
                     }
                     Button("随机换一组站位") {
                         ponyPlacement = placements.randomElement() ?? ponyPlacement
+                        ponyPose = ponyPoses.randomElement() ?? ponyPose
                     }
                     .font(.caption2)
                     .frame(maxWidth: .infinity)
@@ -1550,18 +1406,12 @@ private struct VoiceStep: View {
             Text("建议 6–10 秒，上限 15 秒")
                 .font(.caption)
                 .foregroundColor(.secondary)
-            Text("不需露脸，语音即可（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("钩子帮助降低开口门槛（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("录音建议在安静环境（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("最长 15 秒硬限制（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
+            GuidelinesList(items: [
+                "不需露脸，语音即可（占位）",
+                "钩子帮助降低开口门槛（占位）",
+                "录音建议在安静环境（占位）",
+                "最长 15 秒硬限制（占位）"
+            ])
             VStack(alignment: .leading, spacing: 8) {
                 Text("情绪标签（可选）")
                     .font(.caption2)
@@ -1591,21 +1441,13 @@ private struct VoiceStep: View {
                 .padding(.vertical, 6)
                 .background(Color.gray.opacity(0.12))
                 .cornerRadius(999)
-                Text("未选则默认轻松（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("情绪与语音文案一起展示（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("点按即可切换情绪（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("不选也可继续发布（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("情绪可跳过（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
+                GuidelinesList(items: [
+                    "未选则默认轻松（占位）",
+                    "情绪与语音文案一起展示（占位）",
+                    "点按即可切换情绪（占位）",
+                    "不选也可继续发布（占位）",
+                    "情绪可跳过（占位）"
+                ])
             }
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 10)], spacing: 10) {
                 ForEach(hooks, id: \.self) { hook in
@@ -1627,12 +1469,10 @@ private struct VoiceStep: View {
             .padding(.vertical, 6)
             .background(Color.gray.opacity(0.12))
             .cornerRadius(999)
-            Text("也可随机一个钩子（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("钩子可编辑（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
+            GuidelinesList(items: [
+                "也可随机一个钩子（占位）",
+                "钩子可编辑（占位）"
+            ])
             Button("帮我想个开头") {
                 showAIHelper.toggle()
             }
@@ -1984,6 +1824,7 @@ private struct VideoStep: View {
     @State private var didDownloadStill = false
     @State private var selectedTemplate = "T02_Cloud"
     @State private var exportMuted = false
+    @State private var showShareToast = false
     private let templateOptions = ["T02_Cloud", "T07_Sparkle", "T04_LightLeak", "T06_Wind"]
 
     private var moodEmoji: String {
@@ -2003,6 +1844,10 @@ private struct VideoStep: View {
 
     private var canDownload: Bool {
         renderState == .publishable || renderState == .published
+    }
+
+    private var canShare: Bool {
+        renderState == .published
     }
 
     private var canStartRender: Bool {
@@ -2051,7 +1896,10 @@ private struct VideoStep: View {
     private func simulateRender() {
         renderState = .processing
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-            renderState = .publishable
+            renderState = .rendered
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                renderState = .publishable
+            }
         }
     }
 
@@ -2120,21 +1968,13 @@ private struct VideoStep: View {
             Text("状态机：uploaded → processing → rendered → publishable → published")
                 .font(.caption2)
                 .foregroundColor(.secondary)
-            Text("渲染队列：排队中（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("任务ID：\(renderTaskId)（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("失败可重新排队（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("生成中可退出（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("生成完成将提示发布（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
+            GuidelinesList(items: [
+                "渲染队列：排队中（占位）",
+                "任务ID：\(renderTaskId)（占位）",
+                "失败可重新排队（占位）",
+                "生成中可退出（占位）",
+                "生成完成将提示发布（占位）"
+            ])
             Button("开始渲染") {
                 simulateRender()
             }
@@ -2178,24 +2018,14 @@ private struct VideoStep: View {
             Text(renderHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
-            Text("渲染中可切后台（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text(previewHint)
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text(exportHint)
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("预览仅供确认（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text(shareHint)
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("默认包含原声（可静音导出）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
+            GuidelinesList(items: [
+                "渲染中可切后台（占位）",
+                previewHint,
+                exportHint,
+                "预览仅供确认（占位）",
+                shareHint,
+                "默认包含原声（可静音导出）"
+            ])
             Toggle("静音导出（占位）", isOn: $exportMuted)
                 .toggleStyle(SwitchToggleStyle(tint: .black))
             HStack(spacing: 12) {
@@ -2269,75 +2099,29 @@ private struct VideoStep: View {
             Text("字幕默认白字，必要时启用薄雾底条")
                 .font(.caption2)
                 .foregroundColor(.secondary)
-            Text("字幕不允许贴纸/边框（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("字幕不遮脸（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("默认交付 MP4（无需手动让它动起来）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("微动方式：轻推拉 / 轻漂移 / 光感呼吸（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("主体不漂移、不变形（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("不做 AR / 实时预览（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("镜头推拉极轻（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("动效默认轻推拉（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("默认使用安全动效模板（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("可选：静音导出（后续）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("静音导出不含原声（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("静音导出不影响发布（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("静音导出需确认（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("字幕滚动：语义分段 8–16 字/段（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("字幕不遮挡主体，必要时启用薄雾底条")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("字幕仅 1-2 行展示（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("字幕节奏与语音对齐（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("字幕随语音出现（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("情绪标签展示在角落（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
+            GuidelinesList(items: [
+                "字幕不允许贴纸/边框（占位）",
+                "字幕不遮脸（占位）",
+                "默认交付 MP4（无需手动让它动起来）",
+                "微动方式：轻推拉 / 轻漂移 / 光感呼吸（占位）",
+                "主体不漂移、不变形（占位）",
+                "不做 AR / 实时预览（占位）",
+                "默认使用安全动效模板（占位）",
+                "静音导出不影响发布（占位）",
+                "字幕滚动：语义分段 8–16 字/段（占位）",
+                "字幕仅 1-2 行展示（占位）",
+                "字幕节奏与语音对齐（占位）",
+                "字幕随语音出现（占位）",
+                "情绪标签展示在角落（占位）"
+            ])
             Text(coverHint)
                 .font(.caption2)
                 .foregroundColor(.secondary)
-            Text("渲染完成自动生成封面（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("封面可手动更换（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("封面可用合影静帧（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
+            GuidelinesList(items: [
+                "渲染完成自动生成封面（占位）",
+                "封面可手动更换（占位）",
+                "封面可用合影静帧（占位）"
+            ])
             Button("选择封面（占位）") {
                 coverHint = "封面已更新（占位）"
             }
@@ -2403,33 +2187,17 @@ private struct VideoStep: View {
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
-            Text("下载后自动保存到相册（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("可重复导出（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("下载不影响后续发布（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("可先下载再发布（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("发布后仍可再次下载（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("静帧与 MP4 可独立下载（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("未渲染完成不可发布（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("最终发布形态：仅 MP4（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("导出命名：momentpin_日期（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
+            GuidelinesList(items: [
+                "下载后自动保存到相册（占位）",
+                "可重复导出（占位）",
+                "下载不影响后续发布（占位）",
+                "可先下载再发布（占位）",
+                "发布后仍可再次下载（占位）",
+                "静帧与 MP4 可独立下载（占位）",
+                "未渲染完成不可发布（占位）",
+                "最终发布形态：仅 MP4（占位）",
+                "导出命名：momentpin_日期（占位）"
+            ])
             VStack(alignment: .leading, spacing: 6) {
                 Text("发布前检查")
                     .font(.caption2)
@@ -2469,27 +2237,49 @@ private struct VideoStep: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
             }
-            Text("公开/漂流瓶/仅自己 · 按旧规则")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("发布成功后可生成分享链接（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("发布后可出现在附近地图（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("可分享给好友查看（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("发布后可进入回声/微展（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("发布后可调整可见性（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("发布成功后显示动画（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
+            GuidelinesList(items: [
+                "公开/漂流瓶/仅自己 · 按旧规则",
+                "发布成功后可生成分享链接（占位）",
+                "发布后可出现在附近地图（占位）",
+                "发布后可进入回声/微展（占位）",
+                "发布后可调整可见性（占位）"
+            ])
+            HStack(spacing: 12) {
+                Button("分享马年合影") {
+                    showShareToast = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        showShareToast = false
+                    }
+                }
+                .font(.caption)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 10)
+                .background(canShare ? Color.black : Color.gray.opacity(0.4))
+                .foregroundColor(.white)
+                .cornerRadius(999)
+                .disabled(!canShare)
+                Button("复制分享链接") {
+                    showShareToast = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        showShareToast = false
+                    }
+                }
+                .font(.caption)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 10)
+                .background(canShare ? Color.white : Color.gray.opacity(0.2))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 999)
+                        .stroke(Color.black.opacity(0.15), lineWidth: 1)
+                )
+                .cornerRadius(999)
+                .disabled(!canShare)
+            }
+            if showShareToast {
+                Text("分享已触发（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
             VStack(alignment: .leading, spacing: 6) {
                 Text("兜底策略")
                     .font(.caption2)
