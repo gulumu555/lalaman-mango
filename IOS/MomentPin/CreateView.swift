@@ -1932,20 +1932,12 @@ private struct VideoStep: View {
     @Binding var hasPhoto: Bool
     @Binding var hasVoice: Bool
     var onPublish: () -> Void = {}
-    private enum RenderState: String {
-        case uploaded
-        case processing
-        case rendered
-        case publishable
-        case published
-    }
 
     @State private var subtitleStyle = "默认白字"
     private let subtitleStyles = ["默认白字", "薄雾底条"]
-    @State private var renderStatus = "生成中"
-    private let renderStatuses = ["生成中", "已完成", "失败"]
     @State private var renderProgress: CGFloat = 0.5
     @State private var renderState: RenderState = .uploaded
+    private let renderStateOptions: [RenderState] = [.uploaded, .processing, .publishable, .failed]
     @State private var renderHint = "MP4 ≤ 12s（占位）"
     @State private var renderFailReason = "网络超时（占位）"
     @State private var renderTaskId = "MP4-20260127-001"
@@ -1995,6 +1987,25 @@ private struct VideoStep: View {
             return "可发布"
         case .published:
             return "已发布"
+        case .failed:
+            return "失败"
+        }
+    }
+
+    private func renderStateLabel(_ state: RenderState) -> String {
+        switch state {
+        case .uploaded:
+            return "已上传"
+        case .processing:
+            return "生成中"
+        case .rendered:
+            return "已渲染"
+        case .publishable:
+            return "已完成"
+        case .published:
+            return "已发布"
+        case .failed:
+            return "失败"
         }
     }
 
@@ -2004,9 +2015,9 @@ private struct VideoStep: View {
     }
 
     private func simulateRender() {
-        renderStatus = "生成中"
+        renderState = .processing
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-            renderStatus = "已完成"
+            renderState = .publishable
         }
     }
 
@@ -2053,22 +2064,22 @@ private struct VideoStep: View {
                 Text("生成状态")
                     .font(.caption2)
                     .foregroundColor(.secondary)
-            ForEach(renderStatuses, id: \.self) { status in
-                Button(status) {
-                    renderStatus = status
+                ForEach(renderStateOptions, id: \.self) { state in
+                    Button(renderStateLabel(state)) {
+                        renderState = state
+                    }
+                    .font(.caption2)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(renderState == state ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
+                    .cornerRadius(999)
                 }
-                .font(.caption2)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 6)
-                .background(renderStatus == status ? Color.black.opacity(0.12) : Color.gray.opacity(0.12))
-                .cornerRadius(999)
             }
-        }
-        if renderStatus == "失败" {
-            Text("失败原因：\(renderFailReason)")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-        }
+            if renderState == .failed {
+                Text("失败原因：\(renderFailReason)")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
             Text("状态：\(renderStateText)")
                 .font(.caption2)
                 .foregroundColor(.secondary)
@@ -2116,19 +2127,16 @@ private struct VideoStep: View {
                 }
             }
             .frame(height: 6)
-            .onChange(of: renderStatus) { value in
+            .onChange(of: renderState) { value in
                 switch value {
-                case "生成中":
+                case .processing:
                     renderProgress = 0.5
                     didDownloadMP4 = false
                     didDownloadStill = false
-                    renderState = .processing
-                case "已完成":
+                case .publishable, .published:
                     renderProgress = 1.0
-                    renderState = .publishable
-                case "失败":
+                case .failed:
                     renderProgress = 0.2
-                    renderState = .uploaded
                 default:
                     renderProgress = 0.5
                 }
@@ -2190,26 +2198,25 @@ private struct VideoStep: View {
             Text("切换动效不影响语音（占位）")
                 .font(.caption2)
                 .foregroundColor(.secondary)
-            if renderStatus == "失败" {
+            if renderState == .failed {
                 Text("失败兜底：静帧字幕 MP4")
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 Button("使用兜底版本") {
                     renderState = .publishable
-                    renderStatus = "已完成"
                 }
                 .font(.caption2)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
                 .background(Color.black.opacity(0.12))
                 .cornerRadius(999)
-            Text("失败不影响继续发布（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("失败后可直接下载静帧（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-        }
+                Text("失败不影响继续发布（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                Text("失败后可直接下载静帧（占位）")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
             HStack(spacing: 8) {
                 Text("字幕样式")
                     .font(.caption2)

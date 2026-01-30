@@ -15,3 +15,12 @@ struct Moment: Identifiable {
         Moment(title: "巷子里的灯", moodEmoji: "✨", zoneName: "宽窄巷子", coordinate: .init(latitude: 30.6708, longitude: 104.0517), count: 6),
     ]
 }
+
+enum RenderState: String, CaseIterable {
+    case uploaded
+    case processing
+    case rendered
+    case publishable
+    case published
+    case failed
+}

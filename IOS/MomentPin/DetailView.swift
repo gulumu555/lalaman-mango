@@ -30,11 +30,15 @@ struct DetailView: View {
     @State private var isPublished = true
     @State private var saveCount = 24
     @State private var echoCooldownHint = "不需要时冷却 30 天（占位）"
-    @State private var renderStatus = "ready"
+    @State private var renderState: RenderState = .publishable
     @State private var renderHint = "已生成"
     @State private var motionLevel = "轻"
     @State private var usePolishedCaption = false
     @State private var showAngelBridgeCard = true
+
+    private var canPlay: Bool {
+        renderState == .publishable || renderState == .published
+    }
 
     var body: some View {
         ScrollView {
@@ -55,12 +59,12 @@ struct DetailView: View {
                                 .background(Color.black.opacity(0.7))
                                 .clipShape(Circle())
                         }
-                        .disabled(renderStatus != "ready")
-                        .opacity(renderStatus == "ready" ? 1 : 0.4)
+                        .disabled(!canPlay)
+                        .opacity(canPlay ? 1 : 0.4)
                         .accessibilityLabel(isPlaying ? "暂停" : "播放")
-                        if renderStatus == "rendering" {
+                        if renderState == .processing {
                             StatusOverlay(text: "渲染中...")
-                        } else if renderStatus == "failed" {
+                        } else if renderState == .failed {
                             StatusOverlay(text: "渲染失败")
                         }
                     }
@@ -115,7 +119,7 @@ struct DetailView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
 
-                RenderStatusCard(renderStatus: $renderStatus, renderHint: $renderHint)
+                RenderStatusCard(renderState: $renderState, renderHint: $renderHint)
 
                 PlaybackControls(
                     playbackRate: $playbackRate,
@@ -1326,10 +1330,10 @@ private struct MotionEffectCard: View {
 }
 
 private struct RenderStatusCard: View {
-    @Binding var renderStatus: String
+    @Binding var renderState: RenderState
     @Binding var renderHint: String
 
-    private let statuses: [String] = ["ready", "rendering", "failed"]
+    private let statuses: [RenderState] = [.publishable, .processing, .failed]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -1337,9 +1341,9 @@ private struct RenderStatusCard: View {
                 Text("渲染状态")
                     .font(.headline)
                 Spacer()
-                Picker("状态", selection: $renderStatus) {
+                Picker("状态", selection: $renderState) {
                     ForEach(statuses, id: \.self) { status in
-                        Text(status).tag(status)
+                        Text(renderLabel(for: status)).tag(status)
                     }
                 }
                 .pickerStyle(.menu)
@@ -1357,7 +1361,7 @@ private struct RenderStatusCard: View {
                 .background(Color.black)
                 .foregroundColor(.white)
                 .cornerRadius(999)
-                .disabled(renderStatus == "rendering")
+                .disabled(renderState == .processing)
                 Button("查看日志") {}
                     .font(.caption)
                     .padding(.horizontal, 12)
@@ -1369,7 +1373,7 @@ private struct RenderStatusCard: View {
                     )
                     .cornerRadius(999)
             }
-            if renderStatus == "failed" {
+            if renderState == .failed {
                 Text("失败原因：render_failed（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
@@ -1381,22 +1385,37 @@ private struct RenderStatusCard: View {
         .padding(16)
         .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
-        .onChange(of: renderStatus) { value in
+        .onChange(of: renderState) { value in
             switch value {
-            case "ready":
+            case .publishable, .published:
                 renderHint = "已生成，可播放"
-            case "rendering":
+            case .processing:
                 renderHint = "渲染中..."
-            case "failed":
+            case .failed:
                 renderHint = "渲染失败，可重试"
             default:
-                renderHint = "未知状态"
+                renderHint = "等待生成"
             }
         }
     }
 
     private var renderHintText: String {
         renderHint
+    }
+
+    private func renderLabel(for state: RenderState) -> String {
+        switch state {
+        case .publishable, .published:
+            return "ready"
+        case .processing:
+            return "rendering"
+        case .failed:
+            return "failed"
+        case .uploaded:
+            return "uploaded"
+        case .rendered:
+            return "rendered"
+        }
     }
 }
 
