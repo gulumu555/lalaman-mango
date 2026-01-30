@@ -55,10 +55,10 @@ struct NearbyView: View {
                     } label: {
                         Text("\(moment.count)")
                             .font(.caption2)
-                            .foregroundColor(.black)
+                            .foregroundColor(selectedMomentId == moment.id ? .white : .black)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 5)
-                            .background(Color.white.opacity(0.95))
+                            .background(selectedMomentId == moment.id ? Color.black.opacity(0.9) : Color.white.opacity(0.95))
                             .cornerRadius(999)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 999)
@@ -166,6 +166,17 @@ struct NearbyView: View {
                         Text("情绪卡已收起（占位）")
                             .font(.caption2)
                             .foregroundColor(.secondary)
+                    }
+                    if !bubbleMoments.isEmpty {
+                        BubbleStrip(moments: bubbleMoments) { moment in
+                            selectedMoment = moment
+                            selectedMomentId = moment.id
+                            selectedZoneName = moment.zoneName
+                            showDetail = true
+                            #if canImport(UIKit)
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                            #endif
+                        }
                     }
                     HStack(spacing: 12) {
                     Button("按情绪浏览") {
@@ -406,8 +417,43 @@ struct NearbyView: View {
         }
     }
 
-    private var angelButtonLabel: String {
-        angelCardCount > 0 ? "天使卡片 \(angelCardCount)" : "天使卡片"
+private var angelButtonLabel: String {
+    angelCardCount > 0 ? "天使卡片 \(angelCardCount)" : "天使卡片"
+}
+}
+
+private struct BubbleStrip: View {
+    let moments: [Moment]
+    var onSelect: (Moment) -> Void
+
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 10) {
+                ForEach(moments) { moment in
+                    Button {
+                        onSelect(moment)
+                    } label: {
+                        HStack(spacing: 6) {
+                            Text(moment.moodEmoji)
+                            Text(moment.zoneName)
+                                .lineLimit(1)
+                        }
+                        .font(.caption2)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .background(Color.white.opacity(0.95))
+                        .cornerRadius(999)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 999)
+                                .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                        )
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal, 4)
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 
