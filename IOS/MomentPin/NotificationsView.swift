@@ -86,204 +86,7 @@ struct NotificationsView: View {
                 }
                 .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
                 }
-                Text("通知仅站内提示（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("清空仅影响本地显示（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("天使卡类型：微展 / 回声 / 时间胶囊（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("时间胶囊仅站内提醒（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("通知不会打断系统（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("可筛选漂流瓶/系统通知（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("通知卡片不会触发聊天（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("通知点击跳转详情（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("下拉可刷新（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("天使卡默认关闭（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("回声卡每日最多一次（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("微展推荐每日最多一次（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("时间胶囊可静默 7 天（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("点击卡片进入片刻详情（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("无响应时会自动退场（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("只做动作卡，不做对话（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("AI 仅桥梁角色（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("不做聊天机器人（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片展示后可关闭（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("关闭后进入冷却（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("天使卡仅在授权后出现（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片不触发多轮对话（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片一键关闭（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("回声卡匿名展示（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("回声卡可屏蔽来源（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("微展卡只展示 6-12 条（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("微展名称自动生成（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("时间胶囊只提醒本人（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("天使卡点击不跳转聊天（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片仅显示一句话（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片按钮仅两个（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("回声卡可关闭类似推荐（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("冷却期内不再触发（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("微展卡仅近期内容（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("时间胶囊卡可静默（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片支持一键关闭（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片不引导聊天（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片文案克制（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片频控按天（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片不触发推送（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片可完全关闭（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片点击仅动作（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片不会生成长文（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片优先展示语音（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片展示后自动退场（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片不触发分享引导（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片不占据主流程（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片无强制点击（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片可在设置关闭（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片展示不带身份（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片展示不带头像（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片展示不带昵称（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片展示不带距离（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片展示不带关系（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片展示不带评论（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片展示不带私信（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片展示不带关注（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片展示不带点赞（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片展示不带评论（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片展示不带私信（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片展示不带分享（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片展示不带转发（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片展示不带链接（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片展示不带外部入口（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片展示不带广告（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text("卡片展示不带分享（占位）")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
+                NotificationGuidelines()
                 Text("卡片展示不带转发（占位）")
                     .font(.caption2)
                     .foregroundColor(.secondary)
@@ -1067,6 +870,57 @@ struct NotificationsView: View {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
         return formatter.string(from: Date())
+    }
+}
+
+private struct NotificationGuidelines: View {
+    private let notes: [String] = [
+        "通知仅站内提示（占位）",
+        "清空仅影响本地显示（占位）",
+        "天使卡类型：微展 / 回声 / 时间胶囊（占位）",
+        "时间胶囊仅站内提醒（占位）",
+        "通知不会打断系统（占位）",
+        "可筛选漂流瓶/系统通知（占位）",
+        "通知卡片不会触发聊天（占位）",
+        "通知点击跳转详情（占位）",
+        "下拉可刷新（占位）",
+        "天使卡默认关闭（占位）",
+        "回声卡每日最多一次（占位）",
+        "微展推荐每日最多一次（占位）",
+        "时间胶囊可静默 7 天（占位）",
+        "点击卡片进入片刻详情（占位）",
+        "无响应时会自动退场（占位）",
+        "只做动作卡，不做对话（占位）",
+        "AI 仅桥梁角色（占位）",
+        "不做聊天机器人（占位）",
+        "卡片展示后可关闭（占位）",
+        "关闭后进入冷却（占位）",
+        "天使卡仅在授权后出现（占位）",
+        "卡片不触发多轮对话（占位）",
+        "卡片一键关闭（占位）",
+        "回声卡匿名展示（占位）",
+        "回声卡可屏蔽来源（占位）",
+        "微展卡只展示 6-12 条（占位）",
+        "微展名称自动生成（占位）",
+        "时间胶囊只提醒本人（占位）",
+        "天使卡点击不跳转聊天（占位）",
+        "卡片仅显示一句话（占位）",
+        "卡片按钮仅两个（占位）",
+        "回声卡可关闭类似推荐（占位）",
+        "冷却期内不再触发（占位）",
+        "微展卡仅近期内容（占位）",
+        "时间胶囊卡可静默（占位）",
+        "卡片支持一键关闭（占位）"
+    ]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            ForEach(notes, id: \.self) { note in
+                Text(note)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
+        }
     }
 }
 
