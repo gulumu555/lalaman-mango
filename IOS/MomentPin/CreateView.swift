@@ -52,6 +52,7 @@ struct CreateView: View {
     @State private var publishSummary = ""
     @State private var publishStatusHint = ""
     @State private var publishFailed = false
+    @State private var renderState: RenderState = .uploaded
     private let apiClient = APIClient()
     @State private var settingsLoaded = false
     @State private var debugApplied = false
@@ -97,6 +98,7 @@ struct CreateView: View {
                     hideMood: $hideMood,
                     hasPhoto: $hasPhoto,
                     hasVoice: $hasVoice,
+                    renderState: $renderState,
                     onPublish: { showPublishSheet = true }
                 )
                 .tag(Step.video)
@@ -106,10 +108,23 @@ struct CreateView: View {
             StepControls(
                 step: $step,
                 canProceed: canProceed,
-                onComplete: { showPublishSheet = true }
+                onComplete: {
+                    if renderState == .publishable {
+                        showPublishSheet = true
+                    } else {
+                        publishStatusHint = "请先完成渲染后再发布"
+                    }
+                }
             )
             .padding(.horizontal, 20)
             .padding(.top, 8)
+            if !publishStatusHint.isEmpty {
+                Text(publishStatusHint)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 4)
+            }
 
             Text("发布设置在生成完成后出现")
                 .font(.caption)
@@ -315,6 +330,11 @@ struct CreateView: View {
         .onChange(of: includeBottle) { value in
             if value {
                 allowMapDisplay = false
+            }
+        }
+        .onChange(of: renderState) { value in
+            if value == .publishable {
+                publishStatusHint = ""
             }
         }
     }
@@ -1931,12 +1951,12 @@ private struct VideoStep: View {
     @Binding var hideMood: Bool
     @Binding var hasPhoto: Bool
     @Binding var hasVoice: Bool
+    @Binding var renderState: RenderState
     var onPublish: () -> Void = {}
 
     @State private var subtitleStyle = "默认白字"
     private let subtitleStyles = ["默认白字", "薄雾底条"]
     @State private var renderProgress: CGFloat = 0.5
-    @State private var renderState: RenderState = .uploaded
     private let renderStateOptions: [RenderState] = [.uploaded, .processing, .publishable, .failed]
     @State private var renderHint = "MP4 ≤ 12s（占位）"
     @State private var renderFailReason = "网络超时（占位）"
