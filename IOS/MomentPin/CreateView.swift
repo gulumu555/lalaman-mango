@@ -55,6 +55,7 @@ struct CreateView: View {
     private let apiClient = APIClient()
     @State private var settingsLoaded = false
     @State private var debugApplied = false
+    @State private var showNotes = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -67,46 +68,9 @@ struct CreateView: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
                 .padding(.top, 4)
-            Text("默认输出 MP4 · 字幕保留 · 小马可选")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-                .padding(.top, 2)
-            Text("无声波展示（已取消）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-                .padding(.top, 2)
-            Text("无需社交关系也可使用（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-                .padding(.top, 2)
-            Text("非聊天机器人（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-                .padding(.top, 2)
-            Text("AI 不替代人表达（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-                .padding(.top, 2)
-            Text("地图默认附近 3km（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-                .padding(.top, 2)
-            Text("风格数量固定 3-4 个")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-                .padding(.top, 2)
-            Text("风格不做长列表（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-                .padding(.top, 2)
-            Text("马年活动：小马可见证（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-                .padding(.top, 2)
-            Text("默认情绪：轻松（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-                .padding(.top, 2)
+            DebugNotes(showNotes: $showNotes)
+                .padding(.horizontal, 20)
+                .padding(.top, 8)
 
             TabView(selection: $step) {
                 StyleStep(hasPhoto: $hasPhoto, selectedStyle: $draftStyle)
@@ -147,30 +111,15 @@ struct CreateView: View {
             .padding(.horizontal, 20)
             .padding(.top, 8)
 
-            Text("发布时可设置可见性/漂流瓶")
+            Text("发布设置在生成完成后出现")
                 .font(.caption)
                 .foregroundColor(.secondary)
                 .padding(.horizontal, 20)
                 .padding(.bottom, 6)
-            Text("发布后才出现天使/马年开关")
+            Text("创作流程：风格 → 小马 → 语音 → 视频")
                 .font(.caption2)
                 .foregroundColor(.secondary)
                 .padding(.horizontal, 20)
-                .padding(.bottom, 6)
-            Text("发布页为单屏确认（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-                .padding(.horizontal, 20)
-                .padding(.bottom, 6)
-            Text("发布后可在“我”查看记录（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("情绪已记录（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text("情绪已同步到天气统计（占位）")
-                .font(.caption2)
-                .foregroundColor(.secondary)
             if publishFailed {
                 Text("发布设置保存失败，可重试（占位）")
                     .font(.caption2)
@@ -2583,6 +2532,47 @@ private struct StepControls: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
         }
+    }
+}
+
+private struct DebugNotes: View {
+    @Binding var showNotes: Bool
+
+    var body: some View {
+        VStack(spacing: 8) {
+            HStack {
+                Text("创作说明")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                Spacer()
+                Button(showNotes ? "收起" : "展开") {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        showNotes.toggle()
+                    }
+                }
+                .font(.caption2)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(Color.black.opacity(0.05))
+                .cornerRadius(999)
+            }
+            if showNotes {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("默认输出 MP4 · 字幕保留 · 小马可选")
+                    Text("无声波展示（已取消）")
+                    Text("风格数量固定 3-4 个")
+                    Text("AI 以动作出现，不常驻对话")
+                    Text("地图默认附近 3km（占位）")
+                }
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(Color.white.opacity(0.9))
+        .cornerRadius(12)
     }
 }
 
