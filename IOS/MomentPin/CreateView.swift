@@ -243,6 +243,7 @@ struct CreateView: View {
                 allowMapDisplay: $allowMapDisplay,
                 selectedMood: $selectedMood,
                 hideMood: $hideMood,
+                renderState: $renderState,
                 presetZoneName: presetZoneName,
                 onCancel: {
                     showPublishSheet = false
@@ -481,12 +482,17 @@ private struct PublishSheet: View {
     @Binding var allowMapDisplay: Bool
     @Binding var selectedMood: String
     @Binding var hideMood: Bool
+    @Binding var renderState: RenderState
     var presetZoneName: String? = nil
     var onCancel: () -> Void = {}
     var onDraft: () -> Void = {}
     var onConfirm: () -> Void = {}
     @State private var hideLocation = false
     @State private var openDate = Date().addingTimeInterval(60 * 60 * 24 * 90)
+
+    private var canConfirmPublish: Bool {
+        renderState == .publishable
+    }
 
     private var moodEmoji: String {
         switch selectedMood {
@@ -833,14 +839,22 @@ private struct PublishSheet: View {
                 .toggleStyle(SwitchToggleStyle(tint: .black))
 
             Button("确认发布") {
-                onConfirm()
+                if canConfirmPublish {
+                    onConfirm()
+                }
             }
             .font(.headline)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 12)
-            .background(Color.black)
+            .background(canConfirmPublish ? Color.black : Color.gray.opacity(0.3))
             .foregroundColor(.white)
             .cornerRadius(999)
+            .disabled(!canConfirmPublish)
+            if !canConfirmPublish {
+                Text("需完成渲染后才可发布")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
         }
         .padding(20)
     }
